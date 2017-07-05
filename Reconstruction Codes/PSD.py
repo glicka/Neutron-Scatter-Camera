@@ -77,6 +77,6 @@ def PSD(pulseData, pulseDataTraining):
     photonInfo = np.asarray(photonInfo)
     x = np.asarray(x)
     y = np.asarray(y)
-    #plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
-    plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
+    plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
+    #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     return neutronInfo
