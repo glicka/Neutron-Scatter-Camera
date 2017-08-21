@@ -25,15 +25,26 @@ def generateCones(detectorVals,timeVals,neutronPulseData):
         else:
             k = k + 1
             
-    dataListPlane1 = np.zeros([m,len(neutronPulseData[0,:])+2])
-    dataListPlane2 = np.zeros([k,len(neutronPulseData[0,:])+2])
+    adcBit = len(neutronPulseData[0,:])        
+    dataListPlane1 = np.zeros([m,adcBit+2])
+    dataListPlane2 = np.zeros([k,adcBit+2])
     
     for i in range(0,len(neutronPulseData)-1):
         if detectorVals[i] <=11:
             dataListPlane1[i,:] = [neutronPulseData[i,:],timeVals[i],detectorVals[i]]
         else:
             dataListPlane2[i,:] = [neutronPulseData[i,:],timeVals[i],detectorVals[i]]
-            
-    dataListPlane1 = dataListPlane1[np.argsort(dataListPlane1[:,len(neutronPulseData)+1])]
-    dataListPlane2 = dataListPlane2[np.argsort(dataListPlane1[:,len(neutronPulseData)+1])]
-            
+    
+    
+    dataListPlane1 = dataListPlane1[np.argsort(dataListPlane1[:,adcBit+1])]
+    dataListPlane2 = dataListPlane2[np.argsort(dataListPlane1[:,adcBit+1])]
+    
+    
+    hist = np.zeros(len(dataListPlane1[:,0]))
+    for i in range(0,len(dataListPlane1[:,0])):
+        hist[i] = dataListPlane2[i,adcBit+1]-dataListPlane1[i,adcBit+1]
+    
+    plt.figure()
+    plt.plot(hist)
+    plt.show()
+    
