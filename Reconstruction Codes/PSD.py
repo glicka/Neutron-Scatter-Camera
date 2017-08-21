@@ -11,13 +11,15 @@ def PSD(pulseData, pulseDataTraining):
     import numpy as np
     import math
     import matplotlib.pyplot as plt
-    import plotly.plotly as py
+    #import plotly as py
+    import pylab
     photonTraining = 0
     neutronPhotonDiscriminator = 0
     #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     i = 0
     with open(pulseDataTraining,'r') as csvfile:
         photonTraining = csv.reader(csvfile)
+        #print 'photonTraining = ', photonTraining
         #map(int,photonTraining)
         #photonTraining1 = [int(x) for x in photonTraining]
         #reader = list(csv.DictReader(open(csvfile), delimiter='|'))
@@ -29,54 +31,98 @@ def PSD(pulseData, pulseDataTraining):
             peakVal = findPeaks(row,30)  
             #print(peakVal)
             pulseIntegral = integratePulse(row,30)
-            #print(pulseIntegral)
-            peakToTotalRatioTraining[i] = peakVal/pulseIntegral
+            #print 'pulseIntegral = ', pulseIntegral
+            peakToTotalRatioTraining[i] = peakVal/float(pulseIntegral)
+            #print peakToTotalRatioTraining[i]
             i=i+1
             #print(i)
-        
-    if photonTraining == 0:
-        print("this is a string")
+    
+    #print peakToTotalRatioTraining
+    
+    #if photonTraining == 0:
+    #    print("this is a string")
     
     i = 0
-    with open(pulseData,'r') as csvfile1:
-        neutronPhotonDiscriminator = csv.reader(csvfile1)
+    #with open(pulseData,'r') as csvfile1:
+    #    neutronPhotonDiscriminator = csv.reader(csvfile1)
         #map(int,photonTraining)
         #photonTraining1 = [int(x) for x in photonTraining]
         #reader = list(csv.DictReader(open(csvfile), delimiter='|'))
         #numlines1 = len(open(neutronPhotonDiscriminator).readlines())
-        numlines = len(open(pulseData).readlines())
+        #numlines = len(open(pulseData).readlines())
+    numlines = len(pulseData[:,0])
         #numlines = len(csvfile.readlines())
-        peakToTotalRatio = np.zeros((numlines,1))
-        for row in neutronPhotonDiscriminator:
+    peakToTotalRatio = np.zeros((numlines,1))
+    pulseValue = np.zeros((numlines,1))
+    for row in pulseData[0,0:10000]:#[0,0:99999]:
             #print(row)
-            peakVal = findPeaks(row,30)  
+        peakVal = findPeaks1(row,30)  
+        if i%1000 == 0:
+            print 'i = ', i
+            
             #print(peakVal)
-            pulseIntegral = integratePulse(row,30)
-            #print(pulseIntegral)
-            peakToTotalRatio[i] = peakVal/pulseIntegral
-            i=i+1
+        pulseIntegral = integratePulse1(row,30)
+        peakToTotalRatio[i] = peakVal/float(pulseIntegral)
+        pulseValue[i]=pulseIntegral
+        i=i+1
             #print(i)
             
     if neutronPhotonDiscriminator == 0:
         print("this is a string")
     
-    n=0;
-    m=0;
+    n=0
+    m=0
     neutronInfo = []
     photonInfo = []
-    for i in range(0,len(peakToTotalRatio)):
+    for i in range(0,10000):
+    #for i in range(0,len(peakToTotalRatioTraining)-1):
+        if i%1000 == 0:
+            print 'n = ', i
+            
         if peakToTotalRatio[i] < peakToTotalRatioTraining[i]:
-            neutronInfo[n] = neutronInfo.append(peakToTotalRatio[i])
-            n+=n
+            neutronInfo[n] = neutronInfo.append(pulseValue[i])
+            n = n + 1
+            #print 'n = ', n
         else:
-            photonInfo[m] = photonInfo.append(peakToTotalRatio[i])
-            m+=m
+            photonInfo[m] = photonInfo.append(pulseValue[i])
+            m = m + 1
+            #print 'm = ', m
+    #print 'photonInfo = ',photonInfo
+    #print 'neutronInfo = ',neutronInfo
     x = range(0,len(neutronInfo),1)
     y = range(0,len(photonInfo),1)
-    neutronInfo = np.asarray(neutronInfo)
-    photonInfo = np.asarray(photonInfo)
+    neutronInfo = np.asfarray(neutronInfo,dtype=np.float)
+    neutronInfo = np.sort(neutronInfo)
+    photonInfo = np.asfarray(photonInfo,dtype=np.float)
     x = np.asarray(x)
     y = np.asarray(y)
-    plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
+    neutronAmounts = []
+    adcVal = []
+    n=0
+    #print 'new neutronInfo = ', neutronInfo
+    for i in range(0,10000):
+    #for i in range(0,len(neutronInfo)-1):
+        if i%1000 ==0:
+            print 'i = ', i, 'n = ', n
+         
+        for k in range(0,10000):   
+        #for k in range(0,len(neutronInfo)-1):
+            if neutronInfo[i]==neutronInfo[k] and neutronAmounts[n]>=1:
+                neutronAmounts[n] = neutronAmounts[n]+1
+                print 'neutronAmounts = ',neutronAmounts[n]
+            elif neutronInfo[i]==neutronInfo[k]:
+                neutronAmounts[n] = 1
+                adcVal[n] = neutronInfo[i]
+                print 'neutronInfo = ',neutronInfo[i]
+        n = n + 1
+    
+    print 'adcVal = ', adcVal
+    print 'photon pttr = ', photonInfo
+    #plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
+    pylab.plot(adcVal, neutronAmounts, '*b', label='neutrons')
+    pylab.plot(y[0:70000], photonInfo[0:70000], '--r', label='photons')
+    pylab.legend(loc='upper left')
+    #pylab.ylim(-1.5, 2.0)
+    pylab.show()
     return neutronInfo
