@@ -23,20 +23,28 @@ def PSD(pulseData, pulseDataTraining):
         #map(int,photonTraining)
         #photonTraining1 = [int(x) for x in photonTraining]
         #reader = list(csv.DictReader(open(csvfile), delimiter='|'))
-        numlines = len(open(pulseDataTraining).readlines())
+        numlines = len(open('NE204-09-21-2011-Cs137-LS-Signal.csv').readlines())
         #numlines = len(csvfile.readlines())
-        peakToTotalRatioTraining = np.zeros((numlines,1))
+        tailToTotalRatioTraining = np.zeros((numlines,1))
         for row in photonTraining:
+            #pylab.plot(row)
+            #pylab.show()
             #print(row)
-            peakVal = findPeaks(row,30)  
+            peakVal, peakTime = findPeaks(row,3935)  
             #print(peakVal)
-            pulseIntegral = integratePulse(row,30)
+            pulseIntegral = integratePulse(row,3935)
+            tailIntegral = integrateTail(row,3935,peakTime)
             #print 'pulseIntegral = ', pulseIntegral
-            peakToTotalRatioTraining[i] = peakVal/float(pulseIntegral)
-            #print peakToTotalRatioTraining[i]
+            tailToTotalRatioTraining[i] = tailIntegral/float(pulseIntegral)
+            
+            if i%10000 == 0:
+                print('i = ', i)
+            #if i==0:
+            #    print('peakTime = ', peakTime)
             i=i+1
-            #print(i)
-    
+
+#print('tailToTotalRatioTraining = ', tailToTotalRatioTraining)
+
     #print peakToTotalRatioTraining
     
     #if photonTraining == 0:
@@ -52,13 +60,13 @@ def PSD(pulseData, pulseDataTraining):
         #numlines = len(open(pulseData).readlines())
     numlines = len(pulseData[:,0])
         #numlines = len(csvfile.readlines())
-    peakToTotalRatio = np.zeros((numlines,1))
+    tailToTotalRatio = np.zeros((numlines,1))
     pulseValue = np.zeros((numlines,1))
     for row in pulseData[0,0:10000]:#[0,0:99999]:
             #print(row)
         peakVal = findPeaks1(row,30)  
         if i%1000 == 0:
-            print 'i = ', i
+            print('i = ', i)
             
             #print(peakVal)
         pulseIntegral = integratePulse1(row,30)
@@ -77,7 +85,7 @@ def PSD(pulseData, pulseDataTraining):
     for i in range(0,10000):
     #for i in range(0,len(peakToTotalRatioTraining)-1):
         if i%1000 == 0:
-            print 'n = ', i
+            print('n = ', i)
             
         if peakToTotalRatio[i] < peakToTotalRatioTraining[i]:
             neutronInfo[n] = neutronInfo.append(pulseValue[i])
@@ -103,21 +111,31 @@ def PSD(pulseData, pulseDataTraining):
     for i in range(0,10000):
     #for i in range(0,len(neutronInfo)-1):
         if i%1000 ==0:
-            print 'i = ', i, 'n = ', n
+            print('i = ', i, 'n = ', n)
          
         for k in range(0,10000):   
         #for k in range(0,len(neutronInfo)-1):
             if neutronInfo[i]==neutronInfo[k] and neutronAmounts[n]>=1:
                 neutronAmounts[n] = neutronAmounts[n]+1
-                print 'neutronAmounts = ',neutronAmounts[n]
+                print('neutronAmounts = ',neutronAmounts[n])
             elif neutronInfo[i]==neutronInfo[k]:
                 neutronAmounts[n] = 1
                 adcVal[n] = neutronInfo[i]
-                print 'neutronInfo = ',neutronInfo[i]
+                print('neutronInfo = ',neutronInfo[i])
         n = n + 1
     
-    print 'adcVal = ', adcVal
-    print 'photon pttr = ', photonInfo
+    print('adcVal = ', adcVal)
+    print('photon pttr = ', photonInfo)
+    histTTTRT = np.histogram(tailToTotalRatioTraining,100000)
+    a = histTTTRT[0]
+    b = histTTTRT[1]
+    c = b[0:100000]
+    print('a = ', a)
+    print('b = ', b)
+
+    plt.figure(2)
+    plt.plot(a,c)
+    plt.show()
     #plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     pylab.plot(adcVal, neutronAmounts, '*b', label='neutrons')

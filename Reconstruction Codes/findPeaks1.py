@@ -13,9 +13,9 @@ def findPeaks1(pulse, thresh):
     cols = pulse.shape
     for i in range(0,cols[1]-1):
         if(pulse[0,i]>thresh):
-            if np.abs(pulse[0,i]) < np.abs(pulse[0,i+1]):
+            if np.abs(pulse[0,i]) < np.abs(pulse[0,i+1]) and peakVal < np.abs(pulse[0,i+1]):
                 peakVal = pulse[0,i+1]
-            else:
+            elif peakVal < np.abs(pulse[0,i]):
                 peakVal = pulse[0,i]
                 
     return peakVal
