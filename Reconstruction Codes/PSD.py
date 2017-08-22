@@ -17,6 +17,10 @@ def PSD(pulseData, pulseDataTraining):
     neutronPhotonDiscriminator = 0
     #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
     i = 0
+    pulseIntegral = 0
+    tailIntegral = 0
+    peakVal = 0
+    peakTime = 0
     with open(pulseDataTraining,'r') as csvfile:
         photonTraining = csv.reader(csvfile)
         #print 'photonTraining = ', photonTraining
@@ -51,6 +55,10 @@ def PSD(pulseData, pulseDataTraining):
     #    print("this is a string")
     
     i = 0
+    pulseIntegral = 0
+    tailIntegral = 0
+    peakVal = 0
+    peakTime = 0
     #with open(pulseData,'r') as csvfile1:
     #    neutronPhotonDiscriminator = csv.reader(csvfile1)
         #map(int,photonTraining)
@@ -64,13 +72,14 @@ def PSD(pulseData, pulseDataTraining):
     pulseValue = np.zeros((numlines,1))
     for row in pulseData[0,0:10000]:#[0,0:99999]:
             #print(row)
-        peakVal = findPeaks1(row,30)  
-        if i%1000 == 0:
+        peakVal, peakTime = findPeaks1(row,3900)  
+        if i%10000 == 0:
             print('i = ', i)
             
             #print(peakVal)
-        pulseIntegral = integratePulse1(row,30)
-        peakToTotalRatio[i] = peakVal/float(pulseIntegral)
+        pulseIntegral = integratePulse1(row,3900)
+        tailIntegral = integrateTail1(row,3900,peakTime)
+        tailToTotalRatio[i] = tailIntegral/float(pulseIntegral)
         pulseValue[i]=pulseIntegral
         i=i+1
             #print(i)

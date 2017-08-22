@@ -13,7 +13,7 @@ def integratePulse1(pulse,thresh):
     pulseIntegral = 0;
     cols = pulse.shape
     for i in range(0,cols[1]-1):
-        if pulse[0,i]>thresh:
+        if pulse[0,i]<thresh:
             pulseIntegral = pulseIntegral + pulse[0,i];
         
     return pulseIntegral;
