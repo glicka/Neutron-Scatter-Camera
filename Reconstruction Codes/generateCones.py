@@ -40,11 +40,11 @@ def generateCones(detectorVals,plane1Times,plane2Times,neutronPulseData1,neutron
 #    dataListPlane2 = dataListPlane2[np.argsort(dataListPlane1[:,adcBit+1])]
     
     
-    hist = np.zeros(len(dataListPlane1[:,0]))
-    for i in range(0,len(dataListPlane1[:,0])):
-        hist[i] = dataListPlane2[i,adcBit+1]-dataListPlane1[i,adcBit+1]
+#    hist = np.zeros(len(dataListPlane1[:,0]))
+#    for i in range(0,len(dataListPlane1[:,0])):
+#        hist[i] = dataListPlane2[i,adcBit+1]-dataListPlane1[i,adcBit+1]
     
-    plt.figure()
-    plt.plot(hist)
-    plt.show()
+#    plt.figure()
+#    plt.plot(hist)
+#    plt.show()
     
