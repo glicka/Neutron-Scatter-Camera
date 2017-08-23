@@ -16,9 +16,9 @@ def dataProcessing(datafile):
     #print(f)
     #print("Keys: %s" % f.keys())
     groupKeyVal = f.keys()[4]
-    groupDetectorVal = f.keys()[1]
+    groupDetectorVal = f.keys()[2]
     detectorVals = list(f[groupDetectorVal])
-    groupTimeVals = f.keys()[2]
+    groupTimeVals = f.keys()[5]
     timeVals = list(f[groupTimeVals])
     rawData = list(f[groupKeyVal])
     #A = RawSamples.rawData
