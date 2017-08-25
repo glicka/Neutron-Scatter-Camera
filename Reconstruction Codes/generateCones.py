@@ -6,7 +6,7 @@ Created on Wed Aug 16 10:31:57 2017
 @author: aglick
 """
 
-def generateCones(detectorVals,plane1Times,plane2Times,neutronPulseData1,neutronPulseData2):
+def generateCones(detectorVal,plane1Times,plane2Times,neutronPulseData1,neutronPulseData2):
     import csv
     import numpy as np
     import math
