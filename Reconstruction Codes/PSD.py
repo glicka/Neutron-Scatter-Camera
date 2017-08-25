@@ -60,44 +60,45 @@ def PSD(pulseData, pulseDataTraining):
     peakTime = 0
     neutronTailToTotalRatio = []
     #tailToTotalRatio = 0
-    with open(pulseData,'r') as csvfile:
-        neutronData = csv.reader(csvfile)
+    #with open(pulseData,'r') as csvfile:
+    neutronData = pulseData
         #print 'photonTraining = ', photonTraining
         #map(int,photonTraining)
         #photonTraining1 = [int(x) for x in photonTraining]
         #reader = list(csv.DictReader(open(csvfile), delimiter='|'))
-        numlines = len(open('NE204-09-21-2011-PuBe-LSC-Signal.csv').readlines())
+        #numlines = len(open('NE204-09-21-2011-PuBe-LSC-Signal.csv').readlines())
         #numlines = len(csvfile.readlines())
-        tailToTotalRatio = np.zeros((numlines,1))
-        adcVal = np.zeros((numlines,1))
-        for row in neutronData:
+    numlines = len(neutronData[:,0])
+    tailToTotalRatio = np.zeros((numlines,1))
+    adcVal = np.zeros((numlines,1))
+    for row in neutronData:
             #pylab.plot(row)
             #pylab.show()
             #print(row)
-            peakVal, peakTime = findPeaks(row,3900)  
+        peakVal, peakTime = findPeaks(row,3900)  
             #print(peakVal)
-            pulseIntegral = integratePulse(row,3900)
-            tailIntegral = integrateTail(row,3900,peakTime)
+        pulseIntegral = integratePulse(row,3900)
+        tailIntegral = integrateTail(row,3900,peakTime)
             #print 'pulseIntegral = ', pulseIntegral
-            tailToTotalRatio[i] = tailIntegral/float(pulseIntegral)
-            adcVal[i] = pulseIntegral
+        tailToTotalRatio[i] = tailIntegral/float(pulseIntegral)
+        adcVal[i] = pulseIntegral
             
-            if i%10000 == 0:
-                print('m = ', i)
+        if i%10000 == 0:
+            print('m = ', i)
                 #print('pulseIntegral = ', pulseIntegral)
                 #print('adcVal = ', adcVal[i])
             #if i==0:
             #    print('peakTime = ', peakTime)
                 
-            i=i+1
+        i=i+1
     
     #n = 0
     #neutronADC = [i for i in adcVal if tailToTotalRatio[i] >= 0.7]
     #photonADC = [adcVal[i] for i in tailToTotalRatio if tailToTotalRatio[i] < 0.7]
 
     
-    neutronTailToTotalRatio = [i for i in tailToTotalRatio if i >= 0.7]
-    photonTailToTotalRatio = [i for i in tailToTotalRatio if i < 0.7]
+    neutronTailToTotalRatio = [i for i in tailToTotalRatio if i >= 0.4]
+    photonTailToTotalRatio = [i for i in tailToTotalRatio if i < 0.4]
     
     neutronADC = np.zeros(len(neutronTailToTotalRatio))
     photonADC = np.zeros(len(photonTailToTotalRatio))
@@ -173,73 +174,11 @@ def PSD(pulseData, pulseDataTraining):
     #plt.plot(d,f)
     plt.show()
     
-    #n=0
-    #m=0
-    #neutronInfo = []
-    #photonInfo = []
-    #for i in range(0,len(f)-1):
-    #for i in range(0,len(peakToTotalRatioTraining)-1):
-    #    if i%1000 == 0:
-#            print('n = ', i)
+
 ########################################################################################
 ### Sum up ADC values of pulse (integrate pulse) to put into neutron/photon category ###
 ########################################################################################
-    #    if f[i] > 0.65:
-    #        neutronInfo[n] = neutronInfo.append(pulseIntegral[i])
-    #        n = n + 1
-            #print 'n = ', n
-    #    else:
-    #        photonInfo[m] = photonInfo.append(pulseIntegral[i])
-    #        m = m + 1
-            #print 'm = ', m
-    #print 'photonInfo = ',photonInfo
-    #print 'neutronInfo = ',neutronInfo
-#    x = range(0,len(neutronInfo),1)
-#    y = range(0,len(photonInfo),1)
-#    neutronInfo = np.asfarray(neutronInfo,dtype=np.float)
-#    neutronInfo = np.sort(neutronInfo)
-#    photonInfo = np.asfarray(photonInfo,dtype=np.float)
-#    x = np.asarray(x)
-#    y = np.asarray(y)
-#    neutronAmounts = []
-#    adcVal = []
-#    n=0
-    #print 'new neutronInfo = ', neutronInfo
-#    for i in range(0,10000):
-    #for i in range(0,len(neutronInfo)-1):
-#        if i%1000 ==0:
-#            print('i = ', i, 'n = ', n)
-         
-#        for k in range(0,10000):   
-        #for k in range(0,len(neutronInfo)-1):
-#            if neutronInfo[i]==neutronInfo[k] and neutronAmounts[n]>=1:
-#                neutronAmounts[n] = neutronAmounts[n]+1
-#                print('neutronAmounts = ',neutronAmounts[n])
-#            elif neutronInfo[i]==neutronInfo[k]:
-#                neutronAmounts[n] = 1
-#                adcVal[n] = neutronInfo[i]
-#                print('neutronInfo = ',neutronInfo[i])
-#        n = n + 1
-    
-#    print('adcVal = ', adcVal)
-#    print('photon pttr = ', photonInfo)
-#    histTTTRT = np.histogram(tailToTotalRatioTraining,100000)
-#    a = histTTTRT[0]
-#    b = histTTTRT[1]
-#    c = b[0:100000]
-#    print('a = ', a)
-#   print('b = ', b)
 
-#   plt.figure(2)
-#   plt.plot(a,c)
-#   plt.show()
-    #plt.plot(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
-    #plt.scatter(x[0:70000],neutronInfo[0:70000],y[0:70000],photonInfo[0:70000])
-#    pylab.plot(adcVal, neutronAmounts, '*b', label='neutrons')
-#    pylab.plot(y[0:70000], photonInfo[0:70000], '--r', label='photons')
-#    pylab.legend(loc='upper left')
-    #pylab.ylim(-1.5, 2.0)
-#    pylab.show()
-    return neutronTailToTotalRatio, neutronADC
+    return neutronADC
     
     

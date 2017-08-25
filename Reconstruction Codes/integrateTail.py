@@ -14,7 +14,7 @@ def integrateTail(pulse,thresh,peakTime):
     map(int, pulse)
     pulse1 = [int(x) for x in pulse]
     for i in range(0,len(pulse1)-1):
-        if pulse1[i]<thresh and i>peakTime+3:
+        if pulse1[i]<thresh and i>peakTime+8:
             tailIntegral = tailIntegral + pulse1[i];
         
     return tailIntegral;

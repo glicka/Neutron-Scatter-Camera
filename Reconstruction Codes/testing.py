@@ -15,4 +15,4 @@ import matplotlib.pyplot as plt
     #import plotly as py
 import pylab
 
-PSDtesting('NE204-09-21-2011-PuBe-LSC-Signal.csv','NE204-09-21-2011-Cs137-LS-Signal.csv')
+PSD1('NE204-09-21-2011-PuBe-LSC-Signal.csv','NE204-09-21-2011-Cs137-LS-Signal.csv')
