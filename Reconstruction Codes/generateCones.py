@@ -11,7 +11,6 @@ def generateCones(detectorVal,plane1Times,plane2Times,neutronPulseData1,neutronP
     import numpy as np
     import math
     import matplotlib.pyplot as plt
-    #import plotly as py
     import pylab
     
     

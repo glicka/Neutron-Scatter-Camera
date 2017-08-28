@@ -11,11 +11,9 @@ def integratePulse(pulse,thresh):
     import scipy as sp;
     import math;
     pulseIntegral = 0;
-    map(int, pulse)
-    pulse1 = [int(x) for x in pulse]
-    for i in range(0,len(pulse1)-1):
-        if pulse1[i]<thresh:
-            pulseIntegral = pulseIntegral + pulse1[i];
+    for i in range(0,len(pulse)):
+        if pulse[i]>thresh:
+            pulseIntegral = pulseIntegral + pulse[i];
         
     return pulseIntegral;
         

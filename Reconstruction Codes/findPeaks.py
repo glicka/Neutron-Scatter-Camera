@@ -10,23 +10,17 @@ def findPeaks(pulse, thresh):
     import numpy as np
     import scipy as sp
     import matplotlib.pyplot as plt
-    #import plotly as py
     import pylab
     
-    peakVal = 1000000
+    peakVal = 0
     peakTime = 0
-    map(int, pulse)
-    pulse1 = [int(x) for x in pulse]
-    #plt.plot(pulse1,pulse1)
-    #plt.show()
-    #plt.figure()
-    for i in range(0,len(pulse1)-1):
-        if(pulse1[i]<thresh):
-            if np.abs(pulse1[i]) > np.abs(pulse1[i+1]) and peakVal > np.abs(pulse1[i+1]):
-                peakVal = pulse1[i+1]
+    for i in range(0,len(pulse)-1):
+        if pulse[i]>thresh:
+            if np.abs(pulse[i]) < np.abs(pulse[i+1]) and peakVal < np.abs(pulse[i+1]):
+                peakVal = pulse[i+1]
                 peakTime = i
-            elif peakVal > np.abs(pulse1[i]):
-                peakVal = pulse1[i]
+            elif peakVal < np.abs(pulse[i]):
+                peakVal = pulse[i]
                 peakTime = i
     
     return peakVal, peakTime

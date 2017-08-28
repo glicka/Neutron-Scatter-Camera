@@ -14,28 +14,25 @@ def dataProcessing(datafile):
 
 #### Extract data here ####    
     f = h5py.File(datafile, 'r')
-    #print(f)
-    #print("Keys: %s" % f.keys())
-    groupKeyVal = f.keys()[4]
-    groupDetectorVal = f.keys()[2]
-    adcBoardKey = f.keys()[0]
-    adcBoardVals = list(f[adcKeyVal])
-    adcChannelKey = f.keys()[1]
-    adcChannel = list(f[adcChannelKey])
-    detectorVals = list(f[groupDetectorVal])
-    groupTimeVals = f.keys()[5]
-    timeVals = list(f[groupTimeVals])
-    rawData = list(f[groupKeyVal])
-    
-    rawDataMat = np.matrix(rawData)
-    temp = 0
-    temp1 = 0
+    adcBoardKey = list(f.keys())[0]
+    adcBoardVals = f[adcBoardKey]
+    adcBoardVals = np.array(adcBoardVals)
+    adcChannelKey = list(f.keys())[1]
+    adcChannel = f[adcChannelKey]
+    adcChannel = np.array(adcChannel)
+    groupTimeVals = list(f.keys())[5]
+    timeVals = f[groupTimeVals]
+    timeVals = np.array(timeVals)
+    groupKeyVal = list(f.keys())[4]
+    rawData = f[groupKeyVal]
+    rawDataMat = np.array(rawData,dtype='float')
     detectorVal = []
     
 #### Break up detectors into 1-24 based on adcChannel and adcBoard values ####    
-    for i in range(0,len(adcBoardVals)):
+    for i in range(0,100000):#len(adcBoardVals)):
+        if i%50000 == 0:
+            print(i)    
         if adcBoardVals[i] == 5:
-            temp = temp+1
             if adcChannel[i] == 0:
                 detectorVal = detectorVal + [1]
             elif adcChannel[i] == 1:
@@ -53,7 +50,6 @@ def dataProcessing(datafile):
             elif adcChannel[i] == 7:
                 detectorVal = detectorVal + [8]
         elif adcBoardVals[i] == 7:
-            temp1 = temp1+1
             if adcChannel[i] == 0:
                 detectorVal = detectorVal + [17]
             elif adcChannel[i] == 1:
@@ -73,54 +69,44 @@ def dataProcessing(datafile):
         elif adcBoardVals[i] == 6:
             if adcChannel[i] == 0:
                 detectorVal = detectorVal + [9]
-                temp = temp+1
             elif adcChannel[i] == 1:
                 detectorVal = detectorVal + [10]
-                temp = temp+1
             elif adcChannel[i] == 2:
                 detectorVal = detectorVal + [11]
-                temp = temp+1
             elif adcChannel[i] == 3:
                 detectorVal = detectorVal + [12]
-                temp = temp+1
             elif adcChannel[i] == 4:
                 detectorVal = detectorVal + [13]
-                temp1 = temp1+1
             elif adcChannel[i] == 5:
                 detectorVal = detectorVal + [14]
-                temp1 = temp1+1
             elif adcChannel[i] == 6:
                 detectorVal = detectorVal + [15]
-                temp1 = temp1+1
             elif adcChannel[i] == 7:
                 detectorVal = detectorVal + [16]
-                temp1 = temp1+1
             
-    #### Convert list into numpy array ####
-    detectorVal = np.asarray(detectorVal)
-    #temp = [i for i in groupDetectorVal if i <= 12]
-    #temp1 = [i for i in groupDetectorVal if i > 12]
-    plane1Data = np.zeros((temp,len(rawDataMat[0,:])))
-    plane2Data = np.zeros((temp1,len(rawDataMat[0,:])))
-    plane1Times = np.zeros((temp,1))
-    plane2Times = np.zeros((temp1,1))
+#### Convert list into numpy array ####
+    detectorVal = np.array(detectorVal,dtype='float')
 
-#### Separate data based on each plane of detectors ####
-    n = 0
-    m = 0
-    for i in range(0,len(adcBoardVals)):
-        
-        if detectorVal[i] <= 12:
-            plane1Data[n,:] = rawDataMat[i,:]
-            plane1Times[n] = timeVals[i]
-            n = n+1
-        else:
-            plane2Data[m,:] = rawDataMat[i,:]
-            plane2Times[m] = timeVals[i]
-            m = m+1
+#### Separate data based on each plane of detectors #### 
+    plane1Data = []
+    plane2Data = []
+    plane1Times = []
+    plane2Times = []
+    for i in range(0,100000):#len(adcBoardVals)):
+        if i%50000 == 0:
+            print(i)
             
-    #A = RawSamples.rawData
-    #print(rawData)
+        if detectorVal[i] <= 12:
+            plane1Data = plane1Data + [rawDataMat[i,:]]
+            plane1Times = plane1Times + [timeVals[i]]
+        else:
+            plane2Data = plane2Data + [rawDataMat[i,:]]
+            plane2Times = plane2Times + [timeVals[i]]
+#### Convert list into numpy array ####
+    plane1Data = np.array(plane1Data,dtype='float')
+    plane2Data = np.array(plane2Data,dtype='float')
+    plane1Times = np.array(plane1Times,dtype='float')
+    plane2Times = np.array(plane2Times,dtype='float')
 
 #### Perform PSD for each plane of data to extract just neutron information ####
     neutronPulseData1 = PSD(plane1Data,'NE204-09-21-2011-Cs137-LS-Signal.csv')
