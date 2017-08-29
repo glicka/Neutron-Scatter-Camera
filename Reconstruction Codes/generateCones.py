@@ -12,11 +12,13 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
     import math
     import matplotlib.pyplot as plt
     import pylab
-    
+    import time
     planeSeparation = 0.6096 #meters
     detectorSeparation = 0.0889 #meters
     u = detectorSeparation #meters
     D = planeSeparation #meters
+    clockSpeed = 250*10**6 #Hz
+    timeScale = 1/clockSpeed #seconds
     distance = 0
     temp = 0
     x1 = []
@@ -56,49 +58,43 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
     plane2DetScale = np.array(plane2DetScale,dtype = 'int')
 #### Calculate neutron energy from time of flight between the 2 planes ####
     for i in range(0,len(plane1Times)):
+        tic = time.time()
+
         for n in range(0,len(plane2Times)):
-            if abs(plane1Times[i] - plane2Times[n]) <= 10000:
+            if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
                 x1 = plane1Local[plane1Dets[i]]
                 x2 = plane2Local[plane2DetScale[n]]
                 distance = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
-                neutronEnergyTOF = neutronEnergyTOF + [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/(plane1Times[i]-plane2Times[n]))**2] #MeV
-                energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/(plane1Times[i]-plane2Times[n]))**2
-                print('Energy = ',energy,' MeV')
+                timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
+                neutronEnergyTOF = neutronEnergyTOF + [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
+                #energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2
+                #print('Energy = ',energy,' MeV')   
+                break
+        toc = time.time()
+        if i%1000 == 0:
+            print('i = ',i)
+            print('tictoc = ',toc-tic)
     neutronEnergyTOF = np.array(neutronEnergyTOF)
     
-    for i in range(0,len(neuronEnergyTOF)):
-        temp = neutronPulseData1[i]
-        neutronEnergy = neutronEnergy + [neutronEnergyTOF[i]] + [temp]
-#    dataListPlane2 = []
-#    m=0
-#   k=0
-#   for i in range(0,len(neutronPulseData)-1):
-#        if detectorVals[i] <= 11:
-#            m = m + 1
-            #dataListPlane1 [i,:] = np.insert([neutronPulseData[i],timeVals[i])
-#        else:
-#            k = k + 1
-            
-#    adcBit = len(neutronPulseData[0,:])        
-#    dataListPlane1 = np.zeros([m,adcBit+2])
-#    dataListPlane2 = np.zeros([k,adcBit+2])
+#    for i in range(0,len(neuronEnergyTOF)):
+#        temp = neutronPulseData1[i]
+#        neutronEnergy = neutronEnergy + [neutronEnergyTOF[i]] + [temp]
+
+#    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
+    energyHist = np.histogram(neutronEnergyTOF,100000)
+    a = energyHist[0]
+    b = energyHist[1]
+    c = b[0:100000]
+    plt.figure(1)
+    plt.plot(c,a,'r',label='neutron spectrum')
+    plt.xlabel('Neutron Energy [MeV]')
+    plt.ylabel('Counts')
+    plt.legend(loc='upper right')
+    #plt.plot(d,f)
+    plt.show()
     
-#    for i in range(0,len(neutronPulseData)-1):
-#        if detectorVals[i] <=11:
-#            dataListPlane1[i,:] = [neutronPulseData[i,:],timeVals[i],detectorVals[i]]
-#        else:
-#            dataListPlane2[i,:] = [neutronPulseData[i,:],timeVals[i],detectorVals[i]]
+#    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
+#    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
     
-    
-#    dataListPlane1 = dataListPlane1[np.argsort(dataListPlane1[:,adcBit+1])]
-#    dataListPlane2 = dataListPlane2[np.argsort(dataListPlane1[:,adcBit+1])]
-    
-    
-#    hist = np.zeros(len(dataListPlane1[:,0]))
-#    for i in range(0,len(dataListPlane1[:,0])):
-#        hist[i] = dataListPlane2[i,adcBit+1]-dataListPlane1[i,adcBit+1]
-    
-#    plt.figure()
-#    plt.plot(hist)
-#    plt.show()
+    return
     
