@@ -29,14 +29,15 @@ def radiationPlot(datafile):
     detectorVal = []
     pulseIntegral = []
     i = 0
-    for i in range(0,1000000):
-        if i%50000 == 0:
+    for i in range(0,300000):
+        if i%10000 == 0:
             print(i)
-        elif i == 999999:
+        elif i == 299999:
             print(i)
         row = rawDataMat[i,:]
-        pulseIntegral = pulseIntegral + [integratePulse(row,55)]
-        i = i + 1
+        peakVal, peakTime = findPeaks(row)
+        pulseIntegral = pulseIntegral + [integratePulse(row,peakTime)]
+        #i = i + 1
         
     pulseIntegral = np.array(pulseIntegral)
     
