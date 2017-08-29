@@ -92,6 +92,8 @@ def dataProcessing(datafile):
     plane2Data = []
     plane1Times = []
     plane2Times = []
+    plane1Dets = []
+    plane2Dets = []
     for i in range(0,100000):#len(adcBoardVals)):
         if i%50000 == 0:
             print(i)
@@ -99,18 +101,22 @@ def dataProcessing(datafile):
         if detectorVal[i] <= 12:
             plane1Data = plane1Data + [rawDataMat[i,:]]
             plane1Times = plane1Times + [timeVals[i]]
+            plane1Dets = plane1Dets + [detectorVal[i]]
         else:
             plane2Data = plane2Data + [rawDataMat[i,:]]
             plane2Times = plane2Times + [timeVals[i]]
+            plane2Dets = plane2Dets + [detectorVal[i]]
 #### Convert list into numpy array ####
     plane1Data = np.array(plane1Data,dtype='float')
     plane2Data = np.array(plane2Data,dtype='float')
     plane1Times = np.array(plane1Times,dtype='float')
     plane2Times = np.array(plane2Times,dtype='float')
-
+    plane1Dets = np.array(plane1Dets,dtype='float')
+    plane2Dets = np.array(plane2Dets,dtype='float')
+    
 #### Perform PSD for each plane of data to extract just neutron information ####
     neutronPulseData1 = PSD(plane1Data,'NE204-09-21-2011-Cs137-LS-Signal.csv')
     neutronPulseData2 = PSD(plane2Data,'NE204-09-21-2011-Cs137-LS-Signal.csv')
 
 #### Generate cones and do energy reconstruction of neutrons ####
-    cones = generateCones(detectorVal,plane1Times,plane2Times,neutronPulseData1,neutronPulseData2)
+    cones = generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData1,neutronPulseData2)
