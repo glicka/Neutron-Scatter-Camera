@@ -13,14 +13,16 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
     import matplotlib.pyplot as plt
     import pylab
     
-    planeSeparation = 150 #cm
-    D = planeSeparation #cm
+    planeSeparation = 0.6096 #meters
+    detectorSeparation = 0.0889 #meters
+    u = detectorSeparation #meters
+    D = planeSeparation #meters
     distance = 0
     temp = 0
     x1 = []
     x2 = []
-    plane1Local = np.array([[0,0,0],[0,5,0],[0,10,0],[5,0,0],[5,5,0],[5,10,0],[10,0,0],[10,5,0],[10,10,0],[15,0,0],[15,5,0],[15,10,0]],dtype='float')
-    plane2Local = np.array([[0,0,D],[0,5,D],[0,10,D],[5,0,D],[5,5,D],[5,10,D],[10,0,D],[10,5,D],[10,10,D],[15,0,D],[15,5,D],[15,10,D]],dtype='float')
+    plane1Local = np.array([[0,0,0],[0,u,0],[0,2*u,0],[u,0,0],[u,u,0],[u,2*u,0],[2*u,0,0],[2*u,u,0],[2*u,2*u,0],[3*u,0,0],[3*u,u,0],[3*u,2*u,0]],dtype='float')
+    plane2Local = np.array([[0,0,D],[0,u,D],[0,2*u,D],[u,0,D],[u,u,D],[u,2*u,D],[2*u,0,D],[2*u,u,D],[2*u,2*u,D],[3*u,0,D],[3*u,u,D],[3*u,2*u,D]],dtype='float')
     neutronEnergyTOF = []
     neutronEnergy = []
     
