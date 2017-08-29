@@ -16,5 +16,5 @@ import matplotlib.pyplot as plt
 import pylab
 
 #PSD1('NE204-09-21-2011-PuBe-LSC-Signal.csv','NE204-09-21-2011-Cs137-LS-Signal.csv')
-#dataProcessing('Data-Cs137-08-04-2017-Run1.h5')
-radiationPlot('Data-Cs137-08-04-2017-Run1.h5')
+dataProcessing('Data-Cs137-08-04-2017-Run1.h5')
+#radiationPlot('Data-Cs137-08-04-2017-Run1.h5')

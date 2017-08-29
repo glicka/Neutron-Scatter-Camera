@@ -6,7 +6,7 @@ Created on Tue Aug 22 16:50:31 2017
 @author: aglick
 """
 
-def PSD(pulseData, pulseDataTraining):
+def PSD(detectorData,timeData,pulseData):
     import csv
     import numpy as np
     import math
@@ -26,12 +26,12 @@ def PSD(pulseData, pulseDataTraining):
     tailToTotalRatio = np.zeros((numlines,1))
     adcVal = np.zeros((numlines,1))
     for row in pulseData:
-        peakVal, peakTime = findPeaks(row,55)  
-        pulseIntegral = integratePulse(row,55)
-        tailIntegral = integrateTail(row,55,peakTime)
+        peakVal, peakTime = findPeaks(row)  
+        pulseIntegral = integratePulse(row,peakTime)
+        tailIntegral = integrateTail(row,peakTime)
         tailToTotalRatio[i] = tailIntegral/float(pulseIntegral)
         adcVal[i] = pulseIntegral
-        if i%10000 == 0:
+        if i%50000 == 0:
             print('m = ', i)               
         i=i+1
     
@@ -44,14 +44,19 @@ def PSD(pulseData, pulseDataTraining):
     
     neutronADC = []
     photonADC = []
-
+    neutronDets = []
+    neutronTimes = []
     for i in range(0,len(tailToTotalRatio)-1):
         if tailToTotalRatio[i] >= 0.35:
             neutronADC = neutronADC + [adcVal[i]]
+            neutronDets = neutronDets + [detectorData[i]]
+            neutronTimes = neutronTimes + [timeData[i]]
         else:
             photonADC = photonADC + [adcVal[i]]
         
     neutronADC = np.asarray(neutronADC)
+    neutronDets = np.asarray(neutronDets,dtype = 'int')
+    neutronTimes = np.asarray(neutronTimes)
     photonADC = np.asarray(photonADC)
     a = 0
     b = 0
@@ -92,16 +97,16 @@ def PSD(pulseData, pulseDataTraining):
     plt.show()
     
     plt.figure(3)
-    plt.plot(a1,c1,'r',label='photons')
-    plt.plot(d1,f1,'b--',label='neutrons')
-    plt.xlabel('Counts')
-    plt.ylabel('ADC Val')
+    plt.plot(c1,a1,'r',label='photons')
+    plt.plot(f1,d1,'b--',label='neutrons')
+    plt.xlabel('ADC Val')
+    plt.ylabel('Counts')
     plt.legend(loc='upper right')
     #plt.plot(d,f)
     plt.show()
     
 
 
-    return neutronADC
+    return neutronDets, neutronTimes, neutronADC
     
     
