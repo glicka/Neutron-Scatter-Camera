@@ -81,10 +81,10 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
 #        neutronEnergy = neutronEnergy + [neutronEnergyTOF[i]] + [temp]
 
 #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
-    energyHist = np.histogram(neutronEnergyTOF,100000)
+    energyHist = np.histogram(neutronEnergyTOF,1000)
     a = energyHist[0]
     b = energyHist[1]
-    c = b[0:100000]
+    c = b[0:1000]
     plt.figure(1)
     plt.plot(c,a,'r',label='neutron spectrum')
     plt.xlabel('Neutron Energy [MeV]')
