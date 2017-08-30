@@ -16,7 +16,7 @@ def integratePulse(pulse,peakTime):
     upperBound = int(round(3*len(pulse)/4))
     for i in range(lowerBound,upperBound):
         if pulse[i]>thresh:
-            pulseIntegral = pulseIntegral + pulse[i];
+            pulseIntegral += pulse[i];
         
     return pulseIntegral;
         
