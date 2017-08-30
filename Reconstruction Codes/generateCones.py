@@ -6,7 +6,7 @@ Created on Wed Aug 16 10:31:57 2017
 @author: aglick
 """
 
-def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData1,neutronPulseData2):
+def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseData,plane2NeutronPulseData):
     import csv
     import numpy as np
     import math
@@ -59,8 +59,10 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
 #### Calculate neutron energy from time of flight between the 2 planes ####
     for i in range(0,len(plane1Times)):
         tic = time.time()
-
+        
         for n in range(0,len(plane2Times)):
+#            if n%10000 == 0:
+#                print('n = ',n)
             if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
                 x1 = plane1Local[plane1Dets[i]]
                 x2 = plane2Local[plane2DetScale[n]]
@@ -68,10 +70,14 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
                 timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                 neutronEnergyTOF += [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
                 #energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2
-                #print('Energy = ',energy,' MeV')   
+                #print('Energy = ',energy,' MeV') 
+                if n%10000 == 0:
+                    print('n = ',n)
+                    print('x1 = ',x1)
+                    print('x2 = ',x2)
                 break
         toc = time.time()
-        if i%1000 == 0:
+        if i%100 == 0:
             print('i = ',i)
             print('tictoc = ',toc-tic)
     neutronEnergyTOF = np.array(neutronEnergyTOF)
