@@ -31,29 +31,29 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
     plane2DetScale = []
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
-            plane2DetScale = plane2DetScale + [0]
+            plane2DetScale += [0]
         if plane2Dets[i] == 13:
-            plane2DetScale = plane2DetScale + [1]
+            plane2DetScale += [1]
         if plane2Dets[i] == 14:
-            plane2DetScale = plane2DetScale + [2]
+            plane2DetScale += [2]
         if plane2Dets[i] == 15:
-            plane2DetScale = plane2DetScale + [3]
+            plane2DetScale += [3]
         if plane2Dets[i] == 16:
-            plane2DetScale = plane2DetScale + [4]
+            plane2DetScale += [4]
         if plane2Dets[i] == 17:
-            plane2DetScale = plane2DetScale + [5]
+            plane2DetScale += [5]
         if plane2Dets[i] == 18:
-            plane2DetScale = plane2DetScale + [6]
+            plane2DetScale += [6]
         if plane2Dets[i] == 19:
-            plane2DetScale = plane2DetScale + [7]
+            plane2DetScale += [7]
         if plane2Dets[i] == 20:
-            plane2DetScale = plane2DetScale + [8]
+            plane2DetScale +=[8]
         if plane2Dets[i] == 21:
-            plane2DetScale = plane2DetScale + [9]
+            plane2DetScale += [9]
         if plane2Dets[i] == 22:
-            plane2DetScale = plane2DetScale + [10]
+            plane2DetScale += [10]
         if plane2Dets[i] == 23:
-            plane2DetScale = plane2DetScale + [11]
+            plane2DetScale += [11]
     
     plane2DetScale = np.array(plane2DetScale,dtype = 'int')
 #### Calculate neutron energy from time of flight between the 2 planes ####
@@ -66,7 +66,7 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
                 x2 = plane2Local[plane2DetScale[n]]
                 distance = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
                 timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
-                neutronEnergyTOF = neutronEnergyTOF + [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
+                neutronEnergyTOF += [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
                 #energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2
                 #print('Energy = ',energy,' MeV')   
                 break
@@ -78,7 +78,7 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,neutronPulseData
     
 #    for i in range(0,len(neuronEnergyTOF)):
 #        temp = neutronPulseData1[i]
-#        neutronEnergy = neutronEnergy + [neutronEnergyTOF[i]] + [temp]
+#        neutronEnergy += [neutronEnergyTOF[i]] + [temp]
 
 #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
     energyHist = np.histogram(neutronEnergyTOF,1000)
