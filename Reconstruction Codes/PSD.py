@@ -12,6 +12,8 @@ def PSD(detectorData,timeData,pulseData):
     import math
     import matplotlib.pyplot as plt
     import pylab
+    import time
+    import operator
 
 
     i = 0
@@ -21,20 +23,25 @@ def PSD(detectorData,timeData,pulseData):
     peakTime = 0
     neutronTailToTotalRatio = []
 
-
-    numlines = len(pulseData[:,0])
-    tailToTotalRatio = np.zeros((numlines,1))
-    adcVal = np.zeros((numlines,1))
+    tailToTotalRatio = []
+    adcVal = []
+    tic = time.time()
     for row in pulseData:
-        peakVal, peakTime = findPeaks(row)  
+#        peakVal, peakTime = max(enumerate(row), key=operator.itemgetter(1)) #findPeaks(row)  
+        #print('temp = ',temp)
+        peakTime = row.argmax()
         pulseIntegral = integratePulse(row,peakTime)
         tailIntegral = integrateTail(row,peakTime)
-        tailToTotalRatio[i] = tailIntegral/float(pulseIntegral)
-        adcVal[i] = pulseIntegral
+        tailToTotalRatio += [tailIntegral/float(pulseIntegral)]
+        adcVal += [pulseIntegral]
+        
         if i%50000 == 0:
-            print('m = ', i)               
+            print('m = ', i) 
+            print('tictoc = ',time.time()-tic)     
         i=i+1
     
+    adcVal = np.asarray(adcVal,dtype='float')
+    tailToTotalRatio = np.asarray(tailToTotalRatio,dtype='float')
     neutronTailToTotalRatio = [i for i in tailToTotalRatio if i >= 0.35]
     photonTailToTotalRatio = [i for i in tailToTotalRatio if i < 0.35]
 
@@ -46,18 +53,19 @@ def PSD(detectorData,timeData,pulseData):
     photonADC = []
     neutronDets = []
     neutronTimes = []
-    for i in range(0,len(tailToTotalRatio)-1):
+    for i in range(0,len(tailToTotalRatio)):
         if tailToTotalRatio[i] >= 0.35:
-            neutronADC = neutronADC + [adcVal[i]]
-            neutronDets = neutronDets + [detectorData[i]]
-            neutronTimes = neutronTimes + [timeData[i]]
+            neutronADC += [adcVal[i]]
+            neutronDets += [detectorData[i]]
+            neutronTimes += [timeData[i]]
         else:
-            photonADC = photonADC + [adcVal[i]]
+            photonADC += [adcVal[i]]
         
     neutronADC = np.asarray(neutronADC)
     neutronDets = np.asarray(neutronDets,dtype = 'int')
     neutronTimes = np.asarray(neutronTimes)
     photonADC = np.asarray(photonADC)
+    
     a = 0
     b = 0
     c = 0
@@ -66,12 +74,12 @@ def PSD(detectorData,timeData,pulseData):
     f = 0
     #numpy.savetxt("neutron.csv", neutronTailToTotalRatio, delimiter=",")
     #numpy.savetxt("photon.csv", photonTailToTotalRatio, delimiter=",")
-    histTTTRT = np.histogram(photonTailToTotalRatio,100000)
+    histTTTPT = np.histogram(photonTailToTotalRatio,100000)
 
     histPADC = np.histogram(photonADC,100000)
     #histTTTRT = photonTailToTotalRatio.hist(bins=100000)
-    a = histTTTRT[0]
-    b = histTTTRT[1]
+    a = histTTTPT[0]
+    b = histTTTPT[1]
     c = b[0:100000]
     a1 = histPADC[0]
     b1 = histPADC[1]
