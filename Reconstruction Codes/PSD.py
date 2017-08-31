@@ -6,7 +6,7 @@ Created on Tue Aug 22 16:50:31 2017
 @author: aglick
 """
 
-def PSD(detectorData,timeData,pulseData):
+def PSD(detectorData,timeData,pulseData,plane):
     import csv
     import numpy as np
     import math
@@ -101,6 +101,7 @@ def PSD(detectorData,timeData,pulseData):
     plt.xlabel('Counts')
     plt.ylabel('Tail to Total Ratio')
     plt.legend(loc='upper right')
+    plt.title(plane)
     #plt.plot(d,f)
     plt.show()
     
@@ -110,6 +111,7 @@ def PSD(detectorData,timeData,pulseData):
     plt.xlabel('ADC Val')
     plt.ylabel('Counts')
     plt.legend(loc='upper right')
+    plt.title(plane)
     #plt.plot(d,f)
     plt.show()
     
