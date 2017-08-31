@@ -116,14 +116,16 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
             print('i = ',i)
             print('elapsed time = ',toc-tic, 's')
     neutronEnergyTOF = np.array(neutronEnergyTOF)
-    neutronEnergyTOF = neutronEnergyTOF*10**6
+    neutronEnergyTOF = neutronEnergyTOF*10**3
     slope, intercept = adc2keV(plane1NeutronPulseADC)
-    for i in range(0,len(neuronEnergyTOF)):
+    for i in range(0,len(neutronEnergyTOF)):
         temp = slope*plane1NeutronPulseADC[i] + intercept
         neutronEnergy += [neutronEnergyTOF[i]] + [temp]
 
+    neutronEnergy = np.array(neutronEnergy,dtype='float')
+    neutronEnergy = neutronEnergy*10**3
 #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
-    energyHist = np.histogram(neutronEnergyTOF,100)
+    energyHist = np.histogram(neutronEnergy,100)
     a = energyHist[0]
     b = energyHist[1]
     c = b[0:100]
