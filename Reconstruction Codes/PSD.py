@@ -35,9 +35,9 @@ def PSD(detectorData,timeData,pulseData):
         tailToTotalRatio += [tailIntegral/float(pulseIntegral)]
         adcVal += [pulseIntegral]
         
-        if i%50000 == 0:
+        if i%100000 == 0:
             print('m = ', i) 
-            print('tictoc = ',time.time()-tic)     
+            print('elapsed time = ',time.time()-tic,'s')     
         i=i+1
     
     adcVal = np.asarray(adcVal,dtype='float')
@@ -83,7 +83,7 @@ def PSD(detectorData,timeData,pulseData):
     c = b[0:100000]
     a1 = histPADC[0]
     b1 = histPADC[1]
-    c1 = b[0:100000]
+    c1 = b1[0:100000]
 
     histTTT = np.histogram(neutronTailToTotalRatio,100000)
     histNADC = np.histogram(neutronADC,100000)

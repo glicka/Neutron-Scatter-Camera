@@ -27,7 +27,16 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
     plane2Local = np.array([[0,0,D],[0,u,D],[0,2*u,D],[u,0,D],[u,u,D],[u,2*u,D],[2*u,0,D],[2*u,u,D],[2*u,2*u,D],[3*u,0,D],[3*u,u,D],[3*u,2*u,D]],dtype='float')
     neutronEnergyTOF = []
     neutronEnergy = []
-    
+    data1Mat = np.column_stack((tuple(plane1Dets),tuple(plane1Times),tuple(plane1NeutronPulseData)))
+    data1MatSort = data1Mat[data1Mat[:,0].argsort()[::1]]
+    plane1Dets = data1MatSort[:,0]
+    plane1Times = data1MatSort[:,1]
+    plane1NeutronPulseData = data1MatSort[:,2:len(data1MatSort[0,:])]
+    data2Mat = np.column_stack((tuple(plane2Dets),tuple(plane2Times),tuple(plane2NeutronPulseData)))
+    data2MatSort = data2Mat[data2Mat[:,0].argsort()[::1]]
+    plane1Dets = data2MatSort[:,0]
+    plane1Times = data2MatSort[:,1]
+    plane1NeutronPulseData = data2MatSort[:,2:len(data2MatSort[0,:])]
     plane2DetScale = []
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
@@ -57,29 +66,45 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
     
     plane2DetScale = np.array(plane2DetScale,dtype = 'int')
 #### Calculate neutron energy from time of flight between the 2 planes ####
+    tic = time.time()
     for i in range(0,len(plane1Times)):
-        tic = time.time()
-        
-        for n in range(0,len(plane2Times)):
+        if i > 10000:
+            for n in range(i-100,i+100):
+                if plane2Times[n] - plane1Times[i] <= 100000 and plane2Times[n] - plane1Times[i] > 0:
+                    x1 = plane1Local[plane1Dets[i]]
+                    x2 = plane2Local[plane2DetScale[n]]
+                    distance = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
+                    timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
+                    energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2
+                    neutronEnergyTOF += [energy] #MeV
+                #print('Energy = ',energy,' MeV') 
+                    if n%10000 == 0:
+                        print('n = ',n)
+                        print('x1 = ',x1)
+                        print('x2 = ',x2)
+                    break
+        else:
+            for n in range(0,i+1000):
 #            if n%10000 == 0:
 #                print('n = ',n)
-            if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
-                x1 = plane1Local[plane1Dets[i]]
-                x2 = plane2Local[plane2DetScale[n]]
-                distance = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
-                timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
-                neutronEnergyTOF += [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
+                if plane2Times[n] - plane1Times[i] <= 100000 and plane2Times[n] - plane1Times[i] > 0:
+                    x1 = plane1Local[plane1Dets[i]]
+                    x2 = plane2Local[plane2DetScale[n]]
+                    distance = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
+                    timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
+                    neutronEnergyTOF += [(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2] #MeV
                 #energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(distance/timeSeparation)**2
                 #print('Energy = ',energy,' MeV') 
-                if n%10000 == 0:
-                    print('n = ',n)
-                    print('x1 = ',x1)
-                    print('x2 = ',x2)
-                break
-        toc = time.time()
-        if i%100 == 0:
+                    if n%10000 == 0:
+                        print('n = ',n)
+                        print('x1 = ',x1)
+                        print('x2 = ',x2)
+                    break
+        
+        if i%10000 == 0:
+            toc = time.time()
             print('i = ',i)
-            print('tictoc = ',toc-tic)
+            print('elapsed time = ',toc-tic, 's')
     neutronEnergyTOF = np.array(neutronEnergyTOF)
     
 #    for i in range(0,len(neuronEnergyTOF)):
