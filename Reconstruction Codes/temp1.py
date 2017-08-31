@@ -62,6 +62,6 @@ plane2NeutronDets = np.array(plane2NeutronDets,dtype = 'int')
 plane2NeutronPulseData = np.array(plane2NeutronPulseData,dtype = 'float')
 plane2NeutronTimes = np.array(plane2NeutronTimes,dtype = 'float')
 
-
+#adc2MeV(plane1NeutronPulseData)
 
 cones = generateCones(plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseData,plane2NeutronPulseData)
