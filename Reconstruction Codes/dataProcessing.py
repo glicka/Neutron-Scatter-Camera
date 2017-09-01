@@ -167,7 +167,7 @@ def dataProcessing(datafile):
             print('k = ',i)   
             toc = time.time()
 #            print('tictoc = ',toc-tic)
-            print('elapsed = ',toc-t1)
+            print('elapsed = ',toc-t1,'s')
 
 #### Convert list into numpy array ####
     #detectorVal = np.array(detectorVal,dtype='float')
@@ -177,9 +177,9 @@ def dataProcessing(datafile):
     plane2Times = np.array(plane2Times,dtype='float')
     plane1Dets = np.array(plane1Dets,dtype='int')
     plane2Dets = np.array(plane2Dets,dtype='int')
-    print('plane1Data = ',plane1Data)
-    print('plane1Times = ',plane1Times)
-    print('plane1Dets = ',plane1Dets)
+#    print('plane1Data = ',plane1Data)
+#    print('plane1Times = ',plane1Times)
+#    print('plane1Dets = ',plane1Dets)
 
 #    for i in range(0,len(adcBoardVals)):#10000):
 #        if i%100000 == 0:
@@ -203,10 +203,15 @@ def dataProcessing(datafile):
 
 #### Perform PSD for each plane of data to extract just neutron information ####
     print('Performing PSD on Plane 1')
-    plane1NeutronDets,plane1NeutronTimes,neutronPulseData1 = PSD(plane1Dets,plane1Times,plane1Data)
+    plane1NeutronDets,plane1NeutronTimes,plane1NeutronPulseADC = PSD(plane1Dets,plane1Times,plane1Data,'Plane 1')
     print('Performing PSD on Plane 2')
-    plane2NeutronDets,plane2NeutronTimes,neutronPulseData2 = PSD(plane2Dets,plane2Times,plane2Data)
-
+    plane2NeutronDets,plane2NeutronTimes,plane2NeutronPulseADC = PSD(plane2Dets,plane2Times,plane2Data,'Plane 2')
+    np.savetxt("plane1NeutronDets.csv", plane1NeutronDets, delimiter=",")
+    np.savetxt("plane2NeutronDets.csv", plane2NeutronDets, delimiter=",")
+    np.savetxt("plane1NeutronTimes.csv", plane1NeutronTimes, delimiter=",")
+    np.savetxt("plane2NeutronTimes.csv", plane2NeutronTimes, delimiter=",")
+    np.savetxt("plane1NeutronPulseADC.csv", plane1NeutronPulseADC, delimiter=",")
+    np.savetxt("plane2NeutronPulseADC.csv", plane2NeutronPulseADC, delimiter=",")
 #    print('length of plane1NeutronDets: ',len(plane1NeutronDets))
 #    print('length of plane1NeutronTimes: ',len(plane1NeutronTimes))
 #    print('length of neutronPulseData1: ',len(neutronPulseData1[:,0]))
@@ -214,4 +219,4 @@ def dataProcessing(datafile):
 #    print('length of plane2NeutronTimes: ',len(plane2NeutronTimes))
 #    print('length of neutronPulseData2: ',len(neutronPulseData2[:,0]))
 #### Generate cones and do energy reconstruction of neutrons ####
-    cones = generateCones(plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,neutronPulseData1,neutronPulseData2)
+    cones = generateCones(plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseADC,plane2NeutronPulseADC)
