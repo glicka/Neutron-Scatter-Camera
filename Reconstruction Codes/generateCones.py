@@ -6,7 +6,7 @@ Created on Wed Aug 16 10:31:57 2017
 @author: aglick
 """
 
-def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC,plane2NeutronPulseADC):
+def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC,plane2NeutronPulseADC):
     import csv
     import numpy as np
     import math
@@ -76,7 +76,7 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
             plane2DetScale += [11]
     
     plane2DetScale = np.array(plane2DetScale,dtype = 'int')
-    slope, intercept = adc2keV(plane1NeutronPulseADC)
+    
 #### Calculate neutron energy from time of flight between the 2 planes ####
     tic = time.time()
     for i in range(0,len(plane1Times)): #range(0,len(plane1Times))
@@ -133,6 +133,8 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     neutronEnergy = neutronEnergy*10**(-3)
 #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
+    
+#### Generate the cones for image reconstruction ####
     for i in range(0,len(coneAngles)):
         radii = distance[i]*math.tan(coneAngles[i]/2)
         r = np.linspace(0, radii, 50)
@@ -142,7 +144,6 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
         X = R*np.cos(P)
         Y = R*np.sin(P)
         cones += [[X],[Y],[Z]]
-        plt.figure()
         ax.plot_surface(X, Y, Z)
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
@@ -150,6 +151,7 @@ def generateCones(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPul
     plt.legend(loc = 'best')
     plt.show()
     
+    np.savetxt('GeneratedCones.csv',cones,delimiter=",")
     #ax.plot_surface(cones[0], Y, Z, cmap=plt.cm.YlGnBu_r)
     energyHist = np.histogram(neutronEnergy,100)
     a = energyHist[0]
