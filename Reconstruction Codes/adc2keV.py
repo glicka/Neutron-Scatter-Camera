@@ -19,16 +19,34 @@ def adc2keV(adcPlot):
     index2 = 0
     index3 = 0
     index4 = 0
-    histNADC = np.histogram(adcPlot,100000)
+    adcVal = []
+    i = 0
+    for row in adcPlot:
+#        peakVal, peakTime = max(enumerate(row), key=operator.itemgetter(1)) #findPeaks(row)  
+        #print('temp = ',temp)
+        #print(row)
+        peakTime = row.argmax()
+        pulseIntegral = integratePulse(row,peakTime)
+        #tailIntegral = integrateTail(row,peakTime)
+        #tailToTotalRatio += [tailIntegral/float(pulseIntegral)]
+        adcVal += [pulseIntegral]
+        
+        if i%100000 == 0:
+            print('m = ', i) 
+            print('elapsed time = ',time.time()-tic,'s')     
+        i=i+1
+    
+    adcVal = np.asarray(adcVal,dtype='float')
+    histNADC = np.histogram(adcVal,100000)
     d1 = histNADC[0]
     e1 = histNADC[1]
     f1 = e1[0:100000]
-    #plt.figure(1)
-    #plt.plot(f1,d1,'b--',label='neutrons')
-    #plt.xlabel('ADC Val')
-    #plt.ylabel('Counts')
-    #plt.legend(loc='upper right')
-    #plt.title(plane)
+    plt.figure(1)
+    plt.plot(f1,d1,'b-',label='Cs Plot')
+    plt.xlabel('ADC Val')
+    plt.ylabel('Counts')
+    plt.legend(loc='upper right')
+    plt.title(plane)
     #plt.plot(d,f)
     plt.show()
     #Cs = heapq.nlargest(1,range(125000,len(f1)),key=f1.__getitem__)
@@ -37,17 +55,20 @@ def adc2keV(adcPlot):
     #f1 = np.around(f1)
     #f1 = np.array(f1,dtype='int')
     #print(f1)
-    index1 = (np.abs(f1 - 12500)).argmin()
-    index2 = (np.abs(f1 - 25000)).argmin()
-    index3 = (np.abs(f1 - 35000)).argmin()
-    index4 = (np.abs(f1 - 40000)).argmin()
-
-    Cs = np.argmax(f1[index1:index2])
-    Co1 = np.argmax(f1[index2:index3])
-    Co2 = np.argmax(f1[index3:index4])
+    index1 = (np.abs(f1 - 30000)).argmin()
+    index2 = (np.abs(f1 - 50000)).argmin()
+    index3 = (np.abs(f1 - 100000)).argmin()
+    #index4 = (np.abs(f1 - 400000)).argmin()
+    
+    print('index1 = ',index1)
+    print('index2 = ',index2)
+    print('index3 = ',index3)
+    #print('index4 = ',index4)
+    CsCompton = np.argmax(f1[index1:index2])
+    Cs = np.argmax(f1[index2:index3])
     #for i in range(0,len(d1)):
-    y = np.array([662,1173,1332])
-    x = np.array([Cs,Co1,Co2])
+    y = np.array([477.7,662])
+    x = np.array([f1[CsCompton],f1[Cs]])
     #x = np.array(x)
     #m, b = np.polyfit(x, y, 1)
 
@@ -55,8 +76,8 @@ def adc2keV(adcPlot):
     #plt.plot(x, m*x + b, '-')
 
 
-    X = np.random.rand(100)
-    Y = X + np.random.rand(100)*0.1
+    #X = np.random.rand(100)
+    #Y = X + np.random.rand(100)*0.1
 
     results = sm.OLS(y,sm.add_constant(x)).fit()
 
@@ -68,10 +89,13 @@ def adc2keV(adcPlot):
     abline_values = [slope * i + intercept for i in x]
     plt.plot(x, y, 'ro')
     plt.plot(x, abline_values, 'b')
+    plt.xlabel('ADC Val')
+    plt.ylabel('Energy [keV]')
     plt.title('Best Fit Line')
     plt.show()
 
-    plt.show()
+    
+#    plt.show()
 
     
     return slope, intercept

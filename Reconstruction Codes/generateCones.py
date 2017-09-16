@@ -14,6 +14,7 @@ def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,
     import matplotlib
     import pylab as pl
     import time
+    import pandas as pd
     from mpl_toolkits.mplot3d import Axes3D
     planeSeparation = 0.6096 #meters
     detectorSeparation = 0.0889 #meters
@@ -143,14 +144,15 @@ def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,
         Z = ((R**2 - 1)**2)
         X = R*np.cos(P)
         Y = R*np.sin(P)
-        cones += [[X],[Y],[Z]]
-        ax.plot_surface(X, Y, Z)
-        ax.set_xlabel('X Label')
-        ax.set_ylabel('Y Label')
-        ax.set_zlabel('Z Label')
-    plt.legend(loc = 'best')
-    plt.show()
-    
+        cones += [[radii],[distance[i]],[coneAngles[i]]]
+        #ax.plot_surface(X, Y, Z)
+        #ax.set_xlabel('X Label')
+        #ax.set_ylabel('Y Label')
+        #ax.set_zlabel('Z Label')
+    #plt.legend(loc = 'best')
+    #plt.show()
+    df = pd.DataFrame(cones)
+    df.to_csv("ConesGenerated.csv")
     np.savetxt('GeneratedCones.csv',cones,delimiter=",")
     #ax.plot_surface(cones[0], Y, Z, cmap=plt.cm.YlGnBu_r)
     energyHist = np.histogram(neutronEnergy,100)
