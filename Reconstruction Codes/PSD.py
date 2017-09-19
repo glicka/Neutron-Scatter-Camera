@@ -6,14 +6,11 @@ Created on Tue Aug 22 16:50:31 2017
 @author: aglick
 """
 
-def PSD(detectorData,timeData,pulseData,plane):
-    import csv
+def PSD(detectorData,timeData,pulseData,plane,tic):
     import numpy as np
-    import math
     import matplotlib.pyplot as plt
-    import pylab
     import time
-    import operator
+
 
 
     i = 0
@@ -25,7 +22,7 @@ def PSD(detectorData,timeData,pulseData,plane):
 
     tailToTotalRatio = []
     adcVal = []
-    tic = time.time()
+    #tic = time.time()
     for row in pulseData:
 #        peakVal, peakTime = max(enumerate(row), key=operator.itemgetter(1)) #findPeaks(row)  
         #print('temp = ',temp)
@@ -39,6 +36,7 @@ def PSD(detectorData,timeData,pulseData,plane):
             print('m = ', i) 
             print('elapsed time = ',time.time()-tic,'s')     
         i=i+1
+    
     
     adcVal = np.asarray(adcVal,dtype='float')
     tailToTotalRatio = np.asarray(tailToTotalRatio,dtype='float')

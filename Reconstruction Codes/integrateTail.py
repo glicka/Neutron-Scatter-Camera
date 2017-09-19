@@ -16,6 +16,6 @@ def integrateTail(pulse,peakTime):
     upperBound = int(round(3*len(pulse)/4))
     for i in range(lowerBound,upperBound):
         if pulse[i]>thresh and i>peakTime+3:
-            tailIntegral = tailIntegral + pulse[i];
+            tailIntegral += pulse[i];
         
     return tailIntegral;

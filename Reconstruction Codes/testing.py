@@ -16,8 +16,16 @@ import matplotlib.pyplot as plt
 import pylab
 import time
 tic = time.time()
+photonData = []
+with open('NE204-09-21-2011-Cs137-LS.csv','r') as csvfile:
+    temp = csv.reader(csvfile)
+    for row in temp:
+        photonData += [row]
+
+
+photonData = np.array(photonData,dtype = 'float')
 #PSD1('NE204-09-21-2011-PuBe-LSC-Signal.csv','NE204-09-21-2011-Cs137-LS-Signal.csv')
-dataProcessing('Data-Cs137-08-04-2017-Run1.h5')
+dataProcessingNoExtClock('D07-31-2017T14-18-52.h5',photonData,tic)
 #radiationPlot('Data-Cs137-08-04-2017-Run1.h5')
 toc = time.time()
 print('tictoc = ',toc-tic)

@@ -6,7 +6,7 @@ Created on Mon Jul 31 15:09:28 2017
 @author: aglick
 """
 
-def dataProcessingNoExtClock(datafile,photonDataFile):
+def dataProcessingNoExtClock(datafile,photonDataFile,tic):
     import h5py
     import numpy as np
     import matplotlib.pyplot as plt
@@ -53,7 +53,7 @@ def dataProcessingNoExtClock(datafile,photonDataFile):
     plane1Dets = []
     plane2Dets = []
     plane1PhotonData = []
-    t1 = time.time()
+#    t1 = time.time()
     for i in range(0,len(adcBoardVals)):#10000):
 #        tic = time.time()
         if adcBoardVals[i] == 5:
@@ -195,7 +195,7 @@ def dataProcessingNoExtClock(datafile,photonDataFile):
             print('k = ',i)   
             toc = time.time()
 #            print('tictoc = ',toc-tic)
-            print('elapsed = ',toc-t1,'s')
+            print('elapsed = ',toc-tic,'s')
 
 #### Convert list into numpy array ####
     #detectorVal = np.array(detectorVal,dtype='float')
@@ -232,9 +232,15 @@ def dataProcessingNoExtClock(datafile,photonDataFile):
 
 #### Perform PSD for each plane of data to extract just neutron information ####
     print('Performing PSD on Plane 1')
-    plane1NeutronDets,plane1NeutronTimes,plane1NeutronPulseADC = PSD(plane1Dets,plane1Times,plane1Data,'Plane 1')
+    toc = time.time()
+#            print('tictoc = ',toc-tic)
+    print('elapsed = ',toc-tic,'s')
+    plane1NeutronDets,plane1NeutronTimes,plane1NeutronPulseADC = PSD(plane1Dets,plane1Times,plane1Data,'Plane 1',tic)
     print('Performing PSD on Plane 2')
-    plane2NeutronDets,plane2NeutronTimes,plane2NeutronPulseADC = PSD(plane2Dets,plane2Times,plane2Data,'Plane 2')
+    toc = time.time()
+#            print('tictoc = ',toc-tic)
+    print('elapsed = ',toc-tic,'s')
+    plane2NeutronDets,plane2NeutronTimes,plane2NeutronPulseADC = PSD(plane2Dets,plane2Times,plane2Data,'Plane 2',tic)
 #    np.savetxt("plane1NeutronDets.csv", plane1NeutronDets, delimiter=",")
 #    np.savetxt("plane2NeutronDets.csv", plane2NeutronDets, delimiter=",")
 #    np.savetxt("plane1NeutronTimes.csv", plane1NeutronTimes, delimiter=",")
@@ -248,5 +254,13 @@ def dataProcessingNoExtClock(datafile,photonDataFile):
 #    print('length of plane2NeutronTimes: ',len(plane2NeutronTimes))
 #    print('length of neutronPulseData2: ',len(neutronPulseData2[:,0]))
 #### Generate cones and do energy reconstruction of neutrons ####
+    print('Creating ADC Conversion')
+    toc = time.time()
+#            print('tictoc = ',toc-tic)
+    print('elapsed = ',toc-tic,'s')
     slope, intercept = adc2keV(rawGammaDataMat)
-    cones = generateConesNoExtClock(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseADC,plane2NeutronPulseADC)
+    print('Performing Energy Reconstruction and Cone Generation')
+    toc = time.time()
+#            print('tictoc = ',toc-tic)
+    print('elapsed = ',toc-tic,'s')
+    cones = generateConesNoExtClock(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseADC,plane2NeutronPulseADC,tic)

@@ -59,11 +59,6 @@ def adc2keV(adcPlot):
     index2 = (np.abs(f1 - 50000)).argmin()
     index3 = (np.abs(f1 - 100000)).argmin()
     #index4 = (np.abs(f1 - 400000)).argmin()
-    
-    print('index1 = ',index1)
-    print('index2 = ',index2)
-    print('index3 = ',index3)
-    #print('index4 = ',index4)
     CsCompton = np.argmax(f1[index1:index2])
     Cs = np.argmax(f1[index2:index3])
     #for i in range(0,len(d1)):
