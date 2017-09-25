@@ -224,17 +224,20 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     weights = np.array(weights)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     #### Create unit sphere here ####
-    unitSphere = generateSphere(15)
-    pixels = [] #np.zeros([len(unitSphere[:,0]),2])
+    points = 15
+    unitSphere = generateSphere(points)
+    phi = np.linspace(-90,90,15)
+    theta = np.linspace(-180,180,15)
+    pixels = np.zeros([180/points,360/points]) #np.zeros([len(unitSphere[:,0]),2])
     #size = len(unitSphere[:,0])
     #unitSphere.ravel()
     for n in range(0,len(unitSphere[:,0])):
         b = 0
         c = 0
         for i in range(0,len(coneAngles)):
-            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,0],coneVector[i,0])-mu[i])**2/(2*sigma**2))
-            c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
-        pixels += [[b,c]]
+            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])**2/(2*sigma**2))
+            #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
+        pixels[unitSphere[n,0],unitSphere[n,1]] = b#[[b,c]]
     #recon = [[b],[b]]
     #recon = np.array(recon,dtype='float')
 #    for row, colcolor in zip(recon, colors):
@@ -242,7 +245,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 
     pixels = np.array(pixels)
     plt.figure(1)
-    plt.plot(b)
+    plt.imshow(pixels)
     plt.show()
     #img = Image.fromarray(b, 'RGB')
 #    img.save('my.png')
