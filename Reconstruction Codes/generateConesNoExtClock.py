@@ -38,7 +38,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     radii = 0
     sigma = 0.1
     iteration = 0
-    
+    area = (plane1Local[2,1]-plane1Local[0,1])*(plane1Local[10,0]-plane1Local[0,0])
+    totalSphere = 4*math.pi*300**2
+    geomCorr = totalSphere/area
     data1Mat = np.column_stack((tuple(plane1Dets),tuple(plane1Times),tuple(plane1NeutronPulseADC)))
     data1MatSort = data1Mat[data1Mat[:,0].argsort()[::1]]
     np.savetxt("data1MatSort.csv", data1MatSort, delimiter=",")
@@ -55,6 +57,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     plane2Dets = np.array(plane2Dets,dtype='int')
     plane2Dets = np.array(plane2Dets,dtype='int')
     plane2DetScale = []
+    
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
             plane2DetScale += [0]
@@ -91,10 +94,12 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     else:
         iteration = len(plane1Times)
         
+    keepTrack = 0
     for i in range(0,iteration): #range(0,len(plane1Times))
         if i > 200 and i < iteration-101:
             for n in range(i-100,i+100):
                 if plane2Times[n] - plane1Times[i] <= 125000 and plane2Times[n] - plane1Times[i] > 0:
+                    temp = keepTrack
                     if 0 <= plane1Dets[i] <= 3 and 20 <= plane2Dets[n] <= 23:
                         x1 = plane1Local[plane1Dets[i]]
                         x2 = plane2Local[plane2DetScale[n]]
@@ -107,6 +112,12 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        if keepTrack == 0:
+                            time1 = plane1Times[i]*timeScale
+                        
+                        keepTrack += 1
+                        if keepTrack > temp:
+                            time2 = plane1Times[keepTrack]*timeScale
                         break
                     elif 8 <= plane1Dets[i] <= 11 and 12 <= plane2Dets[n] <= 15:
                         x1 = plane1Local[plane1Dets[i]]
@@ -154,6 +165,10 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        if keepTrack == 0:
+                            time1 = plane1Times[i]*timeScale
+                            
+                        keepTrack += 1
                         break
                     elif 8 <= plane1Dets[i] <= 11 and 12 <= plane2Dets[n] <= 15:
                         x1 = plane1Local[plane1Dets[i]]
@@ -201,7 +216,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     coneAngles = np.array(coneAngles)
     weights = np.array(weights)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
-    
+    #### Create unit sphere here ####
     for i in range(0,len(coneAngles)):
         b += [(1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp(mu[i]**2/(2*sigma**2))]
         
@@ -235,6 +250,38 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #plt.plot(d,f)
     plt.show()
     
+    flux = a/(area*geomCorr*(time2-time1))
+    plt.figure(3)
+    plt.plot(c,flux,'b-')
+    plt.xlabel('Neutron Energy [keV]')
+    plt.ylabel('Flux [Counts/cm^2s]')
+    plt.title('Neutron Flux Spectrum')
+    plt.autoscale(enable=True,axis='x',tight=True)
+    pl.xticks(rotation=45)
+    #plt.legend(loc='upper right')
+    #plt.plot(d,f)
+    plt.show()
+    
+    doseConversion = np.array([[260],[240],[220],[230],[240],[270],[280],[48],[14],[8.5],[7.0],[6.8],[6.8],[6.5],[6.1],[5.1],[3.6],[2.2],[1.6],[1.4]], dtype = 'float')
+    energyVals = np.array([[2.5*10**(-6)],[1*10**(-5)],[1*10**(-4)],[1*10**(-3)],[1*10**(-2)],[1*10**(-1)],[1*10**(0)],[1*10**1],[5*10],[1*10**2],[2*10**2],[5*10**2],[10*10**2],[20*10**2],[50*10**2],[10**4],[2*10**4],[5*10**4],[1*10**5],[2*10**5],[3*10**3]],dtype = 'float')
+    neutronDose = []
+    for i in range(0,len(c)):
+        for n in range(0,len(energyVals)-1):
+            if energyVals[n+1] > c[i] > energyVals[n]:
+                conv = doseConversion[n] + (c[i]-energyVals[n])*(doseConversion[n+1]-doseConversion[n])/(energyVals[n+1]-energyVals[n])
+                neutronDose += [0.01*flux[i]/conv]
+            elif energyVals[n] == c[i]:
+                neutronDose += [0.01*flux[i]/doseConversion[n]]
+            
+            
+    neutronDose = np.array(neutronDose,dtype = 'float')
+    plt.figure(4)
+    plt.plot(c,neutronDose,'b-')
+    plt.xlabel('Neutron Energy [keV]')
+    plt.ylabel('Dose [mSv/hr]')
+    plt.title('Neutron Dose Rate for PuBe Source')
+    plt.autoscale(enable=True,axis='x',tight=True)
+    pl.xticks(rotation=45)
 #    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
 #    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
     
