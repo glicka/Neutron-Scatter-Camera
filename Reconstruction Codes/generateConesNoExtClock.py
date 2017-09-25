@@ -31,6 +31,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     neutronEnergyADC = []
     neutronEnergy = []
     coneAngles = []
+    coneVector = []
     mu = []
     weights = []
     cones = []
@@ -112,6 +113,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        coneVector += [x1-x2]
                         if keepTrack == 0:
                             time1 = plane1Times[i]*timeScale
                         
@@ -131,6 +133,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        coneVector += [x1-x2]
                         break
                     elif 4 <= plane1Dets[i] <= 7 and 16 <= plane2Dets[n] <= 19:
                         x1 = plane1Local[plane1Dets[i]]
@@ -144,6 +147,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        coneVector += [x1-x2]
                         break
                 neutronEnergyTOF += [0] #keV
                 neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
@@ -169,6 +173,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                             time1 = plane1Times[i]*timeScale
                             
                         keepTrack += 1
+                        coneVector += [x1-x2]
                         break
                     elif 8 <= plane1Dets[i] <= 11 and 12 <= plane2Dets[n] <= 15:
                         x1 = plane1Local[plane1Dets[i]]
@@ -182,6 +187,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        coneVector += [x1-x2]
                         break
                     elif 4 <= plane1Dets[i] <= 7 and 16 <= plane2Dets[n] <= 19:
                         x1 = plane1Local[plane1Dets[i]]
@@ -195,6 +201,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
+                        coneVector += [x1-x2]
                         break
                 neutronEnergyTOF += [0] #keV
                 neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
@@ -217,15 +224,23 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     weights = np.array(weights)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     #### Create unit sphere here ####
-    for i in range(0,len(coneAngles)):
-        b += [(1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp(mu[i]**2/(2*sigma**2))]
-        
-    recon = [[b],[b]]
-    recon = np.array(recon,dtype='float')
+    unitSphere = generateSphere(15)
+    pixels = [] #np.zeros([len(unitSphere[:,0]),2])
+    #size = len(unitSphere[:,0])
+    #unitSphere.ravel()
+    for n in range(0,len(unitSphere[:,0])):
+        b = 0
+        c = 0
+        for i in range(0,len(coneAngles)):
+            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,0],coneVector[i,0])-mu[i])**2/(2*sigma**2))
+            c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
+        pixels += [[b,c]]
+    #recon = [[b],[b]]
+    #recon = np.array(recon,dtype='float')
 #    for row, colcolor in zip(recon, colors):
 #        pyplot.plot(2darray, column, "-", color=colcolor)
 
-    b = np.array(b)
+    pixels = np.array(pixels)
     plt.figure(1)
     plt.plot(b)
     plt.show()
