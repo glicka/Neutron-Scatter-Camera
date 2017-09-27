@@ -231,23 +231,33 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     weights = np.array(weights)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     #### Create unit sphere here ####
-    points = 15
+    points = 200
     unitSphere, coords, theta, phi = generateSphere(points)
     #phi = np.linspace(-90,90,len(coords[:,0]))
     #theta = np.linspace(-180,180,len(coords[:,1]))
     pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
+    np.savetxt("muVals.csv", mu, delimiter=",")
+    np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
+    np.savetxt("weights.csv",weights,delimiter = ",")
 ########################################################################################
 ###                      Generate image of neutron data                              ###
 ########################################################################################
     #size = len(unitSphere[:,0])
     #unitSphere.ravel()
+    print('Generating Neutron Image')
+    maxB = 0
     for n in range(0,len(unitSphere[:,0])):
         b = 0
 #        c = 0
-        for i in range(0,len(coneAngles)):
+        print('iter = ',n)
+        print('elapsed = ', time.time()-tic)
+        for i in range(0,len(mu)):
+            print('cone number = ', i)
             b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp(((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])/(2*sigma))**2)
             #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
         pixels[phi.tolist().index(coords[n,0]),theta.tolist().index(coords[n,1])] = b#[[b,c]]
+        if maxB < b:
+            maxB = b
     #recon = [[b],[b]]
     #recon = np.array(recon,dtype='float')
 #    for row, colcolor in zip(recon, colors):
@@ -257,7 +267,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     plt.figure(1)
     plt.imshow(pixels, extent=[-90,90,-180,180], aspect="auto")
 #    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
-#    plt.clim(-4,4)
+    plt.clim(0,maxB)
     plt.show()
     #img = Image.fromarray(b, 'RGB')
 #    img.save('my.png')

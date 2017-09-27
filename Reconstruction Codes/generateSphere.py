@@ -15,8 +15,10 @@ def generateSphere(points):
     phi = []
     #phi = linspace(-90,90,poins)
     #theta = linspace(-180,180,15)
-    for i in range(-90,90,points):
-        for n in range(-180,180,points):
+    temp = np.linspace(-90,90,points)
+    temp1 = np.linspace(-180,180,points)
+    for i in temp:
+        for n in temp1:
             coords += [[np.sin(np.deg2rad(i))*np.cos(np.deg2rad(n)),np.sin(np.deg2rad(i))*np.sin(np.deg2rad(n)),np.cos(np.deg2rad(i))]]
             coords1 += [[i,n]]
             theta += [n]
