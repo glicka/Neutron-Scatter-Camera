@@ -211,70 +211,32 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
             toc = time.time()
             print('i = ',i)
             print('elapsed time = ',toc-tic, 's')
+
+##################################################################################
+####                make lists into numpy arrays                              ####  
+##################################################################################
     distance = np.array(distance)
     neutronEnergyTOF = np.array(neutronEnergyTOF)
     #neutronEnergyTOF = neutronEnergyTOF*10**3 #keV
     neutronEnergyADC = np.array(neutronEnergyADC)
     neutronEnergy = [neutronEnergyTOF + neutronEnergyADC]
     coneVector = np.array(coneVector,dtype = 'float')
-    time1 = np.array(time1,dtype = 'float')
-    time1.sort()
-    for i in range(0,len(coneVector[:,0])):
-        coneVector[i,2] = 0
-#    for i in range(0,len(neutronEnergyADC)):
-#        if neutronEnergyTOF[i] > 0:
-            #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
-#            coneAngles += [math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i]))]
-#            mu += [math.cosine(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
     mu = np.array(mu)
     coneAngles = np.array(coneAngles)
     weights = np.array(weights)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
-    #### Create unit sphere here ####
-    points = 200
-    unitSphere, coords, theta, phi = generateSphere(points)
-    #phi = np.linspace(-90,90,len(coords[:,0]))
-    #theta = np.linspace(-180,180,len(coords[:,1]))
-    pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
-    np.savetxt("muVals.csv", mu, delimiter=",")
-    np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
-    np.savetxt("weights.csv",weights,delimiter = ",")
-########################################################################################
-###                      Generate image of neutron data                              ###
-########################################################################################
-    #size = len(unitSphere[:,0])
-    #unitSphere.ravel()
-    print('Generating Neutron Image')
-    maxB = 0
-    for n in range(0,len(unitSphere[:,0])):
-        b = 0
-#        c = 0
-        print('iter = ',n)
-        print('elapsed = ', time.time()-tic)
-        for i in range(0,len(mu)):
-            print('cone number = ', i)
-            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp(((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])/(2*sigma))**2)
-            #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
-        pixels[phi.tolist().index(coords[n,0]),theta.tolist().index(coords[n,1])] = b#[[b,c]]
-        if maxB < b:
-            maxB = b
-    #recon = [[b],[b]]
-    #recon = np.array(recon,dtype='float')
-#    for row, colcolor in zip(recon, colors):
-#        pyplot.plot(2darray, column, "-", color=colcolor)
+    time1 = np.array(time1,dtype = 'float')
+    time1.sort()
+##############################################################################
+####                set cone origin to zero                               ####  
+##############################################################################
+    for i in range(0,len(coneVector[:,0])):
+        coneVector[i,2] = 0
 
-    pixels = np.array(pixels)
-    plt.figure(1)
-    plt.imshow(pixels, extent=[-90,90,-180,180], aspect="auto")
-#    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
-    plt.clim(0,maxB)
-    plt.show()
-    #img = Image.fromarray(b, 'RGB')
-#    img.save('my.png')
-    #img.show()
 
-#    np.savetxt('GeneratedCones.csv',cones,delimiter=",")
-    #ax.plot_surface(cones[0], Y, Z, cmap=plt.cm.YlGnBu_r)
+##############################################################################
+####                 plot energy spectrum                                 ####  
+##############################################################################
     energyHist = np.histogram(neutronEnergy,100)
     a = energyHist[0]
     b1 = energyHist[1]
@@ -290,7 +252,10 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #plt.plot(d,f)
     plt.show()
     
-    
+
+##############################################################################
+####                 plot flux spectrum                                   ####  
+##############################################################################
     plt.figure()
     flux = a/(area*geomCorr*(time1[len(time1)-1]-time1[0]))
     plt.figure(3)
@@ -303,7 +268,10 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #plt.legend(loc='upper right')
     #plt.plot(d,f)
     plt.show()
-    
+
+#####################################################################################
+####      generate and plot neutron dose spectrum                                ####  
+#####################################################################################
     doseConversion = np.array([[260],[240],[220],[230],[240],[270],[280],[48],[14],[8.5],[7.0],[6.8],[6.8],[6.5],[6.1],[5.1],[3.6],[2.2],[1.6],[1.4]], dtype = 'float')
     energyVals = np.array([[2.5*10**(-6)],[1*10**(-5)],[1*10**(-4)],[1*10**(-3)],[1*10**(-2)],[1*10**(-1)],[1*10**(0)],[1*10**1],[5*10],[1*10**2],[2*10**2],[5*10**2],[10*10**2],[20*10**2],[50*10**2],[10**4],[2*10**4],[5*10**4],[1*10**5],[2*10**5],[3*10**3]],dtype = 'float')
     neutronDose = []
@@ -324,8 +292,49 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     plt.title('Neutron Dose Rate for PuBe Source')
     plt.autoscale(enable=True,axis='x',tight=True)
     pl.xticks(rotation=45)
-#    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
-#    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
-    
+
+#####################################################################################
+####           define neutron dose and flux rates                                ####  
+#####################################################################################
+    maxFluxRate = max(flux)
+    maxDoseRate = max(neutronDose)
+########################################################################################
+###                      Generate image of neutron data                              ###
+########################################################################################
+    #size = len(unitSphere[:,0])
+    #unitSphere.ravel()
+    points = 100
+    unitSphere, coords, theta, phi = generateSphere(points)
+    #phi = np.linspace(-90,90,len(coords[:,0]))
+    #theta = np.linspace(-180,180,len(coords[:,1]))
+    pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
+    #np.savetxt("muVals.csv", mu, delimiter=",")
+    #np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
+    #np.savetxt("weights.csv",weights,delimiter = ",")
+    print('Generating Neutron Image')
+    maxB = 0
+    for n in range(0,len(unitSphere[:,0])):
+        b = 0
+#        c = 0
+        print('iter = ',n)
+        print('elapsed = ', time.time()-tic)
+        for i in range(0,len(mu)):
+            print('cone number = ', i)
+            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])**2/(2*sigma**2))
+            #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
+        pixels[phi.tolist().index(coords[n,0]),theta.tolist().index(coords[n,1])] = b#[[b,c]]
+        if maxB < b:
+            maxB = b
+
+
+    pixels = np.array(pixels)
+    plt.figure()
+    plt.imshow(pixels, vmin=0, vmax=maxFluxRate, extent=[0,180,0,360], aspect="auto")
+    plt.xlabel('Azimuthal Angle [degrees]')
+    plt.ylabel('Radial Angle [degrees]')
+    plt.title('Neutron Image of PuBe Source')
+    cb = plt.colorbar()
+    cb.set_label('Flux Rate [counts/cm2s]')
+    plt.show()
     return
     
