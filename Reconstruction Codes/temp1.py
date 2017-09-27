@@ -60,6 +60,7 @@ pixels = np.zeros([len(phi),len(theta)])
 
 print('Generating Neutron Image')
 maxB = 0
+normB = 0
 print('range end = ',len(unitSphere[:,0]))
 for n in range(0,len(unitSphere[:,0])):
     b = 0
@@ -69,7 +70,8 @@ for n in range(0,len(unitSphere[:,0])):
         #print('cone number = ', i)
         b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])**2/(2*sigma**2))
         #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
-    pixels[phi.tolist().index(coords[n,0]),theta.tolist().index(coords[n,1])] = b#[[b,c]]
+    pixels[theta.tolist().index(coords[n,1]),phi.tolist().index(coords[n,0])] = b#[[b,c]]
+    normB += b
     if n%1000 == 0:
         print('iter = ',n)
         print('elapsed = ', time.time()-tic)
@@ -81,13 +83,26 @@ for n in range(0,len(unitSphere[:,0])):
 #    for row, colcolor in zip(recon, colors):
 #        pyplot.plot(2darray, column, "-", color=colcolor)
 
+
 pixels = np.array(pixels)
+pixels = pixels/normB
+b1 = 0
+b2 = 0
+for u in range(0,len(pixels[0,:])):
+    if phi[u] <= 60 or 160 < phi[u] <= 180:
+        b2 += sum(pixels[u,:])
+    else:
+        b1 += sum(pixels[u,:])
+
+print('b1 = ',b1)
+print('b2 = ', b2)
+
 plt.figure()
-plt.imshow(pixels, vmin=0, vmax=maxB, extent=[0,180,0,360], aspect="auto")
-plt.xlabel('Azimuthal Angle [degrees]')
-plt.ylabel('Radial Angle [degrees]')
+plt.imshow(pixels, vmin=0, vmax=maxB/normB, extent=[0,360,0,180], aspect="auto")
+plt.xlabel('Radial Angle [degrees]')
+plt.ylabel('Azimuthal Angle [degrees]')
 plt.title('Neutron Image of PuBe Source')
 #    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
 cb = plt.colorbar()
-cb.set_label('pixel values')
+cb.set_label('relative activity')
 plt.show()
