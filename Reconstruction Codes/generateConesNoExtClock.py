@@ -36,6 +36,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     weights = []
     cones = []
     b = []
+    time1 = []
     radii = 0
     sigma = 0.1
     iteration = 0
@@ -100,7 +101,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
         if i > 200 and i < iteration-101:
             for n in range(i-100,i+100):
                 if plane2Times[n] - plane1Times[i] <= 125000 and plane2Times[n] - plane1Times[i] > 0:
-                    temp = keepTrack
+                    #temp = keepTrack
                     if 0 <= plane1Dets[i] <= 3 and 20 <= plane2Dets[n] <= 23:
                         x1 = plane1Local[plane1Dets[i]]
                         x2 = plane2Local[plane2DetScale[n]]
@@ -114,12 +115,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
-                        if keepTrack == 0:
-                            time1 = plane1Times[i]*timeScale
+                        #if keepTrack == 0:
+                        time1 += [plane1Times[i]*timeScale]
+                        time1 += [plane2Times[n]*timeScale]
                         
-                        keepTrack += 1
-                        if keepTrack > temp:
-                            time2 = plane1Times[keepTrack]*timeScale
+                        #keepTrack += 1
+                        #if keepTrack > temp:
+                        #    time2 = plane1Times[keepTrack]*timeScale
                         break
                     elif 8 <= plane1Dets[i] <= 11 and 12 <= plane2Dets[n] <= 15:
                         x1 = plane1Local[plane1Dets[i]]
@@ -169,10 +171,10 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
                         mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
                         weights += [1/dist**2]
-                        if keepTrack == 0:
-                            time1 = plane1Times[i]*timeScale
-                            
-                        keepTrack += 1
+                        #if keepTrack == 0:
+                        time1 += [plane1Times[i]*timeScale]
+                        time1 += [plane2Times[n]*timeScale]
+                        #keepTrack += 1
                         coneVector += [x1-x2]
                         break
                     elif 8 <= plane1Dets[i] <= 11 and 12 <= plane2Dets[n] <= 15:
@@ -214,6 +216,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #neutronEnergyTOF = neutronEnergyTOF*10**3 #keV
     neutronEnergyADC = np.array(neutronEnergyADC)
     neutronEnergy = [neutronEnergyTOF + neutronEnergyADC]
+    coneVector = np.array(coneVector,dtype = 'float')
+    time1 = np.array(time1,dtype = 'float')
+    time1.sort()
     for i in range(0,len(coneVector[:,0])):
         coneVector[i,2] = 0
 #    for i in range(0,len(neutronEnergyADC)):
@@ -227,17 +232,20 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     #### Create unit sphere here ####
     points = 15
-    unitSphere, coords = generateSphere(points)
-    phi = np.linspace(-90,90,15)
-    theta = np.linspace(-180,180,15)
-    pixels = np.zeros([180/points,360/points]) #np.zeros([len(unitSphere[:,0]),2])
+    unitSphere, coords, theta, phi = generateSphere(points)
+    #phi = np.linspace(-90,90,len(coords[:,0]))
+    #theta = np.linspace(-180,180,len(coords[:,1]))
+    pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
+########################################################################################
+###                      Generate image of neutron data                              ###
+########################################################################################
     #size = len(unitSphere[:,0])
     #unitSphere.ravel()
     for n in range(0,len(unitSphere[:,0])):
         b = 0
-        c = 0
+#        c = 0
         for i in range(0,len(coneAngles)):
-            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])**2/(2*sigma**2))
+            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp(((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])/(2*sigma))**2)
             #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
         pixels[phi.tolist().index(coords[n,0]),theta.tolist().index(coords[n,1])] = b#[[b,c]]
     #recon = [[b],[b]]
@@ -247,7 +255,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 
     pixels = np.array(pixels)
     plt.figure(1)
-    plt.imshow(pixels)
+    plt.imshow(pixels, extent=[-90,90,-180,180], aspect="auto")
+#    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
+#    plt.clim(-4,4)
     plt.show()
     #img = Image.fromarray(b, 'RGB')
 #    img.save('my.png')
@@ -270,7 +280,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #plt.plot(d,f)
     plt.show()
     
-    flux = a/(area*geomCorr*(time2-time1))
+    
+    plt.figure()
+    flux = a/(area*geomCorr*(time1[len(time1)-1]-time1[0]))
     plt.figure(3)
     plt.plot(c,flux,'b-')
     plt.xlabel('Neutron Energy [keV]')
@@ -288,7 +300,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     for i in range(0,len(c)):
         for n in range(0,len(energyVals)-1):
             if energyVals[n+1] > c[i] > energyVals[n]:
-                conv = doseConversion[n] + (c[i]-energyVals[n])*(doseConversion[n+1]-doseConversion[n])/(energyVals[n+1]-energyVals[n])
+                conv = doseConversion[n] + (c[i]-energyVals[n])*((doseConversion[n+1]-doseConversion[n])/(energyVals[n+1]-energyVals[n]))
                 neutronDose += [0.01*flux[i]/conv]
             elif energyVals[n] == c[i]:
                 neutronDose += [0.01*flux[i]/doseConversion[n]]

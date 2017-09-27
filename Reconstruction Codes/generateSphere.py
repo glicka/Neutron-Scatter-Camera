@@ -11,11 +11,18 @@ def generateSphere(points):
     import math
     coords = []#np.zeros(180/points,360/points)
     coords1 = []
+    theta = []
+    phi = []
     #phi = linspace(-90,90,poins)
     #theta = linspace(-180,180,15)
     for i in range(-90,90,points):
         for n in range(-180,180,points):
             coords += [[np.sin(np.deg2rad(i))*np.cos(np.deg2rad(n)),np.sin(np.deg2rad(i))*np.sin(np.deg2rad(n)),np.cos(np.deg2rad(i))]]
             coords1 += [[i,n]]
+            theta += [n]
+            phi += [i]
     coords = np.asarray(coords,dtype = 'float')
-    return(coords, coords1)
+    coords1 = np.asarray(coords1,dtype = 'float')
+    theta = np.asarray(theta,dtype = 'float')
+    phi = np.asarray(phi,dtype = 'float')
+    return(coords, coords1, theta, phi)
