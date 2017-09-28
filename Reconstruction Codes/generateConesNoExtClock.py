@@ -298,6 +298,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 ########################################################################################
     maxFluxRate = max(flux)
     maxDoseRate = max(neutronDose)
+    totalDose = sum(neutronDose)
 ########################################################################################
 ###                      Generate image of neutron data                              ###
 ########################################################################################
@@ -311,6 +312,8 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #np.savetxt("muVals.csv", mu, delimiter=",")
     #np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
     #np.savetxt("weights.csv",weights,delimiter = ",")
+    np.savetxt("neutronDose.csv",neutronDose,delimiter = ",")
+    np.savetxt("neutronEnergy.csv",c,delimiter = ",")
     print('Generating Neutron Image')
     maxB = 0
     normB = 0 #normalization factor
@@ -329,9 +332,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
             maxB = b
 
     pixels = np.array(pixels)
-    pixels = pixels/normB
+    pixels = totalDose*(pixels/normB)
     plt.figure()
-    plt.imshow(pixels, vmin=0, vmax=maxB/normB, extent=[0,180,0,360], aspect="auto")
+    plt.imshow(pixels, vmin=0, vmax=totalDose*(maxB/normB), extent=[0,180,0,360], aspect="auto")
     plt.xlabel('Azimuthal Angle [degrees]')
     plt.ylabel('Radial Angle [degrees]')
     plt.title('Neutron Image of PuBe Source')

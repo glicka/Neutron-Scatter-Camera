@@ -18,6 +18,8 @@ tic = time.time()
 mu = []
 coneVectors = []
 weights = []
+neutronDose = []
+neutronEnergy = []
 sigma = 0.1
 b = 0
 with open('muVals.csv','r') as csvfile:
@@ -33,11 +35,21 @@ with open('weights.csv','r') as csvfile:
     temp = csv.reader(csvfile)
     for row in temp:
         weights += row
-
+with open('neutronDose.csv','r') as csvfile:
+    temp = csv.reader(csvfile)
+    for row in temp:
+        neutronDose += row
+with open('neutronEnergy.csv','r') as csvfile:
+    temp = csv.reader(csvfile)
+    for row in temp:
+        neutronEnergy += row
         
 mu = np.array(mu,dtype = 'float')
 coneVector = np.array(coneVectors,dtype = 'float')
 weights = np.array(weights,dtype = 'float')
+neutronDose = np.array(neutronDose,dtype = 'float')
+neutronEnergy = np.array(neutronEnergy,dtype = 'float')
+totalDose = sum(neutronDose)*10**6
 #print('coneVector = ',coneVector)
 #plane1NeutronDets = np.array(plane1NeutronDets,dtype = 'int')
 #plane1NeutronDets = np.array(plane1NeutronDets,dtype = 'int')
@@ -54,7 +66,7 @@ weights = np.array(weights,dtype = 'float')
 #slope, intercept = adc2keV(plane1NeutronPulseData)
 #cones = generateCones(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseData,plane2NeutronPulseData)
 
-points = 100
+points = 200
 unitSphere, coords, theta, phi = generateSphere(points)
 pixels = np.zeros([len(phi),len(theta)]) 
 
@@ -85,7 +97,7 @@ for n in range(0,len(unitSphere[:,0])):
 
 
 pixels = np.array(pixels)
-pixels = pixels/normB
+pixels = totalDose*(pixels/normB)
 b1 = 0
 b2 = 0
 for u in range(0,len(pixels[0,:])):
@@ -98,11 +110,11 @@ print('b1 = ',b1)
 print('b2 = ', b2)
 
 plt.figure()
-plt.imshow(pixels, vmin=0, vmax=maxB/normB, extent=[0,360,0,180], aspect="auto")
+plt.imshow(pixels, vmin=0, vmax=totalDose*(maxB/normB), extent=[0,360,0,180], aspect="auto")
 plt.xlabel('Radial Angle [degrees]')
 plt.ylabel('Azimuthal Angle [degrees]')
 plt.title('Neutron Image of PuBe Source')
 #    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
 cb = plt.colorbar()
-cb.set_label('relative activity')
+cb.set_label('Source Dose [nSv/hr]')
 plt.show()
