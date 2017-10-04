@@ -14,6 +14,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     import matplotlib
     import pylab as pl
     import time
+    import healpy as hp
     from mpl_toolkits.mplot3d import Axes3D
     from PIL import Image
     planeSeparation = 0.6096 #meters
@@ -34,11 +35,11 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     coneVector = []
     mu = []
     weights = []
-    cones = []
-    b = []
+#    cones = []
+    b = 0
     time1 = []
-    radii = 0
-    sigma = 0.1
+#    radii = 0
+    sigma = 0.045
     iteration = 0
     area = (plane1Local[2,1]-plane1Local[0,1])*(plane1Local[10,0]-plane1Local[0,0])
     totalSphere = 4*math.pi*300**2
@@ -113,7 +114,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -137,7 +138,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -154,7 +155,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -179,7 +180,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -200,7 +201,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -217,7 +218,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
                         neutronEnergyADC += [energyADC] #keV
-                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
                         coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
                         mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
@@ -326,65 +327,47 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 ########################################################################################
 ###                      Generate image of neutron data                              ###
 ########################################################################################
-    #size = len(unitSphere[:,0])
-    #unitSphere.ravel()
-    points = 100
-    unitSphere, coords, theta, phi = generateSphere(points)
-    #phi = np.linspace(-90,90,len(coords[:,0]))
-    #theta = np.linspace(-180,180,len(coords[:,1]))
-    pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
     np.savetxt("muValsSinTheta.csv", mu, delimiter=",")
     np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
     np.savetxt("weights.csv",weights,delimiter = ",")
     np.savetxt("neutronDose.csv",neutronDose,delimiter = ",")
     np.savetxt("neutronEnergy.csv",c,delimiter = ",")
     print('Generating Neutron Image')
-    for n in range(0,len(unitSphere[:,0])):
-        b = 0
-        #     c = 0
-        for i in range(0,1):#xfRange:#range(0,len(mu)):
-            #print('cone number = ', i)
-            #print(i)
-            #print(unitVector[i,:])
-            temp = mu[i]#np.cos(mu[i])
-            #print('dot product = ',math.exp(((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2)/(2*sigma**2)))
-            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2/(2*sigma**2))#math.exp((sum(p*q for p,q in zip(unitSphere[n,:],coneVector[i,:]))-temp)**2/(2*sigma**2))#math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-temp)**2/(2*sigma**2))
-            #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
-        pixels[theta.tolist().index(coords[n,1]),phi.tolist().index(coords[n,0])] = b#[[b,c]]
-        normB += b
-        if maxB < b:
-            maxB = b
-        if n%5000 == 0:
-        print('iter = ',n)
-        print('elapsed = ', time.time()-tic)
-        print('b = ',b)
-        #print('cos(mu) = ',np.cos(mu[i]))
-        print('unitSphere = ',unitSphere[n,:])
-        print('unitVector = ',np.abs(unitVector[i,:]))
-        print('mu = ',temp)
-        print('exp = ',math.exp((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2/(2*sigma**2)))
+    hpindex = 912
+    theta,phi = np.asarray(hp.pix2ang(16,hpindex-1)) * (180./np.pi)
+    if phi > 180: phi = -(360. - phi)
+    nside = 64
+    [x_,y_,z_] = hp.pix2vec(nside,range(12*nside*nside))#201))
+    k = np.array(list(zip(x_,y_,z_)))
+    cmap_ = plt.cm.jet
+    cmap_.set_under("w")
+    pixels = np.zeros(12*nside*nside)
+    #angunc = 3.
+    print(len(k))
+    print(len(weights))
+    for i in range(len(mu)):
+        b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
+        b[b < 1e-5] = 0
+        pixels += b
 
-    #recon = [[b],[b]]
-    #recon = np.array(recon,dtype='float')
-#    for row, colcolor in zip(recon, colors):
-#        pyplot.plot(2darray, column, "-", color=colcolor)
-    #pixels = np.array(pixels)
-    #pixels = np.array(pixels)
-    #pixels = totalDose*(pixels/normB)
     
-    pixels = (pixels/normB)
-    pixels = np.ravel(pixels)
-    normPix = pixels-min(pixels[:])
-    newPix = normPix/max(normPix)
-    newPix = newPix.reshape([len(phi),len(theta)])
+    latra = [-90,90]
+    lonra = [-180,180]
+    p = hp.cartview(newPix, rot=(90,0), lonra=lonra,latra=latra, return_projected_map=True)
+    hp.projplot(hp.pix2ang(16,hpindex-1), 'k*', markersize = 8)
+    #hp.graticule()
+    plt.close("all")
     plt.figure()
-    plt.imshow(newPix, vmin=0, vmax=1, extent=[-180,180,-90,90], aspect="auto")
+    p = plt.imshow(p, cmap=cmap_, origin='lower', interpolation='nearest', extent=(lonra[1],lonra[0],latra[0],latra[1]))
+    #plt.scatter(phi, 90-theta, marker='x')
+    plt.xlim(lonra[0], lonra[1]); plt.ylim(latra[0], latra[1])
+    plt.colorbar(p, fraction=0.046, pad=0.04)
+    plt.title('Neutron Image of PuBe Source')
     plt.xlabel('Radial Angle [degrees]')
     plt.ylabel('Azimuthal Angle [degrees]')
-    plt.title('Neutron Image of PuBe Source')
-#    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
-    cb = plt.colorbar()
-#cb.set_label('Source Dose [nSv/hr]')
+    plt.xticks([-180,-135,-90,-45,0,45,90,135,180])
+    plt.yticks([-90,-45,0,45,90])
+
     plt.show()
     
 #    plt.figure()

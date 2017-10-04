@@ -45,6 +45,8 @@ with open('neutronEnergy.csv','r') as csvfile:
         neutronEnergy += row
         
 mu = np.array(mu,dtype = 'float')
+mu1 = np.random.uniform(low=-1, high=1, size=(201,))
+#print(mu)
 coneVector = np.array(coneVectors,dtype = 'float')
 weights = np.array(weights,dtype = 'float')
 neutronDose = np.array(neutronDose,dtype = 'float')
@@ -53,11 +55,13 @@ totalDose = sum(neutronDose)*10**6
 unitNorm = 0
 unitVector = []
 for i in range(0,len(coneVector[:,0])):
+    temp1 = np.random.uniform(low = 0, high = 0.6096,size=(3,))#[i,:]
     temp = coneVector[i,:]
     unitNorm = np.linalg.norm(temp)
     unitVector += [temp/unitNorm]
 
 unitVector = np.array(unitVector, dtype = 'float')
+#print(unitVector)
 #print('unitVector = ',unitVector)
 #print('coneVector = ',coneVector)
 #print('coneVector = ',coneVector)
@@ -76,10 +80,10 @@ unitVector = np.array(unitVector, dtype = 'float')
 #slope, intercept = adc2keV(plane1NeutronPulseData)
 #cones = generateCones(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseData,plane2NeutronPulseData)
 
-points = 100
-unitSphere, coords, theta, phi = generateSphere(points)
-pixels = np.zeros([len(theta),len(phi)]) 
-pixels1 = np.zeros([len(theta),len(phi)]) 
+#points = 100
+#unitSphere, coords, theta, phi = generateSphere(points)
+#pixels = np.zeros([len(theta),len(phi)]) 
+#pixels1 = np.zeros([len(theta),len(phi)]) 
 #pixels = (pixels/normB)
 #sShape = len(unitSphere[:,0])
 #unitSphere = np.ravel(unitSphere)
@@ -92,17 +96,17 @@ pixels1 = np.zeros([len(theta),len(phi)])
 #newVector = normVector/max(normVector)
 #newVector = newVector.reshape([vShape,3])
 print('Generating Neutron Image')
-maxB = 0
-normB = 0
-normB1 = 0
+#maxB = 0
+#normB = 0
+#normB1 = 0
 #print('range end = ',len(unitSphere[:,0]))
-print('weights = ',len(weights))
-print('mu = ',len(mu))
-print('unitVector = ',len(unitVector[:,0]))
-print('unitSphere = ',len(unitSphere[:,0]))
+#print('weights = ',len(weights))
+#print('mu = ',len(mu))
+#print('unitVector = ',len(unitVector[:,0]))
+#print('unitSphere = ',len(unitSphere[:,0]))
 #print('newSphere = ',len(newSphere[:,0]))
-xfRange = np.linspace(0,len(mu)-1,len(mu),dtype = 'int')
-xsRange = np.linspace(0,len(unitSphere[:,0])-1,len(unitSphere[:,0]),dtype = 'int')
+#xfRange = np.linspace(0,len(mu)-1,len(mu),dtype = 'int')
+#xsRange = np.linspace(0,len(unitSphere[:,0])-1,len(unitSphere[:,0]),dtype = 'int')
 #for n in range(0,len(unitSphere[:,0])):
 #    b = 0
 #     c = 0
@@ -149,15 +153,14 @@ cmap_ = plt.cm.jet
 cmap_.set_under("w")
 im = np.zeros(12*nside*nside)
 angunc = 3.
-print(len(k))
-print(len(weights))
+
 for i in range(len(mu)):#len(sequences)):
     #for n in range(0,500):#len(k[:,0])):
         #print('n = ',n)
     b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
-    b[b < 1e-5] = 0
+    #b[b < 1e-5] = 0
     #val = np.array(val)
-    im += val
+    im += b
 
 #pixels = (pixels/normB)
 #pixels = np.ravel(pixels)
