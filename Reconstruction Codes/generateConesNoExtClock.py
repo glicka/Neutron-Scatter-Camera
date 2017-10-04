@@ -109,10 +109,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
                         #if keepTrack == 0:
@@ -130,10 +133,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
                         break
@@ -144,10 +150,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
                         break
@@ -166,10 +175,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         #if keepTrack == 0:
                         time1 += [plane1Times[i]*timeScale]
@@ -184,10 +196,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
                         break
@@ -198,10 +213,13 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
                         distance += [dist]
                         timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                         energy = (10**3)*(1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
+                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+                        energyTotal = energyADC + energy
                         neutronEnergyTOF += [energy] #keV
-                        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-                        coneAngles += [math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy))]
-                        mu += [np.cos(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energy)))]
+                        neutronEnergyADC += [energyADC] #keV
+                        print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+                        coneAngles += [math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+                        mu += [np.cos(math.asin(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
                         weights += [1/dist**2]
                         coneVector += [x1-x2]
                         break
@@ -230,8 +248,8 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 #######################################################################################
 ####                   set cone origin to zero                                     ####  
 #######################################################################################
-    for i in range(0,len(coneVector[:,0])):
-        coneVector[i,2] = 0
+    #for i in range(0,len(coneVector[:,0])):
+    #    coneVector[i,2] = 0
 
 
 #######################################################################################
@@ -309,9 +327,9 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #phi = np.linspace(-90,90,len(coords[:,0]))
     #theta = np.linspace(-180,180,len(coords[:,1]))
     pixels = np.zeros([len(phi),len(theta)]) #np.zeros([len(unitSphere[:,0]),2])
-    #np.savetxt("muVals.csv", mu, delimiter=",")
-    #np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
-    #np.savetxt("weights.csv",weights,delimiter = ",")
+    np.savetxt("muValsSinTheta.csv", mu, delimiter=",")
+    np.savetxt("coneVectors.csv",coneVector,delimiter = ",")
+    np.savetxt("weights.csv",weights,delimiter = ",")
     np.savetxt("neutronDose.csv",neutronDose,delimiter = ",")
     np.savetxt("neutronEnergy.csv",c,delimiter = ",")
     print('Generating Neutron Image')
