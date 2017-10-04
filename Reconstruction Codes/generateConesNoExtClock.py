@@ -246,10 +246,16 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     time1 = np.array(time1,dtype = 'float')
     time1.sort()
 #######################################################################################
-####                   set cone origin to zero                                     ####  
+####              create unit vector for cones                                     ####  
 #######################################################################################
-    #for i in range(0,len(coneVector[:,0])):
-    #    coneVector[i,2] = 0
+    unitNorm = 0
+    unitVector = []
+    for i in range(0,len(coneVector[:,0])):
+        temp = coneVector[i,:]
+        unitNorm = np.linalg.norm(temp)
+        unitVector += [temp/unitNorm]
+
+    unitVector = np.array(unitVector, dtype = 'float')
 
 
 #######################################################################################
@@ -333,30 +339,52 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     np.savetxt("neutronDose.csv",neutronDose,delimiter = ",")
     np.savetxt("neutronEnergy.csv",c,delimiter = ",")
     print('Generating Neutron Image')
-    maxB = 0
-    normB = 0 #normalization factor
     for n in range(0,len(unitSphere[:,0])):
         b = 0
-        for i in range(0,len(mu)):
-            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-mu[i])**2/(2*sigma**2))
+        #     c = 0
+        for i in range(0,1):#xfRange:#range(0,len(mu)):
+            #print('cone number = ', i)
+            #print(i)
+            #print(unitVector[i,:])
+            temp = mu[i]#np.cos(mu[i])
+            #print('dot product = ',math.exp(((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2)/(2*sigma**2)))
+            b += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2/(2*sigma**2))#math.exp((sum(p*q for p,q in zip(unitSphere[n,:],coneVector[i,:]))-temp)**2/(2*sigma**2))#math.exp((np.dot(unitSphere[n,:],coneVector[i,:])-temp)**2/(2*sigma**2))
             #c += (1/(weights[i]*sigma*np.sqrt(2*math.pi)))*math.exp((np.dot(unitSphere[n,1],coneVector[i,1])-mu[i])**2/(2*sigma**2))
         pixels[theta.tolist().index(coords[n,1]),phi.tolist().index(coords[n,0])] = b#[[b,c]]
         normB += b
-        if n%1000 == 0:
-            print('iter = ',n)
-            print('elapsed = ', time.time()-tic)
-            print('b = ',b)
         if maxB < b:
             maxB = b
+        if n%5000 == 0:
+        print('iter = ',n)
+        print('elapsed = ', time.time()-tic)
+        print('b = ',b)
+        #print('cos(mu) = ',np.cos(mu[i]))
+        print('unitSphere = ',unitSphere[n,:])
+        print('unitVector = ',np.abs(unitVector[i,:]))
+        print('mu = ',temp)
+        print('exp = ',math.exp((np.dot(unitSphere[n,:],unitVector[i,:])-temp)**2/(2*sigma**2)))
 
-    pixels = np.array(pixels)
-    pixels = totalDose*(pixels/normB)
+    #recon = [[b],[b]]
+    #recon = np.array(recon,dtype='float')
+#    for row, colcolor in zip(recon, colors):
+#        pyplot.plot(2darray, column, "-", color=colcolor)
+    #pixels = np.array(pixels)
+    #pixels = np.array(pixels)
+    #pixels = totalDose*(pixels/normB)
+    
+    pixels = (pixels/normB)
+    pixels = np.ravel(pixels)
+    normPix = pixels-min(pixels[:])
+    newPix = normPix/max(normPix)
+    newPix = newPix.reshape([len(phi),len(theta)])
     plt.figure()
-    plt.imshow(pixels, vmin=0, vmax=totalDose*(maxB/normB), extent=[0,180,0,360], aspect="auto")
-    plt.xlabel('Azimuthal Angle [degrees]')
-    plt.ylabel('Radial Angle [degrees]')
+    plt.imshow(newPix, vmin=0, vmax=1, extent=[-180,180,-90,90], aspect="auto")
+    plt.xlabel('Radial Angle [degrees]')
+    plt.ylabel('Azimuthal Angle [degrees]')
     plt.title('Neutron Image of PuBe Source')
-    plt.colorbar()
+#    plt.pcolor(pixels, extent=[-90,90,-180,180], aspect="auto")
+    cb = plt.colorbar()
+#cb.set_label('Source Dose [nSv/hr]')
     plt.show()
     
 #    plt.figure()
