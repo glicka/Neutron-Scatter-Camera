@@ -59,136 +59,136 @@ def dataProcessingNoExtClock(datafile,photonDataFile,tic):
         if adcBoardVals[i] == 5:
             if adcChannel[i] == 0:
                 #detectorVal = detectorVal + [0]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [0]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 1:
                 #detectorVal = detectorVal + [1]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [1]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 2:
                 #detectorVal = detectorVal + [2]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [2]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 3:
                 #detectorVal = detectorVal + [3]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [3]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 4:
                 #detectorVal = detectorVal + [4]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [20]
             elif adcChannel[i] == 5:
                 #detectorVal = detectorVal + [5]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [21]
             elif adcChannel[i] == 6:
                 #detectorVal = detectorVal + [6]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [22]
             elif adcChannel[i] == 7:
                 #detectorVal = detectorVal + [7]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [23]
         elif adcBoardVals[i] == 7:
             if adcChannel[i] == 0:
                 #detectorVal = detectorVal + [16]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [16]
             elif adcChannel[i] == 1:
                 #detectorVal = detectorVal + [17]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [17]
             elif adcChannel[i] == 2:
                 #detectorVal = detectorVal + [18]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [18]
             elif adcChannel[i] == 3:
                 #detectorVal = detectorVal + [19]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [19]
             elif adcChannel[i] == 4:
                 #detectorVal = detectorVal + [20]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [4]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 5:
                 #detectorVal = detectorVal + [21]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [5]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 6:
                 #detectorVal = detectorVal + [22]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [6]            
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 7:
                 #detectorVal = detectorVal + [23]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [7]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
         elif adcBoardVals[i] == 6:
             if adcChannel[i] == 0:
                 #detectorVal = detectorVal + [8]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [8]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 1:
                 #detectorVal = detectorVal + [9]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [9]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 2:
                 #detectorVal = detectorVal + [10]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [10]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 3:
                 #detectorVal = detectorVal + [11]
-                plane1Data += [rawDataMat[i,:]]
+                plane1Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [11]
                 #plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 4:
                 #detectorVal = detectorVal + [12]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [12]
             elif adcChannel[i] == 5:
                 #detectorVal = detectorVal + [13]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [13]
             elif adcChannel[i] == 6:
                 #detectorVal = detectorVal + [14]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [14]
             elif adcChannel[i] == 7:
                 #detectorVal = detectorVal + [15]
-                plane2Data += [rawDataMat[i,:]]
+                plane2Data += [rawDataMat[i,:]#-np.mean(np.mean(rawDataMat[i,1:20]))]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [15]
         if i%100000 == 0:
@@ -205,6 +205,11 @@ def dataProcessingNoExtClock(datafile,photonDataFile,tic):
     plane2Times = np.array(plane2Times,dtype='float')
     plane1Dets = np.array(plane1Dets,dtype='int')
     plane2Dets = np.array(plane2Dets,dtype='int')
+    rowTest = [i for i in plane1Data[0,:] if i >= 0]
+    rowTest = np.array(rowTest)
+    #plt.plot(plane1Data[0,:])
+    plt.plot(rowTest)
+    plt.show()
     #plane1PhotonData = np.array(plane1PhotonData,dtype='float')
 #    print('plane1Data = ',plane1Data)
 #    print('plane1Times = ',plane1Times)
@@ -261,7 +266,14 @@ def dataProcessingNoExtClock(datafile,photonDataFile,tic):
 #### Generate cones and do energy reconstruction of neutrons ####
 
     print('Performing Energy Reconstruction and Cone Generation')
-    toc = time.time()
+    #toc = time.time()
 #            print('tictoc = ',toc-tic)
     print('elapsed = ',toc-tic,'s')
-    cones = generateConesNoExtClock(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseADC,plane2NeutronPulseADC,tic)
+    neutronEnergy = generateConesNoExtClock(slope,intercept,plane1NeutronDets,plane2NeutronDets,plane1NeutronTimes,plane2NeutronTimes,plane1NeutronPulseADC,plane2NeutronPulseADC,tic)
+    print('elapsed = ',toc-tic,'s')
+    print('Calculating Absorbed Dose')
+    kFactor = calculateAbsorbedDose(neutronEnergy,tic)
+    
+    print('elapsed = ',toc-tic,'s')
+    
+    return
