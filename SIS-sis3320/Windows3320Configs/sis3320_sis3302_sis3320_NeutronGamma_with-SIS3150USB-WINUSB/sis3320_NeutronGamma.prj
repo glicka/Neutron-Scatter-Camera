@@ -1,0 +1,892 @@
+[Project Header]
+Version = 1001
+Pathname Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Pathname Line0002 = "onGamma.prj"
+CVI Dir = "/c/program files/national instruments/cvi2010"
+CVI Shared Dir = "/C/Program Files/National Instruments/Shared/CVI"
+CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2010"
+CVI Pub Global Dir = "/C/ProgramData/National Instruments/CVI"
+IVI Standard Root Dir = "/C/Program Files/IVI Foundation/IVI"
+VXIplug&play Framework Dir = "/C/Program Files/IVI Foundation/VISA/winnt"
+IVI Standard Root 64-bit Dir = "/C/Program Files/IVI Foundation/IVI"
+VXIplug&play Framework 64-bit Dir = "/C/Program Files/IVI Foundation/VISA/win64"
+Number of Files = 27
+Target Type = "Executable"
+Flags = 1040
+Copied From Locked InstrDrv Directory = False
+Copied from VXIPNP Directory = False
+Locked InstrDrv Name = ""
+Don't Display Deploy InstrDrv Dialog = False
+
+[File 0001]
+File Type = "Function Panel"
+Res Id = 1
+Path Is Rel = True
+Path Rel To = "CVI"
+Path Rel To Override = "CVI"
+Path Rel Path = "toolslib/toolbox/inifile.fp"
+Path = "/c/Program Files/National Instruments/CVI2010/toolslib/toolbox/inifile.fp"
+Exclude = False
+Project Flags = 0
+Folder = "Instrument Files"
+
+[File 0002]
+File Type = "CSource"
+Res Id = 2
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "pc_to_vme_routines.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/pc_to_vme_rou"
+Path Line0002 = "tines.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0003]
+File Type = "Include"
+Res Id = 3
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "pc_to_vme_routines.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/pc_to_vme_rou"
+Path Line0002 = "tines.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0004]
+File Type = "Include"
+Res Id = 4
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "pc_vme_interface_defines.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/pc_vme_interf"
+Path Line0002 = "ace_defines.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0005]
+File Type = "Include"
+Res Id = 5
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/sis3150.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/sis315"
+Path Line0002 = "0.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0006]
+File Type = "CSource"
+Res Id = 6
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3150_display_routines.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3150_displ"
+Path Line0002 = "ay_routines.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0007]
+File Type = "CSource"
+Res Id = 7
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3150_energy_spectrum_utils.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3150_energ"
+Path Line0002 = "y_spectrum_utils.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0008]
+File Type = "CSource"
+Res Id = 8
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3150_gamma_diagnostic.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3150_gamma"
+Path Line0002 = "_diagnostic.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0009]
+File Type = "Include"
+Res Id = 9
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150_usb_wrapper.h"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150_usb_wrapper.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0010]
+File Type = "Library"
+Res Id = 10
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150_usb_wrapper.lib"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150_usb_wrapper.lib"
+Exclude = False
+Project Flags = 0
+Folder = "Not In A Folder"
+
+[File 0011]
+File Type = "CSource"
+Res Id = 11
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3150_utils.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3150_utils"
+Path Line0002 = ".c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0012]
+File Type = "Include"
+Res Id = 12
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3150_utils.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3150_utils"
+Path Line0002 = ".h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0013]
+File Type = "Include"
+Res Id = 13
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/sis3150usb.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/sis315"
+Path Line0002 = "0usb.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0014]
+File Type = "CSource"
+Res Id = 14
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_utils.c"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_utils.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0015]
+File Type = "Include"
+Res Id = 15
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_utils.h"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_utils.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0016]
+File Type = "CSource"
+Res Id = 16
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_vme_calls.c"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_vme_calls.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0017]
+File Type = "Include"
+Res Id = 17
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "../../3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_vme_calls.h"
+Path = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib/sis3150usb_vme_calls.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0018]
+File Type = "CSource"
+Res Id = 18
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_configuration.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_confi"
+Path Line0002 = "guration.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0019]
+File Type = "Include"
+Res Id = 19
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/sis3320_NeutronGamma.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/sis332"
+Path Line0002 = "0_NeutronGamma.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0020]
+File Type = "Include"
+Res Id = 20
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/sis3320_NeutronGamma_global.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/sis332"
+Path Line0002 = "0_NeutronGamma_global.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0021]
+File Type = "CSource"
+Res Id = 21
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_NeutronGamma_main.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Path Line0002 = "onGamma_main.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0022]
+File Type = "CSource"
+Res Id = 22
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_NeutronGamma_offline.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Path Line0002 = "onGamma_offline.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0023]
+File Type = "CSource"
+Res Id = 23
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_NeutronGamma_running.c"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Path Line0002 = "onGamma_running.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+
+[File 0024]
+File Type = "Include"
+Res Id = 24
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_NeutronGamma_uir.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Path Line0002 = "onGamma_uir.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0025]
+File Type = "User Interface Resource"
+Res Id = 25
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "sis3320_NeutronGamma_uir.uir"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Path Line0002 = "onGamma_uir.uir"
+Exclude = False
+Project Flags = 0
+Folder = "User Interface Files"
+
+[File 0026]
+File Type = "Include"
+Res Id = 26
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/sis3820_clock.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/sis382"
+Path Line0002 = "0_clock.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[File 0027]
+File Type = "Include"
+Res Id = 27
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Header/vme_TS_communication_address_map.h"
+Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header/vme_TS"
+Path Line0002 = "_communication_address_map.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+
+[Folders]
+Folder 0 = "Source Files"
+Folder 1 = "Instrument Files"
+Folder 2 = "Include Files"
+Folder 3 = "User Interface Files"
+
+[Custom Build Configs]
+Num Custom Build Configs = 0
+
+[Default Build Config Debug]
+Config Name = "Debug"
+Is 64-Bit = False
+Is Release = False
+Default Calling Convention = "cdecl"
+Uninitialized Locals Compile Warning = "Conservative"
+Require Prototypes = True
+Require Return Values = True
+Enable Pointer Mismatch Warning = False
+Enable Unreachable Code Warning = False
+Enable Unreferenced Identifiers Warning = False
+Enable Assignment In Conditional Warning = False
+Enable C99 Extensions = False
+Stack Size = 250000
+Image Base Address = 4194304
+Image Base Address x64 = 4194304
+Compiler Defines = "/DWIN32_LEAN_AND_MEAN"
+Sign = False
+Sign Store = ""
+Sign Certificate = ""
+Sign Timestamp URL = ""
+Sign URL = ""
+Manifest Embed = False
+Icon File Is Rel = True
+Icon File Rel To = "Project"
+Icon File Rel Path = "cvi.ico"
+Icon File = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvi.ico"
+Application Title = "SIS3302_SIS3320-250 NeutronGamma Test"
+DLL Import Library Choice = "Gen Lib For Current Mode"
+Use IVI Subdirectories for Import Libraries = False
+Use VXIPNP Subdirectories for Import Libraries = False
+Use Dflt Import Lib Base Name = True
+Where to Copy DLL = "Do not copy"
+Custom Directory to Copy DLL Is Rel = False
+Custom Directory to Copy DLL = ""
+Generate Source Documentation = "None"
+Runtime Support = "Full Runtime Support"
+Embed Project .UIRs = False
+Generate Map File = False
+Create Console Application = True
+Using LoadExternalModule = False
+DLL Exports = "Include File Symbols"
+Register ActiveX Server = False
+Numeric File Version = "1,0,0,0"
+Numeric Prod Version = "1,0,0,0"
+Comments = ""
+Comments Ex = ""
+Company Name = "sis"
+Company Name Ex = "sis"
+File Description = ""
+File Description Ex = ""
+File Version = "1.0"
+File Version Ex = "%f1.%f2"
+Internal Name = "sis3300_greta"
+Internal Name Ex = "sis3300_greta"
+Legal Copyright = "Copyright © sis, 2002"
+Legal Copyright Ex = "Copyright © sis, 2002"
+Legal Trademarks = ""
+Legal Trademarks Ex = ""
+Original Filename = "sis3300.exe"
+Original Filename Ex = "sis3300.exe"
+Private Build = ""
+Private Build Ex = ""
+Product Name = "sis "
+Product Name Ex = "sis "
+Product Version = "1.0"
+Product Version Ex = "%p1.%p2"
+Special Build = ""
+Special Build Ex = ""
+Add Type Lib To DLL = False
+Include Type Lib Help Links = False
+TLB Help Style = "HLP"
+Type Lib FP File Is Rel = False
+Type Lib FP File = ""
+
+[Default Build Config Release]
+Config Name = "Release"
+Is 64-Bit = False
+Is Release = True
+Default Calling Convention = "cdecl"
+Uninitialized Locals Compile Warning = "Conservative"
+Require Prototypes = True
+Require Return Values = True
+Enable Pointer Mismatch Warning = False
+Enable Unreachable Code Warning = False
+Enable Unreferenced Identifiers Warning = False
+Enable Assignment In Conditional Warning = False
+Enable C99 Extensions = False
+Stack Size = 250000
+Image Base Address = 4194304
+Image Base Address x64 = 4194304
+Compiler Defines = "/DWIN32_LEAN_AND_MEAN"
+Sign = False
+Sign Store = ""
+Sign Certificate = ""
+Sign Timestamp URL = ""
+Sign URL = ""
+Manifest Embed = False
+Icon File Is Rel = True
+Icon File Rel To = "Project"
+Icon File Rel Path = "cvi.ico"
+Icon File = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvi.ico"
+Application Title = "SIS3302_SIS3320-250 NeutronGamma Test"
+DLL Import Library Choice = "Gen Lib For Current Mode"
+Use IVI Subdirectories for Import Libraries = False
+Use VXIPNP Subdirectories for Import Libraries = False
+Use Dflt Import Lib Base Name = True
+Where to Copy DLL = "Do not copy"
+Custom Directory to Copy DLL Is Rel = False
+Custom Directory to Copy DLL = ""
+Generate Source Documentation = "None"
+Runtime Support = "Full Runtime Support"
+Embed Project .UIRs = False
+Generate Map File = False
+Create Console Application = True
+Using LoadExternalModule = False
+DLL Exports = "Include File Symbols"
+Register ActiveX Server = False
+Numeric File Version = "1,0,0,0"
+Numeric Prod Version = "1,0,0,0"
+Comments = ""
+Comments Ex = ""
+Company Name = "sis"
+Company Name Ex = "sis"
+File Description = ""
+File Description Ex = ""
+File Version = "1.0"
+File Version Ex = "%f1.%f2"
+Internal Name = "sis3300_greta"
+Internal Name Ex = "sis3300_greta"
+Legal Copyright = "Copyright © sis, 2002"
+Legal Copyright Ex = "Copyright © sis, 2002"
+Legal Trademarks = ""
+Legal Trademarks Ex = ""
+Original Filename = "sis3300.exe"
+Original Filename Ex = "sis3300.exe"
+Private Build = ""
+Private Build Ex = ""
+Product Name = "sis "
+Product Name Ex = "sis "
+Product Version = "1.0"
+Product Version Ex = "%p1.%p2"
+Special Build = ""
+Special Build Ex = ""
+Add Type Lib To DLL = False
+Include Type Lib Help Links = False
+TLB Help Style = "HLP"
+Type Lib FP File Is Rel = False
+Type Lib FP File = ""
+
+[Default Build Config Debug64]
+Config Name = "Debug64"
+Is 64-Bit = True
+Is Release = False
+Default Calling Convention = "cdecl"
+Uninitialized Locals Compile Warning = "Conservative"
+Require Prototypes = True
+Require Return Values = True
+Enable Pointer Mismatch Warning = False
+Enable Unreachable Code Warning = False
+Enable Unreferenced Identifiers Warning = False
+Enable Assignment In Conditional Warning = False
+Enable C99 Extensions = False
+Stack Size = 250000
+Image Base Address = 4194304
+Image Base Address x64 = 4194304
+Compiler Defines = "/DWIN32_LEAN_AND_MEAN"
+Sign = False
+Sign Store = ""
+Sign Certificate = ""
+Sign Timestamp URL = ""
+Sign URL = ""
+Manifest Embed = False
+Icon File Is Rel = True
+Icon File Rel To = "Project"
+Icon File Rel Path = "cvi.ico"
+Icon File = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvi.ico"
+Application Title = "SIS3302_SIS3320-250 NeutronGamma Test"
+DLL Import Library Choice = "Gen Lib For Current Mode"
+Use IVI Subdirectories for Import Libraries = False
+Use VXIPNP Subdirectories for Import Libraries = False
+Use Dflt Import Lib Base Name = True
+Where to Copy DLL = "Do not copy"
+Custom Directory to Copy DLL Is Rel = False
+Custom Directory to Copy DLL = ""
+Generate Source Documentation = "None"
+Runtime Support = "Full Runtime Support"
+Embed Project .UIRs = False
+Generate Map File = False
+Create Console Application = True
+Using LoadExternalModule = False
+DLL Exports = "Include File Symbols"
+Register ActiveX Server = False
+Numeric File Version = "1,0,0,0"
+Numeric Prod Version = "1,0,0,0"
+Comments = ""
+Comments Ex = ""
+Company Name = "sis"
+Company Name Ex = "sis"
+File Description = ""
+File Description Ex = ""
+File Version = "1.0"
+File Version Ex = "%f1.%f2"
+Internal Name = "sis3300_greta"
+Internal Name Ex = "sis3300_greta"
+Legal Copyright = "Copyright © sis, 2002"
+Legal Copyright Ex = "Copyright © sis, 2002"
+Legal Trademarks = ""
+Legal Trademarks Ex = ""
+Original Filename = "sis3300.exe"
+Original Filename Ex = "sis3300.exe"
+Private Build = ""
+Private Build Ex = ""
+Product Name = "sis "
+Product Name Ex = "sis "
+Product Version = "1.0"
+Product Version Ex = "%p1.%p2"
+Special Build = ""
+Special Build Ex = ""
+Add Type Lib To DLL = False
+Include Type Lib Help Links = False
+TLB Help Style = "HLP"
+Type Lib FP File Is Rel = False
+Type Lib FP File = ""
+
+[Default Build Config Release64]
+Config Name = "Release64"
+Is 64-Bit = True
+Is Release = True
+Default Calling Convention = "cdecl"
+Uninitialized Locals Compile Warning = "Conservative"
+Require Prototypes = True
+Require Return Values = True
+Enable Pointer Mismatch Warning = False
+Enable Unreachable Code Warning = False
+Enable Unreferenced Identifiers Warning = False
+Enable Assignment In Conditional Warning = False
+Enable C99 Extensions = False
+Stack Size = 250000
+Image Base Address = 4194304
+Image Base Address x64 = 4194304
+Compiler Defines = "/DWIN32_LEAN_AND_MEAN"
+Sign = False
+Sign Store = ""
+Sign Certificate = ""
+Sign Timestamp URL = ""
+Sign URL = ""
+Manifest Embed = False
+Icon File Is Rel = True
+Icon File Rel To = "Project"
+Icon File Rel Path = "cvi.ico"
+Icon File = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvi.ico"
+Application Title = "SIS3302_SIS3320-250 NeutronGamma Test"
+DLL Import Library Choice = "Gen Lib For Current Mode"
+Use IVI Subdirectories for Import Libraries = False
+Use VXIPNP Subdirectories for Import Libraries = False
+Use Dflt Import Lib Base Name = True
+Where to Copy DLL = "Do not copy"
+Custom Directory to Copy DLL Is Rel = False
+Custom Directory to Copy DLL = ""
+Generate Source Documentation = "None"
+Runtime Support = "Full Runtime Support"
+Embed Project .UIRs = False
+Generate Map File = False
+Create Console Application = True
+Using LoadExternalModule = False
+DLL Exports = "Include File Symbols"
+Register ActiveX Server = False
+Numeric File Version = "1,0,0,0"
+Numeric Prod Version = "1,0,0,0"
+Comments = ""
+Comments Ex = ""
+Company Name = "sis"
+Company Name Ex = "sis"
+File Description = ""
+File Description Ex = ""
+File Version = "1.0"
+File Version Ex = "%f1.%f2"
+Internal Name = "sis3300_greta"
+Internal Name Ex = "sis3300_greta"
+Legal Copyright = "Copyright © sis, 2002"
+Legal Copyright Ex = "Copyright © sis, 2002"
+Legal Trademarks = ""
+Legal Trademarks Ex = ""
+Original Filename = "sis3300.exe"
+Original Filename Ex = "sis3300.exe"
+Private Build = ""
+Private Build Ex = ""
+Product Name = "sis "
+Product Name Ex = "sis "
+Product Version = "1.0"
+Product Version Ex = "%p1.%p2"
+Special Build = ""
+Special Build Ex = ""
+Add Type Lib To DLL = False
+Include Type Lib Help Links = False
+TLB Help Style = "HLP"
+Type Lib FP File Is Rel = False
+Type Lib FP File = ""
+
+[Compiler Options]
+Default Calling Convention = "cdecl"
+Require Prototypes = True
+Require Return Values = True
+Enable Pointer Mismatch Warning = False
+Enable Unreachable Code Warning = False
+Enable Unreferenced Identifiers Warning = False
+Enable Assignment In Conditional Warning = False
+O Option Compatible With 5.0 = False
+Enable C99 Extensions = False
+Uninitialized Locals Compile Warning = "Conservative"
+Precompile Prefix Header = False
+Prefix Header File = ""
+
+[Run Options]
+Stack Size = 250000
+Image Base Address = 4194304
+Image Base Address x64 = 4194304
+
+[Compiler Defines]
+Compiler Defines = "/DWIN32_LEAN_AND_MEAN"
+
+[Include Paths]
+Include Path 1 Is Rel = False
+Include Path 1 = "/c/3150usb_driver/driver_winusb/driver_1.1.0.2/lib"
+Include Path 2 Is Rel = True
+Include Path 2 Rel To = "Project"
+Include Path 2 Rel Path = ""
+Include Path 2 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB"
+Include Path 3 Is Rel = False
+Include Path 3 = "/c/SIS1100_3100/sis1100_win2k_utils/plx"
+Include Path 4 Is Rel = False
+Include Path 4 = "/c/SIS1100_3100/sis1100_win2k_utils/plx/header"
+Include Path 5 Is Rel = False
+Include Path 5 = "/c/SIS1100_3100/sis1100_win2k_utils/plx/header"
+Include Path 6 Is Rel = True
+Include Path 6 Rel To = "Project"
+Include Path 6 Rel Path = ""
+Include Path 6 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB"
+Include Path 7 Is Rel = True
+Include Path 7 Rel To = "Project"
+Include Path 7 Rel Path = "Header"
+Include Path 7 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/Header"
+
+[Create Executable]
+Executable File_Debug Is Rel = True
+Executable File_Debug Rel To = "Project"
+Executable File_Debug Rel Path = "sis3302_sis3320_NeutronGamma_debug.exe"
+Executable File_Debug Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3302_sis33"
+Executable File_Debug Line0002 = "20_NeutronGamma_debug.exe"
+Executable File_Release Is Rel = True
+Executable File_Release Rel To = "Project"
+Executable File_Release Rel Path = "sis3302_sis3320_NeutronGamma.exe"
+Executable File_Release Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3302_sis33"
+Executable File_Release Line0002 = "20_NeutronGamma.exe"
+Executable File_Debug64 Is Rel = True
+Executable File_Debug64 Rel To = "Project"
+Executable File_Debug64 Rel Path = "sis3320_NeutronGamma.exe"
+Executable File_Debug64 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Executable File_Debug64 Line0002 = "onGamma.exe"
+Executable File_Release64 Is Rel = True
+Executable File_Release64 Rel To = "Project"
+Executable File_Release64 Rel Path = "sis3320_NeutronGamma.exe"
+Executable File_Release64 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Executable File_Release64 Line0002 = "onGamma.exe"
+Icon File Is Rel = True
+Icon File Rel To = "Project"
+Icon File Rel Path = "cvi.ico"
+Icon File = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvi.ico"
+Application Title = "SIS3302_SIS3320-250 NeutronGamma Test"
+Numeric File Version = "1,0,0,0"
+Numeric Prod Version = "1,0,0,0"
+Comments = ""
+Comments Ex = ""
+Company Name = "sis"
+Company Name Ex = "sis"
+File Description = ""
+File Description Ex = ""
+File Version = "1.0"
+File Version Ex = "%f1.%f2"
+Internal Name = "sis3300_greta"
+Internal Name Ex = "sis3300_greta"
+Legal Copyright = "Copyright © sis, 2002"
+Legal Copyright Ex = "Copyright © sis, 2002"
+Legal Trademarks = ""
+Legal Trademarks Ex = ""
+Original Filename = "sis3300.exe"
+Original Filename Ex = "sis3300.exe"
+Private Build = ""
+Private Build Ex = ""
+Product Name = "sis "
+Product Name Ex = "sis "
+Product Version = "1.0"
+Product Version Ex = "%p1.%p2"
+Special Build = ""
+Special Build Ex = ""
+DLL Exports = "Include File Symbols"
+DLL Import Library Choice = "Gen Lib For Current Mode"
+Use IVI Subdirectories for Import Libraries = False
+Use VXIPNP Subdirectories for Import Libraries = False
+Use Dflt Import Lib Base Name = True
+Where to Copy DLL = "Do not copy"
+Custom Directory to Copy DLL Is Rel = False
+Custom Directory to Copy DLL = ""
+Generate Source Documentation = "None"
+Add Type Lib To DLL = False
+Include Type Lib Help Links = False
+TLB Help Style = "HLP"
+Type Lib FP File Is Rel = False
+Type Lib FP File = ""
+Type Lib Guid = ""
+Runtime Support = "Full Runtime Support"
+Instrument Driver Support Only = False
+Embed Project .UIRs = False
+Generate Map File = False
+
+[External Compiler Support]
+UIR Callbacks File Option = 0
+Using LoadExternalModule = False
+Create Project Symbols File = True
+UIR Callbacks Obj File Is Rel = False
+UIR Callbacks Obj File = ""
+Project Symbols H File Is Rel = False
+Project Symbols H File = ""
+Project Symbols Obj File Is Rel = False
+Project Symbols Obj File = ""
+
+[Distribution Kit]
+Distribution Kit GUID = "{FA9484C6-5CCA-4E47-B45A-E78894AC45CD}"
+Installation Directory = "sis3320_NeutronGamma"
+Installation Destination = 4
+Install Run-Time Engine = True
+Install RTE Privately = False
+Install Instrsup = False
+Install Instrsup Privately = False
+Install CVI_LVRT = False
+Install CVI_LVRT Privately = False
+Install Low-Level Support Driver = False
+Install ActiveX Container = False
+Media Size = 3
+kBytes Reserved on First Disk = 0
+Target Path Is Rel = True
+Target Path Rel To = "Project"
+Target Path Rel Path = "cvidistkit.sis3302_sis3320_NeutronGamma_for_sis3150usb-winusb"
+Target Path Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/cvidistkit.si"
+Target Path Line0002 = "s3302_sis3320_NeutronGamma_for_sis3150usb-winusb"
+Language = "English"
+Core Group Index = 1
+DLL Group Index = 2
+Project File 0001 Is Rel = True
+Project File 0001 Rel To = "Project"
+Project File 0001 Rel Path = "sis3320_NeutronGamma_uir.uir"
+Project File 0001 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+Project File 0001 Line0002 = "onGamma_uir.uir"
+Project File 0002 Is Rel = True
+Project File 0002 Rel To = "Project"
+Project File 0002 Rel Path = "sis3302_sis3320_NeutronGamma.exe"
+Project File 0002 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3302_sis33"
+Project File 0002 Line0002 = "20_NeutronGamma.exe"
+Project File 0003 Is Rel = False
+Project File 0003 = "/c/Windows/System32/sis3150_usb_wrapper.dll"
+Redistribute DataSocket = 0
+Redistribute NIReports = 0
+Redistribute DDC = 0
+Redistribute CW3DGraph = 0
+Use Custom Script = False
+Run Executable After Setup Group Index = -1
+Run Executable After Setup File Index = -1
+Use Default Program Group Name = True
+Use Default Installation Name = True
+
+[Distribution Kit File Group 001]
+Group Name = "SIS3302/SIS3320-250 Gamma/Neutron Test Files"
+Destination Directory = "Application"
+Use Relative Path = False
+Create Shortcuts = 1
+Install Icons = True
+Distribute Multiple Objects = False
+Replace Mode = "If Newer"
+Register As ActiveX Servers = False
+File 0001 Is Rel = True
+File 0001 Rel To = "Project"
+File 0001 Rel Path = "sis3302_sis3320_NeutronGamma.exe"
+File 0001 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3302_sis33"
+File 0001 Line0002 = "20_NeutronGamma.exe"
+File 0002 Is Rel = True
+File 0002 Rel To = "Project"
+File 0002 Rel Path = "sis3320_NeutronGamma_uir.uir"
+File 0002 Line0001 = "/c/SIS/sis3320_sis3302_sis3320_NeutronGamma_with-SIS3150USB-WINUSB/sis3320_Neutr"
+File 0002 Line0002 = "onGamma_uir.uir"
+
+[Distribution Kit File Group 002]
+Group Name = "DLL Files"
+Destination Directory = "Application"
+Use Relative Path = False
+Create Shortcuts = 1
+Install Icons = True
+Distribute Multiple Objects = False
+Replace Mode = "If Newer"
+Register As ActiveX Servers = False
+File 0001 Is Rel = False
+File 0001 = "/c/Windows/System32/sis3150_usb_wrapper.dll"
+
+[Distribution Kit Hardware Config]
+Include Hardware Config File = 0
+
+[ActiveX Server Options]
+Specification File Is Rel = False
+Specification File = ""
+Source File Is Rel = False
+Source File = ""
+Include File Is Rel = False
+Include File = ""
+IDL File Is Rel = False
+IDL File = ""
+Register ActiveX Server = False
+
+[Signing Info]
+Sign = False
+Sign Debug Build = False
+Store = ""
+Certificate = ""
+Timestamp URL = ""
+URL = ""
+
+[Manifest Info]
+Embed = False
+
+[tpcSection]
+tpcEnabled = 0
+tpcOverrideEnvironment = 0
+tpcEnabled x64 = 0
+tpcOverrideEnvironment x64 = 0
+
