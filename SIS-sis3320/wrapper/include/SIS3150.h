@@ -9,7 +9,7 @@
 /**********************************************/
 /**********************************************/
 
-    int loadConfiguration( char* configFilename, char* outputFilename, 
+    int loadConfiguration( char* configFilename, char* outputFilename,
                            int saveData );
     int connectToDAQ();
     int initialize(); //{cout << "initialize inline" << endl; return 0;}
@@ -30,18 +30,21 @@
     int  ReadConfiguration (char *path_file);
     int  Configuration_SIS3820Clock (void);
     int  Configuration_SIS3320ADC (unsigned int module_addr, unsigned int module_conf_index );
-    int  sis3302_write_dac_offset(unsigned int module_addr, unsigned int *offset_value_array);
-    int sub_sis3302_fastTriggerOut_setup(unsigned int module_addr, unsigned int module_conf_index);
+    int  sis3320_write_dac_offset(unsigned int module_addr, unsigned int *offset_value_array);
+    int sub_sis3320_fastTriggerOut_setup(unsigned int module_addr, unsigned int module_conf_index);
     int  DefineRunEnergyFactor (void);
     int WriteParseBuffer (unsigned int* memory_data_array, unsigned int nof_write_length_lwords,struct SISdata **data, unsigned int *len);
+    int  CopyModuleAddressesToTable (void);
+    int  copy_sis3320_sample_energy_CommonParameters_to_inbox (void);
     int  calculate_energy_trigger_windows_and_parameters (void);
     int  Get_ADC_sample_clock_for_DecayExpCalculation(unsigned int* sample_clock);
+    int  TauFactor_to_DecayExpCalculation(void);
     int sisVME_ErrorHandling (unsigned int prot_error, unsigned int vme_addr, const char *err_messages);
     int write_system_messages (char *system_messages, int write_datetime);
     int sis_AnyErrorHandling (char *err_messages);
 //    typedef unsigned char           u_int8_t;
 //    typedef unsigned short          u_int16_t;
-    
+
     // DAC Offset
       unsigned int  gl_uint_DacOffset_Conf[MAX_NO_OF_MODULES] [NO_OF_ADC_CHANNELS]     ;
 
@@ -82,7 +85,39 @@
       unsigned int  gl_uint_EnergySampleLength     ;
       unsigned int  gl_uint_PreTriggerDelay     ;
       unsigned int  gl_uint_TriggerGateLength     ;
-      
+
+  // Added by Adam
+      unsigned int  SIS3320_ADC1_OFFSET       ;
+      unsigned int  SIS3320_ADC2_OFFSET       ;
+      unsigned int  SIS3320_ADC3_OFFSET       ;
+      unsigned int  SIS3320_ADC4_OFFSET       ;
+      unsigned int  SIS3320_ADC5_OFFSET       ;
+      unsigned int  SIS3320_ADC6_OFFSET       ;
+      unsigned int  SIS3320_ADC7_OFFSET       ;
+      unsigned int  SIS3320_ADC8_OFFSET       ;
+      unsigned int  SIS3320_KEY_RESET         ;
+      unsigned int  SIS3320_KEY_TIMESTAMP_CLEAR         ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC1       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC2       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC4       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC5       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC6       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC7       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC8       ;
+      unsigned int  SIS3320_PREVIOUS_BANK_SAMPLE_ADDRESS_ADC3       ;
+      unsigned int  gl_uint_Gate1_Length      ;
+      unsigned int  gl_uint_Gate2_Length      ;
+      unsigned int  gl_uint_Gate3_Length      ;
+      unsigned int  gl_uint_RawSample_Length      ;
+      unsigned int  gl_uint_RawDataSampleMode      ;
+      unsigned int  SIS3320_END_ADDRESS_THRESHOLD_ALL_ADC      ;
+      unsigned int  SIS3320_MODID      ;
+      unsigned int  SIS3320_KEY_DISARM      ;
+      unsigned int  SIS3320_KEY_DISARM_AND_ARM_BANK1      ;
+      unsigned int  SIS3320_KEY_DISARM_AND_ARM_BANK2      ;
+      unsigned int  SIS3320_ADC_MEMORY_PAGE_REGISTER      ;
+
+
       int sub_vme_A32MBLT64_read (unsigned int vme_adr, unsigned long* dma_buffer, unsigned int request_nof_words, unsigned long* got_nof_words);
 
 
@@ -122,7 +157,7 @@ int sub_vme_A32D32_write (unsigned int vme_adr, unsigned int vme_data);
       unsigned int gl_uint_system_status ;
       unsigned int gl_uint_ModEnableConf[MAX_NO_OF_MODULES]   ;
       unsigned int gl_uint_ModAddrConf[MAX_NO_OF_MODULES]		;
-      unsigned int gl_uint_SIS3302_FourChannelFlag   ;
+      unsigned int gl_uint_SIS3320_FourChannelFlag   ;
 
     // Clock Module
       unsigned int gl_uint_SIS3820EnableConf   ;
@@ -134,13 +169,13 @@ int sub_vme_A32D32_write (unsigned int vme_adr, unsigned int vme_data);
       unsigned int gl_uint_SIS3820ClockCtrl3FlagConf	;
       unsigned int gl_uint_SIS3820ClockCtrl2FlagConf	;
       unsigned int gl_uint_SIS3820ClockTriggerMaskConf	;
-      unsigned int  gl_uint_SIS3302ClockModeConf     ;
+      unsigned int  gl_uint_SIS3320ClockModeConf     ;
 
     // Common SIS3150
-      unsigned int  gl_uint_SIS3302_Trigger_Mode_Source_ModeConf     ;
-      unsigned int  gl_uint_SIS3302External_Lemo_InOutput_Conf     ;
-      unsigned int  gl_uint_SIS3302_Reserved1_ModeConf     ;
-      unsigned int  gl_uint_SIS3302_Reserved2_ModeConf     ;
+      unsigned int  gl_uint_SIS3320_Trigger_Mode_Source_ModeConf     ;
+      unsigned int  gl_uint_SIS3320External_Lemo_InOutput_Conf     ;
+      unsigned int  gl_uint_SIS3320_Reserved1_ModeConf     ;
+      unsigned int  gl_uint_SIS3320_Reserved2_ModeConf     ;
 
     // Instance variables:
 
@@ -176,7 +211,7 @@ int sub_vme_A32D32_write (unsigned int vme_adr, unsigned int vme_data);
       unsigned int gl_uint_ModConfIndexRun[MAX_NO_OF_MODULES]  ;
       unsigned int gl_uint_ModAddrRun[MAX_NO_OF_MODULES]  ;
       unsigned int gl_uint_NoOfModulesRun ;
-      unsigned int gl_uint_SIS3302_BroadcastAddrConf ;
+      unsigned int gl_uint_SIS3320_BroadcastAddrConf ;
 
     // Display Diagnostic
       unsigned int  gl_uint_CountOfPileupsTriggerCountBasedArray[16]  ;
