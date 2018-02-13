@@ -9,10 +9,10 @@
 Author: Cameron Bates cameron.r.bates@gmail.com
 Source code based on Struck Innovative Systeme vme routines from gamma_system code
 
-Source code for SIS3302 readout using SIS3150 modules.
+Source code for SIS3320 readout using SIS3150 modules.
 Primary code with methods relevant to the framework is located in this file.
-Methods specific to configuring the 3302's and communication to the
-vme are located in SIS3302Configuration.cpp and VMECalls.cpp respectively
+Methods specific to configuring the 3320's and communication to the
+vme are located in SIS3320Configuration.cpp and VMECalls.cpp respectively
 
 
   */
@@ -178,7 +178,7 @@ int startDataAcquisition()
     gl_uint_NoOfModulesRun =  run_index ;
 
 
-    // configure all defined SIS3302 modules
+    // configure all defined SIS3320 modules
     if (gl_uint_NoOfModulesRun != 0) {
         for (i=0;i<gl_uint_NoOfModulesRun;i++) {
             Configuration_SIS3320ADC(gl_uint_ModAddrRun[i], gl_uint_ModConfIndexRun[i]) ;
@@ -190,7 +190,7 @@ int startDataAcquisition()
 
     gl_uint_RunStopStatusFlag = 1 ;
 
-    //gl_uint_SIS3302_BroadcastAddrConf = ADC_MODULE_CONF_DEFAULT_BROADCAST_ADDRESS;
+    //gl_uint_SIS3320_BroadcastAddrConf = ADC_MODULE_CONF_DEFAULT_BROADCAST_ADDRESS;
 
     // Clear Timestamp via KEY Address
     addr = gl_uint_SIS3320_BroadcastAddrConf + SIS3320_KEY_TIMESTAMP_CLEAR ;
@@ -291,7 +291,7 @@ int startDataAcquisition()
 
 
 //    event_length_lwords    = 10  ; // Timestamp/Header, Peakhigh, Integrals of Gates, Trailer
-    // SIS3302 modification
+    // SIS3320 modification
 
 
     raw_buffer_length_index = event_length_lwords - 1;
@@ -311,12 +311,12 @@ int startDataAcquisition()
 //printf("max_events = %d\n",max_events);
     // Always use max num evs
     temp = DEFAULT_MAX_EVENTS_ENABLED_FLAG;
-    if (temp == 1) {                                                                //
+//    if (temp == 1) {                                                                //
 //            GetCtrlVal (Panels[RUN_CTRL_MENUE],RUN_CTRL_RUN_EVENT_MAX_NUMBER2, &temp2); //
-            if ( max_events > temp2) {                                                  //
-                    max_events = temp2 * 2;  //                                             //
-            }                                                                           //
-    }                                                                               //
+//            if ( max_events > temp2) {                                                  //
+//                    max_events = temp2 * 2;  //                                             //
+//            }                                                                           //
+//    }                                                                               //
                                                                                                                                                                     //
     address_threshold_value = (max_events * event_length_lwords) ; // valid if halfful !!
 //printf("address_threshold_value = %d\n",address_threshold_value);
@@ -351,7 +351,7 @@ printf("dma_got_no_of_words = %i\n", dma_got_no_of_words);
 
 int stopDataAcquisition(){
     int error;
-    unsigned int addr = gl_uint_ModAddrRun[0] + SIS3302_KEY_DISARM ;
+    unsigned int addr = gl_uint_ModAddrRun[0] + SIS3320_KEY_DISARM ;
     if ((error = vme_A32D32_write(gl_USBDevice,addr,0x0 )) != 0) {
         sisVME_ErrorHandling (error, addr, "sub_vme_A32D32_write")   ;
         gl_uint_system_status = SYSTEM_STATUS_MODULES_NOT_READY ;
@@ -359,10 +359,10 @@ int stopDataAcquisition(){
     }
 
     //Close data file
-    if (gl_uint_RunCheckWrDataToFileFlag == 1)
-    {
-      CloseEventDataFile();
-    }
+//    if (gl_uint_RunCheckWrDataToFileFlag == 1)
+//    {
+//      CloseEventDataFile();
+//    }
 
     return 0;
 }
@@ -481,12 +481,12 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 //printf("max_events = %d\n",max_events);
     // Always use max num evs
     temp = DEFAULT_MAX_EVENTS_ENABLED_FLAG;
-    if (temp == 1) {                                                                //
-       //     GetCtrlVal (Panels[RUN_CTRL_MENUE],RUN_CTRL_RUN_EVENT_MAX_NUMBER2, &temp2); //
-            if ( max_events > temp2) {                                                  //
-                    max_events = temp2 * 2;  //                                             //
-            }                                                                           //
-    }                                                                               //
+//    if (temp == 1) {                                                                //
+//            GetCtrlVal (Panels[RUN_CTRL_MENUE],RUN_CTRL_RUN_EVENT_MAX_NUMBER2, &temp2); //
+//            if ( max_events > temp2) {                                                  //
+//                    max_events = temp2 * 2;  //                                             //
+//            }                                                                           //
+//    }                                                                               //
                                                                                                                                                                     //
     address_threshold_value = (max_events * event_length_lwords) ; // valid if halfful !!
 //printf("address_threshold_value = %d\n",address_threshold_value);
@@ -496,13 +496,13 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 
 
 
-//printf("addr = %d\n",addr);
+printf("addr = %d\n",addr);
     bank1_armed_flag = 1; // start condition
     buffer_switch_counter = 0 ;
-//printf("addr value = %d\n",addr);
+printf("addr value = %d\n",addr);
         addr = SIS3150USB_VME_INTERRUPT_STATUS ;
-//printf("new addr value = %d\n",addr);
-//printf("max_events = %d\n",max_events);
+printf("new addr value = %d\n",addr);
+printf("max_events = %d\n",max_events);
         do {
             if ((error = sis3150Usb_Register_Single_Read(gl_USBDevice, addr, &data_rd )) != 0) {
                 sisVME_ErrorHandling (error, addr, "SIS3150USB_Register_Single_Read");
@@ -561,13 +561,13 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 //            gl_uint_end_sample_address[6] = 0 ;
 //            gl_uint_end_sample_address[7] = 0 ;
             // if not four_channel
-//            if(gl_uint_SIS3302_FourChannelFlag == 0x0) { //
+//            if(gl_uint_SIS3320_FourChannelFlag == 0x0) { //
 //                nof_channel = 8 ;
 //            }
 
 
 //            int poll_counter = 0 ;
-//            addr = gl_uint_ModAddrRun[module_index] + SIS3302_ACQUISITION_CONTROL ;
+//            addr = gl_uint_ModAddrRun[module_index] + SIS3320_ACQUISITION_CONTROL ;
 //            int poll_loop_valid = 1;
 //            do {
 //                    if ((error = vme_A32D32_read(gl_USBDevice,addr,&data_rd )) != 0) {
@@ -605,7 +605,7 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 		for (module_index=0;module_index<gl_uint_NoOfModulesRun;module_index++) {
 		//for (module_index=0;module_index<1;module_index++) {
 			// set Buffer page
-//            printf("Module index in loop = %u\n", module_index);
+            printf("Module index in loop = %u\n", module_index);
 			data = 0x0 ; //Bank2 is armed and Bank1 (page 0) has to be readout
 			if (bank1_armed_flag == 1) { // Bank1 is armed and Bank2 (page 4) has to be readout
 				data = 0x4 ;
@@ -625,13 +625,13 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 					sisVME_ErrorHandling (error, gl_uint_ModAddrRun[module_index], "sub_vme_A32D32_read");
 					return -1;
 				}
-//printf("max_events = %u\n", max_events);
+printf("max_events = %u\n", max_events);
 			   	// check buffer address
 			   	gl_uint_end_sample_address[channel_index] = gl_uint_end_sample_address[channel_index] & 0xffffff ; // mask bank2 address bit (bit 24)
 				if (gl_uint_end_sample_address[channel_index] > 0x3fffff) {   // more than 1 page memory buffer is used
 					    gl_uint_end_sample_address[channel_index] = 2 * ((max_events-1) * event_length_lwords) ; // max 8Mbyte (inside one page)
 				}
-//                printf("  gl_uint_end_sample_addr = %u\n", gl_uint_end_sample_address[channel_index]);
+                printf("  gl_uint_end_sample_addr = %u\n", gl_uint_end_sample_address[channel_index]);
 				// readout
 				temp =  (gl_uint_end_sample_address[channel_index] & 0x3ffffc)>>1 ;
 				temp =  gl_uint_end_sample_address[channel_index]  ;
@@ -724,12 +724,9 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 //   		ProcessSystemEvents ();
 //	}while (    (gl_uint_RunStopStatusFlag == AQC_RUN_STATUS)   ) ;
 	//}
-//int gl_uint_RunMaxEventCounter = 1000 ; //Taken straight from sis3320_NeutronGamma_running.c
-//int gl_uint_RunMaxSecondsCounter = 60 ; //Taken straight from sis3320_NeutronGamma_running.c
-//int gl_uint_RunCheckStopTimeFlag = 0;	//Taken straight from sis3320_NeutronGamma_running.c
 //while (    (gl_uint_RunStopStatusFlag == AQC_RUN_STATUS)
-//            && ((gl_uint_RunEventCounter < gl_uint_RunMaxEventCounter ) || (gl_uint_RunCheckStopEventsFlag == 0) )
-//            && ((gl_unit_RunOneSecondCounter < gl_uint_RunMaxSecondsCounter ) || (gl_uint_RunCheckStopTimeFlag == 0) ) ) ;
+ //           && ((gl_uint_RunEventCounter < gl_uint_RunMaxEventCounter ) || (gl_uint_RunCheckStopEventsFlag == 0) )
+//            && ((gl_unit_RunOneSecondCounter < gl_uint_RunMaxSecondsCounter ) || .(gl_uint_RunCheckStopTimeFlag == 0) ) ) ;
 
 
 
@@ -778,11 +775,11 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 //					printf("About to use the WriteParseBuffer\n");
 //					printf("%d ",gl_dma_rd_buffer);
 //					printf("%d ",dma_got_no_of_words);
-//                    for(int i = 0; i < dma_got_no_of_words; i++)
-//                    {
+                    for(int i = 0; i < dma_got_no_of_words; i++)
+                    {
                       //printf("%u\n", gl_dma_rd_buffer[i]);
-//                    }
-					//printf("gl_dma_rd_buffer = %d",gl_dma_rd_buffer);
+                    }
+					printf("gl_dma_rd_buffer = %d",gl_dma_rd_buffer);
                     WriteParseBuffer(gl_dma_rd_buffer, dma_got_no_of_words,outdata,len);  // Parse and post data
                 }
 
@@ -792,7 +789,7 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
         //}   //   module_index
 
 
-printf("end of acquireData \n");
+
         return 0;
 }
 /************************************************************************************************/
@@ -804,84 +801,84 @@ printf("end of acquireData \n");
 int WriteParseBuffer (unsigned int* memory_data_array, unsigned int nof_write_length_lwords,struct SISdata **data, unsigned int *len)
 {
     long long timestamp;
-    int energy;
-    int maxEnergy;
-    int firstEnergy;
-	int peakHigh;
-	int argHigh;
+//    int energy;
+////    int maxEnergy;
+////    int firstEnergy;
+//	int peakHigh;
+//	int argHigh;
 //    printf("len = %u\n", *len);
     unsigned short *raw_data_ptr ;
     unsigned int Cl = 6 + floor(gl_uint_RawSampleLength/2 + 0.5) + gl_uint_DataEvent_RunFile_NOF_Energy;
     unsigned int NumRec = nof_write_length_lwords/Cl;
-//    qint64 * qTS = new qint64[NumRec];
-//	  SISdata *unpackeddata = new SISdata[NumRec];
+    //qint64 * qTS = new qint64[NumRec];
+    //SISdata *unpackeddata = new SISdata[NumRec];
 
     int oldlen = *len;
     *len += NumRec;
-//	printf("entering malloc\n");
+	//printf("entering malloc\n");
     if (oldlen == 0) {
         *data = malloc(NumRec*sizeof(struct SISdata));
-//		printf("in malloc\n");
-//		printf("data = %d \n ",data);
+		//printf("in malloc\n");
+		printf("%d ",data);
     }
     else {
         *data = realloc(*data,(*len)*sizeof(struct SISdata));
-//		printf("in realloc\n");
+		printf("in realloc\n");
     }
-//    printf("events = %d \n",NumRec);
-
+    //printf("%d events\n",NumRec);
+//  printf("leaving malloc\n");
     unsigned int cntr = 0;
-//    printf("data now = %d \n ",*data);
+//    printf("%d ",*data);
 //
 ////    printf( "gl_uint_RawSampleLength = %d\n", gl_uint_RawSampleLength );
    for(unsigned int i = 0; i <NumRec; i++){
-        unsigned int ADCID = memory_data_array[cntr] & 65535;
-        unsigned int Mod = ADCID >> 11;//
-        unsigned int ID = (((Mod-1) << 3) + (ADCID & 7) ) -56 ;
+//        unsigned int ADCID = memory_data_array[cntr] & 65535;
+//        unsigned int Mod = ADCID >> 11;//
+//        unsigned int ID = (((Mod-1) << 3) + (ADCID & 7) ) -56 ;
 //
 //	printf("in for loop after malloc\n");
         timestamp = ((long long)(memory_data_array[cntr] & 0xffff0000) << 16) + (long long)memory_data_array[cntr+1];
 //        printf("Parsed ts value: %llu\n", timestamp);
 
-        cntr = cntr + 2;
- //       if (gl_uint_RawSampleLength != 0)
- //       {
- //           raw_data_ptr = (unsigned short*) &(memory_data_array[cntr]);	//Changed to "&" - RWB
+//        cntr = cntr + 2;
+//        if (gl_uint_RawSampleLength != 0)
+//        {
+//            raw_data_ptr = (unsigned short*) &(memory_data_array[cntr]);	//Changed to "&" - RWB
 //            for (int k=0;k<gl_uint_RawSampleLength;k++){
-//                data[i].rawdata[k] = raw_data_ptr[k];
+//                //data[i].rawdata[k] = raw_data_ptr[k];
 //            }
 //         }
 
-        cntr = cntr + gl_uint_RawSampleLength/2 + gl_uint_DataEvent_RunFile_NOF_Energy;
-        maxEnergy = memory_data_array[cntr++];
-        firstEnergy = memory_data_array[cntr++];
-        int trigger = (memory_data_array[cntr] >> 24 ) & 7;	//RWB
-        int nneighborm1 = (memory_data_array[cntr] >> 28) & 1;
-        int nneighborp1 = (memory_data_array[cntr]>> 29) & 1;
-        int pileup = (memory_data_array[cntr] >> 30) & 1 ;
-        unsigned int trailer = memory_data_array[cntr+1]; //this reads the trailer which should be 3735928559 in decimal
-        energy = maxEnergy - firstEnergy;
-        energy = maxEnergy;					//RWB
-        cntr += 2;
-        //printf("energy: %u adcid: %u \n",energy,ID);
+        //cntr = cntr + gl_uint_RawSampleLength/2 + gl_uint_DataEvent_RunFile_NOF_Energy;
+//        maxEnergy = memory_data_array[cntr++];
+//        firstEnergy = memory_data_array[cntr++];
+//        int trigger = (memory_data_array[cntr] >> 24 ) & 7;	//RWB
+//        int nneighborm1 = (memory_data_array[cntr] >> 28) & 1;
+//        int nneighborp1 = (memory_data_array[cntr]>> 29) & 1;
+//        int pileup = (memory_data_array[cntr] >> 30) & 1 ;
+        //unsigned int trailer = memory_data_array[cntr+1]; this reads the trailer which should be 3735928559 in decimal
+//        energy = maxEnergy - firstEnergy;
+//        energy = maxEnergy;					//RWB
+//        cntr += 2;
+//        //printf("energy: %u adcid: %u \n",energy,ID);
 //		printf("%d ", i);
         int n = i +oldlen;
 
-        (*data)[n].adcid = ID;
-        (*data)[n].energy = energy;
+//        (*data)[n].adcid = ID;
+//        (*data)[n].energy = energy;
         (*data)[n].timestamp = timestamp;
-        (*data)[n].trigger = trigger;				//RWB
-        (*data)[n].neighborminus = nneighborm1;
-        (*data)[n].neighborplus = nneighborp1;
-        (*data)[n].pileup = pileup;
-        // Raw Data  - RWB
-        int k;
-        for( k=0; k < gl_uint_RawSampleLength; k++ )
-        {
-          (*data)[n].rawdata[k] = raw_data_ptr[k];
-        }
+//        (*data)[n].trigger = trigger;				//RWB
+//        (*data)[n].neighborminus = nneighborm1;
+//        (*data)[n].neighborplus = nneighborp1;
+//        (*data)[n].pileup = pileup;
+//        // Raw Data  - RWB
+//        int k;
+//        for( k=0; k < gl_uint_RawSampleLength; k++ )
+//        {
+//          (*data)[n].rawdata[k] = raw_data_ptr[k];
+//        }
    }
-
+	//printf(timestamp);
     return 0;
 }
 //
@@ -892,7 +889,7 @@ int WriteBufferHeaderCounterNofChannelToDataFile (unsigned int buffer_no,unsigne
 {
     int written ;
     int data ;
-//	printf("in write buffer function\n");
+	printf("in write buffer function\n");
     //header
     data = FILE_FORMAT_EVENT_HEADER ;
     written=fwrite(&data,0x4,0x1,gl_FILE_DataEvenFilePointer); // write one  uint word
@@ -917,7 +914,7 @@ int WriteTS_EventsToDataFile (ULONG* memory_data_array, unsigned int nof_write_l
     int nof_write_elements ;
     int written ;
     char messages_buffer[256] ;
-//	printf("in write ts function\n");
+	printf("in write ts function\n");
     // gl_uint_DataEvent_RunFile_EvenSize : length
 
     nof_write_elements = nof_write_length_lwords ;
@@ -934,7 +931,6 @@ int WriteTS_EventsToDataFile (ULONG* memory_data_array, unsigned int nof_write_l
 
 int OpenEventDataFile (char* filename)
 {
-
     int written ;
     unsigned int dataFormat ;
     unsigned int temp ;
@@ -960,7 +956,7 @@ int OpenEventDataFile (char* filename)
 
 
     // sampling parameters (clock)
-    temp =   (gl_uint_SIS3820ClockModeConf << 16) +  (gl_uint_SIS3302ClockModeConf) ;
+    temp =   (gl_uint_SIS3820ClockModeConf << 16) +  (gl_uint_SIS3320ClockModeConf) ;
     written=fwrite(&temp,0x4,0x1,gl_FILE_DataEvenFilePointer); // write one  uint word
     gl_uint_DataEvent_LWordCounter = gl_uint_DataEvent_LWordCounter + written ;
 
@@ -1071,7 +1067,7 @@ int CloseEventDataFile (void)
 {
     int written ;
     int data ;
-	printf("in closeEventDataFile \n");
+
     data = FILE_FORMAT_EOF_TRAILER ;
     written=fwrite(&data,0x4,0x1,gl_FILE_DataEvenFilePointer); // write one  uint word
     gl_uint_DataEvent_LWordCounter = gl_uint_DataEvent_LWordCounter + written ;

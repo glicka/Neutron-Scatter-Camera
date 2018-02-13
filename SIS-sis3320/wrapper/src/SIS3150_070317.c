@@ -173,7 +173,7 @@ int startDataAcquisition()
     } /* for loop */
 
 
-
+	
     gl_uint_NoOfModulesRun =  run_index ;
 
 
@@ -299,7 +299,7 @@ int startDataAcquisition()
 		else {
 			event_length_lwords	 = 12  ; // Timestamp/Header, Peakhigh, Integrals of Gates, Trailer
    		}
-
+   	
     raw_buffer_length_index = event_length_lwords - 1;
 
 
@@ -397,8 +397,8 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 	int event_index, nof_events, event_index_offset  ;
 	int buffer_switch_counter  ;
 
-	char messages_buffer[80] ;
-
+	char messages_buffer[80] ;           
+	
 
 	int i,j,k ;
 
@@ -412,7 +412,7 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 
 	unsigned int  uint_energy ;
 	int sign_diff ;
-	int sign_max,sign_min  ;	//
+	int sign_max,sign_min  ;	//    
 	float float_factor;
 
 
@@ -423,7 +423,7 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 	unsigned int  energy_mode ;
 	unsigned int  nof_energy_values ;
 	unsigned int  energy_max_index ;
-
+    	 
 //	signed int  sign_integral ;
  	unsigned int  gate1_sum, gate2_sum, gate3_sum, gate4_sum;
  	unsigned int  gate5_sum, gate6_sum, gate7_sum, gate8_sum;
@@ -553,7 +553,7 @@ int acquireData( struct SISdata **outdata,unsigned int *len, int saveData )
 		else {
 			event_length_lwords	 = 12  ; // Timestamp/Header, Peakhigh, Integrals of Gates, Trailer
    		}
-
+   	
     raw_buffer_length_index = event_length_lwords - 1;
 
 
@@ -584,15 +584,15 @@ if (temp == 1) {																//
 printf("max_events = \n", max_events);
 		for (module_index=0;module_index<gl_uint_NoOfModulesRun;module_index++) {
 		//for (module_index=0;module_index<1;module_index++) {
-			// set Buffer page
+			// set Buffer page 
             printf("Module index in loop = %u\n", module_index);
 			data = 0x0 ; //Bank2 is armed and Bank1 (page 0) has to be readout
-			if (bank1_armed_flag == 1) { // Bank1 is armed and Bank2 (page 4) has to be readout
+			if (bank1_armed_flag == 1) { // Bank1 is armed and Bank2 (page 4) has to be readout		
 				data = 0x4 ;
 			}
-			addr = gl_uint_ModAddrRun[module_index] + SIS3320_ADC_MEMORY_PAGE_REGISTER ;
-			if ((error = sub_vme_A32D32_write(addr,data )) != 0) {
-				sisVME_ErrorHandling (error, gl_uint_ModAddrRun[module_index], "sub_vme_A32D32_write");
+			addr = gl_uint_ModAddrRun[module_index] + SIS3320_ADC_MEMORY_PAGE_REGISTER ; 
+			if ((error = sub_vme_A32D32_write(addr,data )) != 0) { 
+				sisVME_ErrorHandling (error, gl_uint_ModAddrRun[module_index], "sub_vme_A32D32_write"); 
 				return -1;
 			}
 
@@ -600,9 +600,9 @@ printf("max_events = \n", max_events);
 			//for (channel_index=0;channel_index<1;channel_index++) {
                 //printf("  Channel index inner loop = %u\n", channel_index);
 				// read stop sample address
-				addr = gl_uint_ModAddrRun[module_index] + previous_bank_sample_address_reg_offset[channel_index] ;
-				if ((error = sub_vme_A32D32_read(addr,&gl_uint_end_sample_address[channel_index] )) != 0) {
-					sisVME_ErrorHandling (error, gl_uint_ModAddrRun[module_index], "sub_vme_A32D32_read");
+				addr = gl_uint_ModAddrRun[module_index] + previous_bank_sample_address_reg_offset[channel_index] ; 
+				if ((error = sub_vme_A32D32_read(addr,&gl_uint_end_sample_address[channel_index] )) != 0) { 
+					sisVME_ErrorHandling (error, gl_uint_ModAddrRun[module_index], "sub_vme_A32D32_read"); 
 					return -1;
 				}
 
@@ -612,7 +612,7 @@ printf("max_events = \n", max_events);
 					    gl_uint_end_sample_address[channel_index] = 2 * ((max_events-1) * event_length_lwords) ; // max 8Mbyte (inside one page)
 				}
                 printf("  gl_uint_end_sample_addr = %u\n", gl_uint_end_sample_address[channel_index]);
-				// readout
+				// readout	   	
 				temp =  (gl_uint_end_sample_address[channel_index] & 0x3ffffc)>>1 ;
 				temp =  gl_uint_end_sample_address[channel_index]  ;
 				if (gl_uint_end_sample_address[channel_index] != 0) {
@@ -622,7 +622,7 @@ printf("max_events = \n", max_events);
 						sisVME_ErrorHandling (error, addr, "sub_vme_A32MBLT64_read")   ;
 					}
 				}
-
+						   
 
 				//Histogramming
 				if (gl_uint_end_sample_address[channel_index] == 0) {
@@ -632,14 +632,14 @@ printf("max_events = \n", max_events);
 					nof_events =	(gl_uint_end_sample_address[channel_index]  >> 1) / event_length_lwords ;
 					for (event_index=0;event_index<nof_events;event_index++) {
 
-						if ((gl_uint_RawDataSampleMode == 0) || (gl_uint_RawDataSampleMode == 1) ) { // never or always raw data
+						if ((gl_uint_RawDataSampleMode == 0) || (gl_uint_RawDataSampleMode == 1) ) { // never or always raw data  
 							event_index_offset =  event_index * event_length_lwords ;
 						}
 						else {  // 2 only first event
 						   if (event_index == 0) {
 								event_index_offset =  0 ;
 						   }
-						   else {
+						   else { 
 								event_index_offset =  first_event_length_lwords + ((event_index -1)* event_length_lwords ) ;
 						   }
 						}
@@ -648,39 +648,39 @@ printf("max_events = \n", max_events);
 						float_Gate2_sum =  (float) (gl_dma_rd_buffer[event_index_offset+4] & 0xffffffff) ;
 						float_Gate3_sum =  (float) (gl_dma_rd_buffer[event_index_offset+5] & 0xffffffff) ;
 						float_scaled_Gate2_sum = float_Gate2_sum - ((float_Gate1_sum *  float_N2) /  float_N1);
-
+	                   
 						uint_energy =   (unsigned int) float_scaled_Gate2_sum;
                         //printf("uint_energy = %u\n", uint_energy);
-
+	
 //						if ((uint_energy <= (MAX_NOF_ENERGY_SPECTRUM-1)) && (uint_energy > 30) ) {
-//							gl_uint_EnergySpectrumArray[module_index][channel_index][uint_energy]++ ;
+//							gl_uint_EnergySpectrumArray[module_index][channel_index][uint_energy]++ ;	    
 //						}
-
+					
 						float_scaled_Gate3_sum = float_Gate3_sum - ((float_Gate1_sum *  float_N3) /  float_N1);
 						uint_energy =   (unsigned int) ((float_scaled_Gate3_sum * 10000.0) / float_scaled_Gate2_sum) ;
-
+	
 //						if ((uint_energy <= (MAX_NOF_ENERGY_SPECTRUM-1)) && (uint_energy > 30) ) {
-//							gl_uint_EnergySpectrum2Array[module_index][channel_index][uint_energy]++ ;
+//							gl_uint_EnergySpectrum2Array[module_index][channel_index][uint_energy]++ ;	    
 //						}
 
 						//Peakhigh - base
 						//uint_energy =   (unsigned int) ((gl_dma_rd_buffer[event_index_offset+2] & 0xffff) - (float_Gate1_sum /  float_N1)) ;;
 						uint_energy =   (unsigned int) ((gl_dma_rd_buffer[event_index_offset+2] & 0xffff) ) ;;
-
+	
 //						if ((uint_energy <= (MAX_NOF_ENERGY_SPECTRUM-1)) && (uint_energy > 30) ) {
-//							gl_uint_EnergySpectrum3Array[module_index][channel_index][uint_energy]++ ;
+//							gl_uint_EnergySpectrum3Array[module_index][channel_index][uint_energy]++ ;	    
 //						}
-
-
-
+					
+					
+					
 					}
-
+				
 				}	//printf("dma_no_of_words = %i\n", dma_got_no_of_words);
-
+				
 				gl_uint_RunEventCounter = gl_uint_RunEventCounter +  nof_events ;
                 //printf("RunEventCounter = %u\n", gl_uint_RunEventCounter);
-
-
+ 
+ 	
 
 
 				if (gl_uint_end_sample_address[channel_index] != 0) {
@@ -689,7 +689,7 @@ printf("max_events = \n", max_events);
 						WriteTS_EventsToDataFile (gl_dma_rd_buffer, dma_got_no_of_words)  ;
         			}
         		}
-
+				
 			}   // channel_index
 //   			ProcessSystemEvents ();
 
@@ -698,20 +698,20 @@ printf("max_events = \n", max_events);
 //			DisplayEnergySpectrum();
 //		}
 
-		buffer_switch_counter++ ;
+		buffer_switch_counter++ ;	
 
 
-//   		ProcessSystemEvents ();
+//   		ProcessSystemEvents ();  
 //	}while (    (gl_uint_RunStopStatusFlag == AQC_RUN_STATUS)   ) ;
 	//}
-//while (    (gl_uint_RunStopStatusFlag == AQC_RUN_STATUS)
+//while (    (gl_uint_RunStopStatusFlag == AQC_RUN_STATUS) 
  //           && ((gl_uint_RunEventCounter < gl_uint_RunMaxEventCounter ) || (gl_uint_RunCheckStopEventsFlag == 0) )
-//            && ((gl_unit_RunOneSecondCounter < gl_uint_RunMaxSecondsCounter ) || .(gl_uint_RunCheckStopTimeFlag == 0) ) ) ;
+//            && ((gl_unit_RunOneSecondCounter < gl_uint_RunMaxSecondsCounter ) || .(gl_uint_RunCheckStopTimeFlag == 0) ) ) ; 
 
 
 
-	addr =gl_uint_SIS3320_BroadcastAddrConf + SIS3320_KEY_DISARM ;
-	if ((error = sub_vme_A32D32_write(addr,0x0 )) != 0) {
+	addr =gl_uint_SIS3320_BroadcastAddrConf + SIS3320_KEY_DISARM ; 
+	if ((error = sub_vme_A32D32_write(addr,0x0 )) != 0) { 
 		sisVME_ErrorHandling (error, addr, "sub_vme_A32D32_write")   ;
 		gl_uint_system_status = SYSTEM_STATUS_MODULES_NOT_READY ;
 		return -1 ;
@@ -745,7 +745,7 @@ printf("max_events = \n", max_events);
                     {
 //                        #ifdef STD_DEBUG
 //                            fprintf(gl_stdDebugFilePointer, "Writing to data file\n");
-//                        #endif
+//                        #endif 
 //						printf("About to use the WriteBufferHeaderCounter\n");
                         WriteBufferHeaderCounterNofChannelToDataFile (buffer_switch_counter, 0x0 /*nof_events*/, dma_got_no_of_words /*event_length_lwords*/) ;
                         WriteTS_EventsToDataFile (gl_dma_rd_buffer, dma_got_no_of_words);
@@ -815,7 +815,7 @@ int WriteParseBuffer (unsigned int* memory_data_array, unsigned int nof_write_le
 //        unsigned int ADCID = memory_data_array[cntr] & 65535;
 //        unsigned int Mod = ADCID >> 11;//
 //        unsigned int ID = (((Mod-1) << 3) + (ADCID & 7) ) -56 ;
-//
+//	
 //	printf("in for loop after malloc\n");
         timestamp = ((long long)(memory_data_array[cntr] & 0xffff0000) << 16) + (long long)memory_data_array[cntr+1];
 //        printf("Parsed ts value: %llu\n", timestamp);
