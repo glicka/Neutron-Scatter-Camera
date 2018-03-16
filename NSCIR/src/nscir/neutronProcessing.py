@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jul 31 15:09:28 2017
@@ -6,44 +6,14 @@ Created on Mon Jul 31 15:09:28 2017
 @author: aglick
 """
 
-def dataProcessing(datafile,photonDataFile):
+def neutronProcessing(rawDataMat,timeVals,detData,slope,intercept):
     import h5py
     import numpy as np
     import matplotlib.pyplot as plt
     import pylab
     import time
-    from nscir import generateCones, PSD
-
-#### Extract data here ####
-    f = h5py.File(datafile, 'r')
-    adcBoardKey = list(f.keys())[0]
-    adcBoardVals = f[adcBoardKey]
-    adcBoardVals = np.array(adcBoardVals)
-    adcChannelKey = list(f.keys())[1]
-    adcChannel = f[adcChannelKey]
-    adcChannel = np.array(adcChannel)
-    groupTimeVals = list(f.keys())[5]
-    timeVals = f[groupTimeVals]
-    timeVals = np.array(timeVals)
-    groupKeyVal = list(f.keys())[4]
-    rawData = f[groupKeyVal]
-    rawDataMat = np.array(rawData,dtype='float')
-
-#### Extract photon data here for ADC conversion ####
-    f1 = h5py.File(photonDataFile, 'r')
-    adcGammaBoardKey = list(f1.keys())[0]
-    adcGammaBoardVals = f1[adcGammaBoardKey]
-    adcGammaBoardVals = np.array(adcGammaBoardVals)
-    adcGammaChannelKey = list(f1.keys())[1]
-    adcGammaChannel = f1[adcGammaChannelKey]
-    adcGammaChannel = np.array(adcGammaChannel)
-    #groupTimeVals = list(f.keys())[5]
-    #timeVals = f[groupTimeVals]
-    #timeVals = np.array(timeVals)
-    groupKeyValGamma = list(f1.keys())[4]
-    rawGammaData = f1[groupKeyValGamma]
-    rawGammaDataMat = np.array(rawGammaData,dtype='float')
-#    detectorVal = []
+    from nscir.generateCones import generateCones
+    from nscir.PSD import PSD
 
 #### Break up detectors into 1-24 based on adcChannel and adcBoard values ####
 #### Separate data based on each plane of detectors ####
@@ -55,58 +25,92 @@ def dataProcessing(datafile,photonDataFile):
     plane2Dets = []
     plane1PhotonData = []
     t1 = time.time()
-    for i in range(0,len(adcBoardVals)):#10000):
+
+#### adcBoardVals and adcChannel variables need to be changed depending on parsed format
+    for i in range(0,len(detData)):#10000):
 #        tic = time.time()
-        if adcBoardVals[i] == 5:
+        if adcBoardVals[i] == 1:
             if adcChannel[i] == 0:
                 #detectorVal = detectorVal + [0]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [0]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 1:
                 #detectorVal = detectorVal + [1]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [1]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 2:
                 #detectorVal = detectorVal + [2]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [2]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 3:
                 #detectorVal = detectorVal + [3]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [3]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 4:
                 #detectorVal = detectorVal + [4]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [4]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 5:
                 #detectorVal = detectorVal + [5]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [5]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 6:
                 #detectorVal = detectorVal + [6]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [6]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
             elif adcChannel[i] == 7:
                 #detectorVal = detectorVal + [7]
                 plane1Data += [rawDataMat[i,:]]
                 plane1Times += [timeVals[i]]
                 plane1Dets += [7]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
-        elif adcBoardVals[i] == 7:
+            if adcChannel[i] == 8:
+                #detectorVal = detectorVal + [8]
+                plane1Data += [rawDataMat[i,:]]
+                plane1Times += [timeVals[i]]
+                plane1Dets += [8]
+            elif adcChannel[i] == 9:
+                #detectorVal = detectorVal + [9]
+                plane1Data += [rawDataMat[i,:]]
+                plane1Times += [timeVals[i]]
+                plane1Dets += [9]
+            elif adcChannel[i] == 10:
+                #detectorVal = detectorVal + [10]
+                plane1Data += [rawDataMat[i,:]]
+                plane1Times += [timeVals[i]]
+                plane1Dets += [10]
+            elif adcChannel[i] == 11:
+                #detectorVal = detectorVal + [11]
+                plane1Data += [rawDataMat[i,:]]
+                plane1Times += [timeVals[i]]
+                plane1Dets += [11]
+            elif adcChannel[i] == 12:
+                #detectorVal = detectorVal + [12]
+                plane2Data += [rawDataMat[i,:]]
+                plane2Times += [timeVals[i]]
+                plane2Dets += [12]
+            elif adcChannel[i] == 13:
+                #detectorVal = detectorVal + [13]
+                plane2Data += [rawDataMat[i,:]]
+                plane2Times += [timeVals[i]]
+                plane2Dets += [13]
+            elif adcChannel[i] == 14:
+                #detectorVal = detectorVal + [14]
+                plane2Data += [rawDataMat[i,:]]
+                plane2Times += [timeVals[i]]
+                plane2Dets += [14]
+            elif adcChannel[i] == 15:
+                #detectorVal = detectorVal + [15]
+                plane2Data += [rawDataMat[i,:]]
+                plane2Times += [timeVals[i]]
+                plane2Dets += [15]
+        elif adcBoardVals[i] == 2:
             if adcChannel[i] == 0:
                 #detectorVal = detectorVal + [16]
                 plane2Data += [rawDataMat[i,:]]
@@ -147,51 +151,7 @@ def dataProcessing(datafile,photonDataFile):
                 plane2Data += [rawDataMat[i,:]]
                 plane2Times += [timeVals[i]]
                 plane2Dets += [23]
-        elif adcBoardVals[i] == 6:
-            if adcChannel[i] == 0:
-                #detectorVal = detectorVal + [8]
-                plane1Data += [rawDataMat[i,:]]
-                plane1Times += [timeVals[i]]
-                plane1Dets += [8]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
-            elif adcChannel[i] == 1:
-                #detectorVal = detectorVal + [9]
-                plane1Data += [rawDataMat[i,:]]
-                plane1Times += [timeVals[i]]
-                plane1Dets += [9]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
-            elif adcChannel[i] == 2:
-                #detectorVal = detectorVal + [10]
-                plane1Data += [rawDataMat[i,:]]
-                plane1Times += [timeVals[i]]
-                plane1Dets += [10]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
-            elif adcChannel[i] == 3:
-                #detectorVal = detectorVal + [11]
-                plane1Data += [rawDataMat[i,:]]
-                plane1Times += [timeVals[i]]
-                plane1Dets += [11]
-                plane1PhotonData += [rawGammaDataMat[i,:]]
-            elif adcChannel[i] == 4:
-                #detectorVal = detectorVal + [12]
-                plane2Data += [rawDataMat[i,:]]
-                plane2Times += [timeVals[i]]
-                plane2Dets += [12]
-            elif adcChannel[i] == 5:
-                #detectorVal = detectorVal + [13]
-                plane2Data += [rawDataMat[i,:]]
-                plane2Times += [timeVals[i]]
-                plane2Dets += [13]
-            elif adcChannel[i] == 6:
-                #detectorVal = detectorVal + [14]
-                plane2Data += [rawDataMat[i,:]]
-                plane2Times += [timeVals[i]]
-                plane2Dets += [14]
-            elif adcChannel[i] == 7:
-                #detectorVal = detectorVal + [15]
-                plane2Data += [rawDataMat[i,:]]
-                plane2Times += [timeVals[i]]
-                plane2Dets += [15]
+
         if i%100000 == 0:
             print('k = ',i)
             toc = time.time()
@@ -201,7 +161,9 @@ def dataProcessing(datafile,photonDataFile):
 #### Convert list into numpy array ####
     #detectorVal = np.array(detectorVal,dtype='float')
     plane1Data = np.array(plane1Data,dtype='float')
+    plane1Data = plane1Data - np.average(plane1Data[0:30])
     plane2Data = np.array(plane2Data,dtype='float')
+    plane2Data = plane2Data - np.average(plane2Data[0:30])
     plane1Times = np.array(plane1Times,dtype='float')
     plane2Times = np.array(plane2Times,dtype='float')
     plane1Dets = np.array(plane1Dets,dtype='int')
@@ -209,9 +171,8 @@ def dataProcessing(datafile,photonDataFile):
     plane1PhotonData = np.array(plane1PhotonData,dtype='float')
 
 
-
 #### Create ADC to keV Conversion ####
-    slope, intercept = adc2keV(plane1PhotonData)
+    #slope, intercept = adc2keV(plane1PhotonData)
 #### Perform PSD for each plane of data to extract just neutron information ####
     print('Performing PSD on Plane 1')
     plane1NeutronDets,plane1NeutronTimes,plane1NeutronPulseADC = PSD(plane1Dets,plane1Times,plane1Data,'Plane 1')
@@ -242,4 +203,5 @@ def dataProcessing(datafile,photonDataFile):
     plane2DetScale = []
 
 #### Generate cones and do energy reconstruction of neutrons ####
+
     cones = generateCones(slope,intercept,plane1NeutronDetsSort,plane2NeutronDetsSort,plane1NeutronTimesSort,plane2NeutronTimesSort,plane1NeutronPulseADCSort,plane2NeutronPulseADCSort)

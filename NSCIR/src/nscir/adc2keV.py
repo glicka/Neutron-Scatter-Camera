@@ -13,7 +13,8 @@ def adc2keV(adcPlot):
     import statsmodels.api as sm
     import numpy as np
     import matplotlib.pyplot as plt
-    
+    from nscir.integratePulse import integratePulse
+
     MeV = []
     index1 = 0
     index2 = 0
@@ -22,7 +23,7 @@ def adc2keV(adcPlot):
     adcVal = []
     i = 0
     for row in adcPlot:
-#        peakVal, peakTime = max(enumerate(row), key=operator.itemgetter(1)) #findPeaks(row)  
+#        peakVal, peakTime = max(enumerate(row), key=operator.itemgetter(1)) #findPeaks(row)
         #print('temp = ',temp)
         #print(row)
         peakTime = row.argmax()
@@ -30,12 +31,8 @@ def adc2keV(adcPlot):
         #tailIntegral = integrateTail(row,peakTime)
         #tailToTotalRatio += [tailIntegral/float(pulseIntegral)]
         adcVal += [pulseIntegral]
-        
-        if i%100000 == 0:
-            print('m = ', i) 
-            print('elapsed time = ',time.time()-tic,'s')     
-        i=i+1
-    
+
+
     adcVal = np.asarray(adcVal,dtype='float')
     histNADC = np.histogram(adcVal,100000)
     d1 = histNADC[0]
@@ -46,7 +43,7 @@ def adc2keV(adcPlot):
     plt.xlabel('ADC Val')
     plt.ylabel('Counts')
     plt.legend(loc='upper right')
-    plt.title(plane)
+    plt.title('Cs-137 Plot')
     #plt.plot(d,f)
     plt.show()
     #Cs = heapq.nlargest(1,range(125000,len(f1)),key=f1.__getitem__)
@@ -80,7 +77,7 @@ def adc2keV(adcPlot):
 
 
     slope, intercept = np.polyfit(x, y, 1)
-    
+
     abline_values = [slope * i + intercept for i in x]
     plt.plot(x, y, 'ro')
     plt.plot(x, abline_values, 'b')
@@ -89,9 +86,8 @@ def adc2keV(adcPlot):
     plt.title('Best Fit Line')
     plt.show()
 
-    
+
 #    plt.show()
 
-    
+
     return slope, intercept
-    
