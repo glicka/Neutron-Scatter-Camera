@@ -200,7 +200,7 @@ def PSDRT(ttr,timeData,detectorData,adcVal,ttrArg):
     nTTR = []
     pTTR = []
     L = [len(ttr), len(timeData), len(detectorData), len(adcVal)]
-    for i in range(0,int(max(L))-1):
+    for i in range(0,int(min(L))-1):
         if ttr[i] >= ttrArg:
             neutronADC += [adcVal[i]]
             neutronDets += [detectorData[i]]

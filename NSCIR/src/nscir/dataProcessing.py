@@ -444,13 +444,13 @@ def dataProcessingRT(adc,ttr,modules,channels,timeVals):
     plane1NeutronTimes = []
     plane1NeutronPulseADC = []
     print('Performing PSD on Plane 1')
-    plane1NeutronDets,plane1NeutronTimes, plane1NeutronPulseADC = PSD(plane1Data, plane1Dets,plane1Times,plane1ADC,5)
+    plane1NeutronDets,plane1NeutronTimes, plane1NeutronPulseADC = PSD(plane1Data, plane1Times, plane1Dets,plane1ADC,5)
 
     plane2NeutronDets = []
     plane2NeutronTimes = []
     plane2NeutronPulseADC = []
     print('Performing PSD on Plane 2')
-    plane2NeutronDets,plane2NeutronTimes, plane2NeutronPulseADC = PSD(plane2Data, plane2Dets,plane2Times,plane2ADC,1)
+    plane2NeutronDets,plane2NeutronTimes, plane2NeutronPulseADC = PSD(plane2Data,plane2Times,plane2Dets,plane2ADC,1)
 
     data1Mat = np.column_stack((tuple(plane1NeutronDets),tuple(plane1NeutronTimes),tuple(plane1NeutronPulseADC)))
     data1MatSort = data1Mat[data1Mat[:,0].argsort()[::1]]
@@ -461,6 +461,7 @@ def dataProcessingRT(adc,ttr,modules,channels,timeVals):
 
     data2Mat = np.column_stack((tuple(plane2NeutronDets),tuple(plane2NeutronTimes),tuple(plane2NeutronPulseADC)))
     data2MatSort = data2Mat[data2Mat[:,0].argsort()[::1]]
+    #np.savetxt("data2MatSort.csv", data2MatSort, delimiter=",")
     plane2NeutronDetsSort = [column[0] for column in data2MatSort]
     plane2NeutronTimesSort = [column[1] for column in data2MatSort]
     plane2NeutronPulseADCSort = [column[2] for column in data2MatSort]
@@ -473,7 +474,7 @@ def dataProcessingRT(adc,ttr,modules,channels,timeVals):
 
     plane1NeutronPulseADCSort = np.array(plane1NeutronPulseADCSort, dtype='int')
     plane2NeutronPulseADCSort = np.array(plane2NeutronPulseADCSort, dtype='int')
-    
+
 
 #### Generate cones and do energy reconstruction of neutrons ####
     newPix, latra, lontra = imPlot(plane1NeutronDetsSort,plane2NeutronDetsSort,plane1NeutronTimesSort,plane2NeutronTimesSort,plane1NeutronPulseADCSort,plane2NeutronPulseADCSort)

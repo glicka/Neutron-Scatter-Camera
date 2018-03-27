@@ -894,6 +894,8 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     import time
     import pandas as pd
     from mpl_toolkits.mplot3d import Axes3D
+    import healpy as hp
+    from PIL import Image
     planeSeparation = 0.6096 #meters
     detectorSeparation = 0.0889 #meters
     u = detectorSeparation #meters
@@ -908,12 +910,16 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     neutronEnergyTOF = []
     neutronEnergyADC = []
     neutronEnergy = []
+    coneVector = []
     coneAngles = []
     cones = []
+    mu = []
+    weights = []
     adcCalVals = []
     radii = 0
 
     plane2DetScale = []
+    print(plane2Dets)
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
             plane2DetScale += [0]
@@ -945,20 +951,20 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
 #### Calculate neutron energy from time of flight between the 2 planes ####
     tic = time.time()
     L = [len(plane1Times), len(plane1Dets)]
-    for i in range(0,int(max(L))-1): #range(0,len(plane1Times))
-        for n in range(i):
+    for i in range(0,int(min(L))-1): #range(0,len(plane1Times))
+        for n in range(int(min(L))-1):
             if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
-                #print('plane1Local = ',plane1Local[i])
-                #print('plane1Dets = ',plane1Dets[i])
                 x1 = plane1Local[plane1Dets[i]]
                 x2 = plane2Local[plane2DetScale[n]]
                 #print('x1 = ',x1)
-                dist = [np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)]
+                dist = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
                 distance += [dist]
                 timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                 energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
                 neutronEnergyTOF += [energy] #MeV
                 adcCalVals += [plane2NeutronPulseADC[n]]
+                weights += [1/dist**2]
+                coneVector += [x1-x2]
                 #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
                 #print('Energy = ',energy,' MeV')
                 break
@@ -966,6 +972,25 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
             toc = time.time()
             print('i = ',i)
             print('elapsed time = ',toc-tic, 's')
+
+#                        x1 = plane1Local[plane1Dets[i]]
+#                        x2 = plane2Local[plane2DetScale[n]]
+#                        dist = np.sqrt((x2[0]-x1[0])**2 + (x2[1]-x1[1])**2 + (x2[2])**2)
+#                        distance += [dist]
+#                        timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
+#                        energy = (1/(1.602*10**(-16)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2 #keV
+#                        energyADC = slope*plane1NeutronPulseADC[i] + intercept
+#                        energyTotal = energyADC + energy
+#                        neutronEnergyTOF += [energy] #keV
+#                        adcValP2 += [plane2NeutronPulseADC[n]]
+#                        neutronEnergyADC += [energyADC] #keV
+#                        neutronEnergy += [energyTotal] #keV
+                        #print('angle = ',np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))
+#                        coneAngles += [math.atan(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal)))]
+#                        mu += [np.cos(math.atan(np.deg2rad(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/energyTotal))))]
+#                        weights += [1/dist**2]
+#                        coneVector += [x1-x2]
+
     distance = np.array(distance)
     neutronEnergyTOF = np.array(neutronEnergyTOF)
     neutronEnergyTOF = neutronEnergyTOF*10**3 #keV
@@ -974,13 +999,42 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     slope, intercept = np.polyfit(adcCalVals, neutronEnergyTOF, 1)
     neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
     neutronEnergyADC = np.array(neutronEnergyADC)
-    for i in range(0,len(neutronEnergyADC)):
-        coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
-
+    coneVector = np.array(coneVector,dtype = 'float')
+    weights = np.array(weights, dtype='float')
+    m = 0
+    for i in range(0,int(min(L))-1): #range(0,len(plane1Times))
+        for n in range(int(min(L))-1):
+            if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
+                x1 = plane1Local[plane1Dets[i]]
+                x2 = plane2Local[plane2DetScale[n]]
+                #print('x1 = ',x1)
+                coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                m+=1
+                #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
+                #print('Energy = ',energy,' MeV')
+                break
+        if i%100000 == 0:
+            toc = time.time()
+            print('i = ',i)
+            print('elapsed time = ',toc-tic, 's')
+    mu = np.array(mu)
     coneAngles = np.array(coneAngles)
     neutronEnergy = np.array(neutronEnergy,dtype='float')
     neutronEnergy = neutronEnergy*10**(-3)
 #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
+
+#######################################################################################
+####              create unit vector for cones                                     ####
+#######################################################################################
+    unitNorm = 0
+    unitVector = []
+    for i in range(0,len(coneVector)):
+        temp = coneVector[i,:]
+        unitNorm = np.linalg.norm(temp)
+        unitVector += [temp/unitNorm]
+
+    unitVector = np.array(unitVector, dtype = 'float')
 
 #### Generate the cones for image reconstruction ####
     for i in range(0,len(coneAngles)):
@@ -1012,12 +1066,15 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     cmap_.set_under("w")
     im = np.zeros(12*nside*nside)
     angunc = 3.
-
+    b = []
+    sigma = 0.045
+    print('k = ',len(k))
+    print('uV = ',len(unitVector))
     for i in range(len(mu)):#len(sequences)):
         #for n in range(0,500):#len(k[:,0])):
             #print('n = ',n)
         b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
-        #b[b < 1e-5] = 0
+        b[b < 1e-5] = 0
         #val = np.array(val)
         im += b
 
