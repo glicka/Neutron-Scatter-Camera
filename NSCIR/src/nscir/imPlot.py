@@ -25,6 +25,7 @@ def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,
     distance = []
     x1 = []
     x2 = []
+    plane2DetScale = []
     plane1Local = np.array([[0,0,0],[0,u,0],[0,2*u,0],[u,0,0],[u,u,0],[u,2*u,0],[2*u,0,0],[2*u,u,0],[2*u,2*u,0],[3*u,0,0],[3*u,u,0],[3*u,2*u,0]],dtype='float')
     plane2Local = np.array([[0,0,D],[0,u,D],[0,2*u,D],[u,0,D],[u,u,D],[u,2*u,D],[2*u,0,D],[2*u,u,D],[2*u,2*u,D],[3*u,0,D],[3*u,u,D],[3*u,2*u,D]],dtype='float')
     neutronEnergyTOF = []
@@ -64,11 +65,7 @@ def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,
 
     plane2DetScale = np.array(plane2DetScale,dtype = 'int')
 
-        peakTime = row.argmax()
-        pulseIntegral = integratePulse(row,peakTime)
-        tailIntegral = integrateTail(row,peakTime)
-        tailToTotalRatio += [tailIntegral/float(pulseIntegral)]
-        adcVal += [pulseIntegral]
+
 #### Calculate neutron energy from time of flight between the 2 planes ####
     tic = time.time()
     for i in range(0,len(plane1Times)): #range(0,len(plane1Times))
@@ -218,7 +215,7 @@ def generateCones(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,
 #    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
 #    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
 
-return
+    return
 
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
@@ -249,6 +246,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     distance = []
     x1 = []
     x2 = []
+
     plane1Local = np.array([[0,0,0],[0,u,0],[0,2*u,0],[u,0,0],[u,u,0],[u,2*u,0],[2*u,0,0],[2*u,u,0],[2*u,2*u,0],[3*u,0,0],[3*u,u,0],[3*u,2*u,0]],dtype='float')
     plane2Local = np.array([[0,0,D],[0,u,D],[0,2*u,D],[u,0,D],[u,u,D],[u,2*u,D],[2*u,0,D],[2*u,u,D],[2*u,2*u,D],[3*u,0,D],[3*u,u,D],[3*u,2*u,D]],dtype='float')
     area = ((plane2Local[0,2] - plane1Local[0,2])*10**2)*(plane2Local[11,0]-plane1Local[0,0])*10**2 #cm2
@@ -882,11 +880,11 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     plt.title('Azimuthal Resolution = %f degrees'%azFWHM)
     plt.xlabel('Azimuthal Angle [degrees]')
     plt.plot(azAng,histRow)
-return
+    return
 
 ### Real time neutron image reconstruction algorithm
 
-def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC,plane2NeutronPulseADC):
+def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC,plane2NeutronPulseADC):
     import csv
     import numpy as np
     import math
@@ -912,9 +910,10 @@ def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane
     neutronEnergy = []
     coneAngles = []
     cones = []
+    adcCalVals = []
     radii = 0
 
-
+    plane2DetScale = []
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
             plane2DetScale += [0]
@@ -945,9 +944,10 @@ def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane
 
 #### Calculate neutron energy from time of flight between the 2 planes ####
     tic = time.time()
-    for i in range(0,len(plane1Times)): #range(0,len(plane1Times))
+    L = [len(plane1Times), len(plane1Dets)]
+    for i in range(0,int(max(L))-1): #range(0,len(plane1Times))
         for n in range(i):
-            if plane2Times[n] - plane1Times[i] <= 100000 and plane2Times[n] - plane1Times[i] > 0:
+            if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
                 #print('plane1Local = ',plane1Local[i])
                 #print('plane1Dets = ',plane1Dets[i])
                 x1 = plane1Local[plane1Dets[i]]
@@ -958,7 +958,7 @@ def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane
                 timeSeparation = (plane2Times[n]-plane1Times[i])*timeScale
                 energy = (1/(1.602*10**(-13)))*0.5*(1.675*10**(-27))*(dist/timeSeparation)**2
                 neutronEnergyTOF += [energy] #MeV
-                neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
+                adcCalVals += [plane2NeutronPulseADC[n]]
                 #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
                 #print('Energy = ',energy,' MeV')
                 break
@@ -969,8 +969,11 @@ def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane
     distance = np.array(distance)
     neutronEnergyTOF = np.array(neutronEnergyTOF)
     neutronEnergyTOF = neutronEnergyTOF*10**3 #keV
+    neutronEnergy = neutronEnergyTOF
+    adcCalVals = np.array(adcCalVals)
+    slope, intercept = np.polyfit(adcCalVals, neutronEnergyTOF, 1)
+    neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
     neutronEnergyADC = np.array(neutronEnergyADC)
-    neutronEnergy = [neutronEnergyTOF]
     for i in range(0,len(neutronEnergyADC)):
         coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
 
@@ -1032,37 +1035,37 @@ def imPlotRT(slope,intercept,plane1Dets,plane2Dets,plane1Times,plane2Times,plane
     newPix = newPix.reshape(12*nside*nside)
     latra = [-90,90]
     lonra = [-180,180]
-    p = hp.cartview(newPix, rot=(90,0), lonra=lonra,latra=latra, return_projected_map=True)
-    hp.projplot(hp.pix2ang(16,hpindex-1), 'k*', markersize = 8)
+#    p = hp.cartview(newPix, rot=(90,0), lonra=lonra,latra=latra, return_projected_map=True)
+#    hp.projplot(hp.pix2ang(16,hpindex-1), 'k*', markersize = 8)
     #hp.graticule()
-    plt.close("all")
-    plt.figure()
-    p = plt.imshow(p, cmap=cmap_, origin='lower', interpolation='nearest', extent=(lonra[1],lonra[0],latra[0],latra[1]))
+#    plt.close("all")
+#    plt.figure()
+#    p = plt.imshow(p, cmap=cmap_, origin='lower', interpolation='nearest', extent=(lonra[1],lonra[0],latra[0],latra[1]))
     #plt.scatter(phi, 90-theta, marker='x')
-    plt.xlim(lonra[0], lonra[1]); plt.ylim(latra[0], latra[1])
-    plt.colorbar(p, fraction=0.046, pad=0.04)
-    plt.title('Neutron Image of PuBe Source')
-    plt.xlabel('Radial Angle [degrees]')
-    plt.ylabel('Azimuthal Angle [degrees]')
-    plt.xticks([-180,-135,-90,-45,0,45,90,135,180])
-    plt.yticks([-90,-45,0,45,90])
+#    plt.xlim(lonra[0], lonra[1]); plt.ylim(latra[0], latra[1])
+#    plt.colorbar(p, fraction=0.046, pad=0.04)
+#    plt.title('Neutron Image of PuBe Source')
+#    plt.xlabel('Radial Angle [degrees]')
+#    plt.ylabel('Azimuthal Angle [degrees]')
+#    plt.xticks([-180,-135,-90,-45,0,45,90,135,180])
+#    plt.yticks([-90,-45,0,45,90])
 
-    energyHist = np.histogram(neutronEnergy,100)
-    a = energyHist[0]
-    b = energyHist[1]
-    c = b[0:100]
-    plt.figure(1)
-    plt.plot(c,a,'r--')
-    plt.xlabel('Neutron Energy [MeV]')
-    plt.ylabel('Counts')
-    plt.title('Neutron Spectrum')
-    plt.autoscale(enable=True,axis='x',tight=True)
-    pl.xticks(rotation=45)
+#    energyHist = np.histogram(neutronEnergy,100)
+#    a = energyHist[0]
+#    b = energyHist[1]
+#    c = b[0:100]
+#    plt.figure(1)
+#    plt.plot(c,a,'r--')
+#    plt.xlabel('Neutron Energy [MeV]')
+#    plt.ylabel('Counts')
+#    plt.title('Neutron Spectrum')
+#    plt.autoscale(enable=True,axis='x',tight=True)
+#    pl.xticks(rotation=45)
     #plt.legend(loc='upper right')
     #plt.plot(d,f)
-    plt.show()
+#    plt.show()
 
 #    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
 #    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
 
-return
+    return newPix, latra, lontra

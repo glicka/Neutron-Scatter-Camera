@@ -167,3 +167,57 @@ def PSD(detectorData,timeData,pulseData,plane,tic):
 
 
     return neutronDets, neutronTimes, neutronADC
+
+def PSDRT(ttr,timeData,detectorData,adcVal,ttrArg):
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import time
+    #from numpy import *
+
+
+    i = 0
+    pulseIntegral = 0
+    tailIntegral = 0
+    totalIntegral = 0
+    peakVal = 0
+    peakTime = 0
+    neutronTailToTotalRatio = []
+
+    tailToTotalRatio = []
+    #adcVal = []
+    #ttrArg = 5
+    neutronTailToTotalRatio = [i for i in ttr if i >= ttrArg]
+    photonTailToTotalRatio = [i for i in ttr if 0 < i < ttrArg]
+
+########################################################################################
+### Sum up ADC values of pulse (integrate pulse) to put into neutron/photon category ###
+########################################################################################
+
+    neutronADC = []
+    photonADC = []
+    neutronDets = []
+    neutronTimes = []
+    nTTR = []
+    pTTR = []
+    L = [len(ttr), len(timeData), len(detectorData), len(adcVal)]
+    for i in range(0,int(max(L))-1):
+        if ttr[i] >= ttrArg:
+            neutronADC += [adcVal[i]]
+            neutronDets += [detectorData[i]]
+            neutronTimes += [timeData[i]]
+            nTTR += [ttr[i]]
+#        else:
+#            photonADC += [adcVal[i]]
+#            pTTR += [tailToTotalRatio[i]]
+
+    neutronDets = np.array(neutronDets,dtype = 'int')
+    neutronTimes = np.array(neutronTimes, dtype = 'float')
+    neutronADC = np.array(neutronADC, dtype = 'int')
+
+#    photonADC = np.asarray(photonADC)
+    nTTR = np.asarray(nTTR,dtype = 'float')
+
+
+
+
+    return neutronDets, neutronTimes, neutronADC
