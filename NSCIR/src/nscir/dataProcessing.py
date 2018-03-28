@@ -419,7 +419,7 @@ def dataProcessingRT(adc,ttr,modules,channels,timeVals):
                 plane2Times += [timeVals[i]]
                 plane2Dets += [23]
                 plane2ADC += [adc[i]]
-        if i%100000 == 0:
+        if i%500000 == 0:
             print('k = ',i)
             toc = time.time()
 #            print('tictoc = ',toc-tic)
