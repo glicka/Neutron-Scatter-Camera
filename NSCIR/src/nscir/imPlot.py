@@ -1066,15 +1066,14 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     cmap_.set_under("w")
     im = np.zeros(12*nside*nside)
     angunc = 3.
-    b = []
+    b = 0
     sigma = 0.045
-    print('k = ',len(k))
-    print('uV = ',len(unitVector))
+
     for i in range(len(mu)):#len(sequences)):
         #for n in range(0,500):#len(k[:,0])):
             #print('n = ',n)
         b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
-        b[b < 1e-5] = 0
+        #b[b < 1e-5] = 0
         #val = np.array(val)
         im += b
 
@@ -1125,4 +1124,4 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
 #    numpy.savetxt("neutronEnergy.csv", c, delimiter=",")
 #    numpy.savetxt("neutronCounts.csv", a, delimiter=",")
 
-    return newPix, latra, lontra
+    return newPix, latra, lonra

@@ -477,8 +477,8 @@ def dataProcessingRT(adc,ttr,modules,channels,timeVals):
 
 
 #### Generate cones and do energy reconstruction of neutrons ####
-    newPix, latra, lontra = imPlot(plane1NeutronDetsSort,plane2NeutronDetsSort,plane1NeutronTimesSort,plane2NeutronTimesSort,plane1NeutronPulseADCSort,plane2NeutronPulseADCSort)
-    return newPix, latra, lontra
+    newPix, latra, lonra = imPlot(plane1NeutronDetsSort,plane2NeutronDetsSort,plane1NeutronTimesSort,plane2NeutronTimesSort,plane1NeutronPulseADCSort,plane2NeutronPulseADCSort)
+    return newPix, latra, lonra
 
 def dataProcessingNoExtClock(datafile,photonDataFile,tic):
     import h5py
