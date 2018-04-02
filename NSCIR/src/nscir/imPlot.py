@@ -527,11 +527,11 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     #np.savetxt('neutronEnergy.csv',neutronEnergy)
     ### Checking max TOF and ADC Energies ###
     tofMaxArg = neutronEnergyTOF.argmax()
-    print('Max TOF Energy = ', neutronEnergyTOF[tofMaxArg])
+    #print('Max TOF Energy = ', neutronEnergyTOF[tofMaxArg])
     adcMaxArg = neutronEnergyADC.argmax()
-    print('Max ADC Energy = ', neutronEnergyADC[adcMaxArg])
+    #print('Max ADC Energy = ', neutronEnergyADC[adcMaxArg])
     nEMax = neutronEnergy.argmax()
-    print('Max Total Energy = ',neutronEnergy[nEMax])
+    #print('Max Total Energy = ',neutronEnergy[nEMax])
 #######################################################################################
 ####              create unit vector for cones                                     ####
 #######################################################################################
@@ -577,7 +577,7 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 #######################################################################################
 ####                    plot energy spectrum                                       ####
 #######################################################################################
-    print('nEnergy.size() = ', np.size(neutronEnergy))
+    #print('nEnergy.size() = ', np.size(neutronEnergy))
     neutronEnergyAdj = [i for i in neutronEnergy if  0 < i <= 500000]
     neutronEnergyAdj = np.array(neutronEnergyAdj, dtype = 'float')
     #print(neutronEnergy)
@@ -782,8 +782,8 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
     histCol = histCol/max(histCol)
 
     #res = np.histogram(newPix,100)
-    print(rowArg)
-    print(colArg)
+    #print(rowArg)
+    #print(colArg)
     #hp.graticule()
     plt.close("all")
     plt.figure()
@@ -860,22 +860,22 @@ def generateConesNoExtClock(slope,intercept,plane1Dets,plane2Dets,plane1Times,pl
 
     max_r = max(histRow)  # Find the maximum y value
     xr = [x for x in range(len(histRow)) if histRow[x] > max_r/2.0]
-    print(min(xr), max(xr))
+    #print(min(xr), max(xr))
     azFWHM = radAng[max(xr)]-radAng[min(xr)]
-    print('radAng1 = ',radAng[max(xr)])
-    print('radAng2 = ', radAng[min(xr)])
-    print('radFWHM = ', azFWHM)
+    #print('radAng1 = ',radAng[max(xr)])
+    #print('radAng2 = ', radAng[min(xr)])
+    #print('radFWHM = ', azFWHM)
     max_c = max(histCol)
     xc = [x for x in range(len(histCol)) if histCol[x] > max_c/2.0]
     radFWHM = azAng[max(xc)] - azAng[min(xr)]
-    print('azFWHM = ', radFWHM)
+    #print('azFWHM = ', radFWHM)
     plt.figure()
     plt.title('Radial Resolution = %f degrees'%radFWHM)
     plt.xlabel('Radial Angle [degrees]')
     plt.plot(radAng,histCol)
     plt.show()
-    print(len(histRow))
-    print(len(azAng))
+    #print(len(histRow))
+    #print(len(azAng))
     plt.figure()
     plt.title('Azimuthal Resolution = %f degrees'%azFWHM)
     plt.xlabel('Azimuthal Angle [degrees]')
@@ -919,7 +919,7 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     radii = 0
 
     plane2DetScale = []
-    print(plane2Dets)
+    #print(plane2Dets)
     for i in range(0,len(plane2Dets)):
         if plane2Dets[i] == 12:
             plane2DetScale += [0]
@@ -950,7 +950,7 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
 
 #### Calculate neutron energy from time of flight between the 2 planes ####
     tic = time.time()
-    L = [len(plane1Times), len(plane1Dets)]
+    L = [len(plane1Times), len(plane2Times)]
     for i in range(0,int(min(L))-1): #range(0,len(plane1Times))
         if i < 200:
             for n in range(i + 200):
@@ -1031,128 +1031,133 @@ def imPlotRT(plane1Dets,plane2Dets,plane1Times,plane2Times,plane1NeutronPulseADC
     neutronEnergyTOF = neutronEnergyTOF*10**3 #keV
     neutronEnergy = neutronEnergyTOF
     adcCalVals = np.array(adcCalVals)
-    slope, intercept = np.polyfit(adcCalVals, neutronEnergyTOF, 1)
-    neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
-    neutronEnergyADC = np.array(neutronEnergyADC)
-    coneVector = np.array(coneVector,dtype = 'float')
-    weights = np.array(weights, dtype='float')
-    m = 0
-    print('nETOF = ',len(neutronEnergyTOF))
-    for i in range(0,int(min(L))-1): #range(0,len(plane1Times))
-        if i < 200:
-            for n in range(i + 200):
-                if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
+    if adcCalVals.size != 0 and neutronEnergyTOF.size != 0:
+        slope, intercept = np.polyfit(adcCalVals, neutronEnergyTOF, 1)
+        neutronEnergyADC += [slope*plane1NeutronPulseADC[i] + intercept]
+        neutronEnergyADC = np.array(neutronEnergyADC)
+        coneVector = np.array(coneVector,dtype = 'float')
+        weights = np.array(weights, dtype='float')
+        m = 0
+    #    print('nETOF = ',len(neutronEnergyTOF))
+        for i in range(0,int(min(L))-1): #range(0,len(plane1Times))
+            if i < 200:
+                for n in range(i + 200):
+                    if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
 
-                    x1 = plane1Local[plane1Dets[i]]
-                    x2 = plane2Local[plane2DetScale[n]]
-                    #print('x1 = ',x1)
-                    coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    m+=1
-                    #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
-                    #print('Energy = ',energy,' MeV')
-                    break
-        elif i > 200 and i < min(L)-100:
-            for n in range(i-100,i+100):
-                if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
-                    x1 = plane1Local[plane1Dets[i]]
-                    x2 = plane2Local[plane2DetScale[n]]
-                    #print('x1 = ',x1)
-                    coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    m+=1
-                    #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
-                    #print('Energy = ',energy,' MeV')
-                    break
-        else:
-            for n in range(i-200,int(min(L))-1):
-                if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
-                    x1 = plane1Local[plane1Dets[i]]
-                    x2 = plane2Local[plane2DetScale[n]]
-                    #print('x1 = ',x1)
-                    coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
-                    m+=1
-                    #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
-                    #print('Energy = ',energy,' MeV')
-                    break
-        if i%100000 == 0:
-            toc = time.time()
-            print('i = ',i)
-            print('elapsed time = ',toc-tic, 's')
-    mu = np.array(mu)
-    coneAngles = np.array(coneAngles)
-    neutronEnergy = np.array(neutronEnergy,dtype='float')
-    neutronEnergy = neutronEnergy*10**(-3)
-#    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
+                        x1 = plane1Local[plane1Dets[i]]
+                        x2 = plane2Local[plane2DetScale[n]]
+                        #print('x1 = ',x1)
+                        coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        m+=1
+                        #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
+                        #print('Energy = ',energy,' MeV')
+                        break
+            elif i > 200 and i < min(L)-100:
+                for n in range(i-100,i+100):
+                    if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
+                        x1 = plane1Local[plane1Dets[i]]
+                        x2 = plane2Local[plane2DetScale[n]]
+                        #print('x1 = ',x1)
+                        coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        m+=1
+                        #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
+                        #print('Energy = ',energy,' MeV')
+                        break
+            else:
+                for n in range(i-200,int(min(L))-1):
+                    if plane2Times[n] - plane1Times[i] <= 10000 and plane2Times[n] - plane1Times[i] > 0:
+                        x1 = plane1Local[plane1Dets[i]]
+                        x2 = plane2Local[plane2DetScale[n]]
+                        #print('x1 = ',x1)
+                        coneAngles += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        mu += [math.degrees(math.atan(math.sqrt((slope*plane1NeutronPulseADC[i] + intercept)/neutronEnergyTOF[m])))]
+                        m+=1
+                        #coneAngles += [math.degrees(math.atan(math.sqrt(neutronEnergyADC[i]/neutronEnergyTOF[i])))]
+                        #print('Energy = ',energy,' MeV')
+                        break
+            if i%100000 == 0:
+                toc = time.time()
+                print('i = ',i)
+                print('elapsed time = ',toc-tic, 's')
+        mu = np.array(mu)
+        coneAngles = np.array(coneAngles)
+        neutronEnergy = np.array(neutronEnergy,dtype='float')
+        neutronEnergy = neutronEnergy*10**(-3)
+    #    numpy.savetxt("neutron.csv", neutronEnergyTOF, delimiter=",")
 
-#######################################################################################
-####              create unit vector for cones                                     ####
-#######################################################################################
-    unitNorm = 0
-    unitVector = []
-    for i in range(0,len(coneVector)):
-        temp = coneVector[i,:]
-        unitNorm = np.linalg.norm(temp)
-        unitVector += [temp/unitNorm]
+    #######################################################################################
+    ####              create unit vector for cones                                     ####
+    #######################################################################################
+        unitNorm = 0
+        unitVector = []
+        for i in range(0,len(coneVector)):
+            temp = coneVector[i,:]
+            unitNorm = np.linalg.norm(temp)
+            unitVector += [temp/unitNorm]
 
-    unitVector = np.array(unitVector, dtype = 'float')
+        unitVector = np.array(unitVector, dtype = 'float')
 
-#### Generate the cones for image reconstruction ####
-    for i in range(0,len(coneAngles)):
-        radii = distance[i]*math.tan(coneAngles[i]/2)
-        r = np.linspace(0, radii, 50)
-        p = np.linspace(0, 2*np.pi, 50)
-        R, P = np.meshgrid(r, p)
-        Z = ((R**2 - 1)**2)
-        X = R*np.cos(P)
-        Y = R*np.sin(P)
-        cones += [[radii],[distance[i]],[coneAngles[i]]]
-        #ax.plot_surface(X, Y, Z)
-        #ax.set_xlabel('X Label')
-        #ax.set_ylabel('Y Label')
-        #ax.set_zlabel('Z Label')
-    #plt.legend(loc = 'best')
-    #plt.show()
-    df = pd.DataFrame(cones)
-    #df.to_csv("ConesGenerated.csv")
-    #np.savetxt('GeneratedCones.csv',cones,delimiter=",")
-    #ax.plot_surface(cones[0], Y, Z, cmap=plt.cm.YlGnBu_r)
-    hpindex = 912
-    theta,phi = np.asarray(hp.pix2ang(16,hpindex-1)) * (180./np.pi)
-    if phi > 180: phi = -(360. - phi)
-    nside = 64
-    [x_,y_,z_] = hp.pix2vec(nside,range(12*nside*nside))#201))
-    k = np.array(list(zip(x_,y_,z_)))
-    cmap_ = plt.cm.jet
-    cmap_.set_under("w")
-    im = np.zeros(12*nside*nside)
-    angunc = 3.
-    b = 0
-    sigma = 0.045
+    #### Generate the cones for image reconstruction ####
+        for i in range(0,len(coneAngles)):
+            radii = distance[i]*math.tan(coneAngles[i]/2)
+            r = np.linspace(0, radii, 50)
+            p = np.linspace(0, 2*np.pi, 50)
+            R, P = np.meshgrid(r, p)
+            Z = ((R**2 - 1)**2)
+            X = R*np.cos(P)
+            Y = R*np.sin(P)
+            cones += [[radii],[distance[i]],[coneAngles[i]]]
+            #ax.plot_surface(X, Y, Z)
+            #ax.set_xlabel('X Label')
+            #ax.set_ylabel('Y Label')
+            #ax.set_zlabel('Z Label')
+        #plt.legend(loc = 'best')
+        #plt.show()
+        df = pd.DataFrame(cones)
+        #df.to_csv("ConesGenerated.csv")
+        #np.savetxt('GeneratedCones.csv',cones,delimiter=",")
+        #ax.plot_surface(cones[0], Y, Z, cmap=plt.cm.YlGnBu_r)
+        hpindex = 912
+        theta,phi = np.asarray(hp.pix2ang(16,hpindex-1)) * (180./np.pi)
+        if phi > 180: phi = -(360. - phi)
+        nside = 64
+        [x_,y_,z_] = hp.pix2vec(nside,range(12*nside*nside))#201))
+        k = np.array(list(zip(x_,y_,z_)))
+        cmap_ = plt.cm.jet
+        cmap_.set_under("w")
+        im = np.zeros(12*nside*nside)
+        angunc = 3.
+        b = 0
+        sigma = 0.045
 
-    for i in range(len(mu)):#len(sequences)):
-        #for n in range(0,500):#len(k[:,0])):
-            #print('n = ',n)
-        b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
-        #b[b < 1e-5] = 0
-        #val = np.array(val)
-        im += b
+        for i in range(len(mu)):#len(sequences)):
+            #for n in range(0,500):#len(k[:,0])):
+                #print('n = ',n)
+            b += (weights[i] / (sigma * np.sqrt(2.*np.pi))) * np.exp(-(np.dot(k,unitVector[i,:]) - mu[i])**2/(2. * sigma**2))
+            #b[b < 1e-5] = 0
+            #val = np.array(val)
+            im += b
 
-#pixels = (pixels/normB)
-#pixels = np.ravel(pixels)
-#maxPix = 0
-#newNorm = 0
-#normPix = pixels-min(pixels[:])
-#newPix = normPix/max(normPix)
-#newPix = newPix.reshape([len(theta),len(phi)])
-    pixels = im/max(im)
-    pixels = np.ravel(pixels)
-    normPix = pixels-min(pixels[:])
-    newPix = normPix/max(normPix)
-    newPix = newPix.reshape(12*nside*nside)
-    latra = [-90,90]
-    lonra = [-180,180]
+    #pixels = (pixels/normB)
+    #pixels = np.ravel(pixels)
+    #maxPix = 0
+    #newNorm = 0
+    #normPix = pixels-min(pixels[:])
+    #newPix = normPix/max(normPix)
+    #newPix = newPix.reshape([len(theta),len(phi)])
+        pixels = im/max(im)
+        pixels = np.ravel(pixels)
+        normPix = pixels-min(pixels[:])
+        newPix = normPix/max(normPix)
+        newPix = newPix.reshape(12*nside*nside)
+        latra = [-90,90]
+        lonra = [-180,180]
+    else:
+        newPix = np.array([])
+        latra = np.array([])
+        lonra = np.array([])
 #    p = hp.cartview(newPix, rot=(90,0), lonra=lonra,latra=latra, return_projected_map=True)
 #    hp.projplot(hp.pix2ang(16,hpindex-1), 'k*', markersize = 8)
     #hp.graticule()
